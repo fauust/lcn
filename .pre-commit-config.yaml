@@ -1,7 +1,7 @@
 ---
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v4.6.0
     hooks:
       - id: check-added-large-files
       - id: check-ast
@@ -9,34 +9,11 @@ repos:
       - id: check-executables-have-shebangs
       - id: check-merge-conflict
       - id: check-symlinks
-      - id: check-toml
-      - id: check-xml
-      - id: debug-statements
-        name: Check for Python debug statements
       - id: trailing-whitespace
         name: Check trailing whitespace
         args: [--markdown-linebreak-ext=md]
-  - repo: https://github.com/PyCQA/flake8
-    rev: 7.0.0
-    hooks:
-      - id: flake8
-        name: Check python (flake8)
-        # args: ["--ignore=E501,E226"]
-  - repo: https://github.com/PyCQA/pylint.git
-    rev: v3.0.3
-    hooks:
-      - id: pylint
-        name: Check python (pylint)
-        entry: pylint
-        language: system
-        types: [python]
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    # Ruff version.
-    rev: "v0.2.1"
-    hooks:
-      - id: ruff
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.34.0
+    rev: v1.35.1
     hooks:
       - id: yamllint
         name: Check yaml files (yamllint)
@@ -49,54 +26,20 @@ repos:
       - id: shfmt
         name: Check shell style (shfmt)
         args: ["-d", "-i", "2", "-ci"]
-  - repo: https://gitlab.com/devopshq/gitlab-ci-linter
-    rev: v1.0.6
-    hooks:
-      - id: gitlab-ci-linter
-        name: Check for gitlab-ci error (gitlab-ci-linter)
-        args:
-          - "--server"
-          - "https://salsa.debian.org"
-      - id: gitlab-ci-linter
-        name: Check for gitlab-ci error (gitlab-ci-linter, debian)
-        files: "debian/salsa-ci.yml"
-        args:
-          - "--server"
-          - "https://salsa.debian.org"
-          - "--filename"
-          - "debian/salsa-ci.yml"
   - repo: https://github.com/markdownlint/markdownlint
     rev: v0.12.0
     hooks:
       - id: markdownlint
         name: Check for markdown lint (mdl)
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.2.6
+    rev: v2.3.0
     hooks:
       - id: codespell
         name: Checks for common misspellings in text files
         entry: codespell
         language: python
-  # - reppo: https://github.com/amperser/proselint
-  #   rev: 0.13.0
-  #   hooks:
-  #     - id: proselint
-  #       name: Check language usage and style in text files
-  #       entry: proselint
-  #       language: python
-  #       types: [markdown]
   - repo: local
     hooks:
-      - id: docker-hadolint
-        name: Run hadolint with docker
-        language: docker_image
-        entry: hadolint/hadolint:latest hadolint
-        files: Dockerfile
-      - id: dockerfilelint
-        name: Run dockerfilelint with docker
-        language: docker_image
-        entry: replicated/dockerfilelint:latest
-        files: Dockerfile
       - id: docker-prettier
         name: Run prettier with docker
         entry: tmknom/prettier:latest -l
@@ -118,42 +61,3 @@ repos:
         entry: lycheeverse/lychee
         language: docker_image
         types: [markdown]
-        # - id: docker-prettier-json
-        #   name: Run prettier on json files with docker
-        #   entry: mohrere/prettier:2.0.2 --parser json -c
-        #   language: docker_image
-        #   types: [json]
-        # - id: docker-prettier-yaml
-        #   name: Run prettier on yaml files with docker
-        #   entry: mohrere/prettier:2.0.2 --parser yaml -c
-        #   language: docker_image
-        #   types: [yaml]
-        # - id: docker-prettier-markdown
-        #   name: Run prettier on markdown files with docker
-        #   entry: mohrere/prettier:2.0.2 --parser markdown -c
-        #   language: docker_image
-        #   types: [markdown]
-        # - id: docker-shell-shfmt
-        #   name: Run shfmt with docker
-        #   entry: mvdan/shfmt:latest -d -i 2 -ci
-        #   language: docker_image
-        #   types: [shell]
-        # - id: docker-shell-lint
-        #   name: Run shellcheck with docker
-        #   language: docker_image
-        #   entry: koalaman/shellcheck:stable
-        #   types: [shell]
-  - repo: https://github.com/ansible/ansible-lint.git
-    rev: v24.2.0
-    hooks:
-      - id: ansible-lint
-        name: Check ansible files (ansible-lint)
-        # https://github.com/ansible/ansible-lint/issues/1066
-        always_run: false
-        # args: ["-x", "602"]
-        exclude_types: [markdown, shell]
-        types: [yaml]
-  - repo: https://github.com/pre-commit/mirrors-puppet-lint
-    rev: v4.2.3
-    hooks:
-      - id: puppet-lint
