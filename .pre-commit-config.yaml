@@ -20,6 +20,12 @@ repos:
       - id: shellcheck
         name: Check shell script (shellcheck)
         args: ["-x"]
+<<<<<<< HEAD
+      - id: shfmt
+        name: Check shell style (shfmt)
+        args: ["-d", "-i", "2", "-ci"]
+=======
+>>>>>>> a321b8c (test pre-commit)
   - repo: https://github.com/markdownlint/markdownlint
     rev: v0.12.0
     hooks:
