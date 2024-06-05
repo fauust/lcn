@@ -1,0 +1,7 @@
+[[bash]]
+# like -i=2
+indent_size = 2
+# --case-indent
+switch_case_indent = true
+space_redirects    = true
+keep_padding       = true
