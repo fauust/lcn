@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 virt-install \
 	--console=pty,target_type=serial \
 	--disk=pool=default,size=20,format=qcow2,bus=virtio \
