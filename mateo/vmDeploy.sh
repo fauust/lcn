@@ -12,7 +12,7 @@ if [ -f /var/lib/libvirt/images/linuxconfig-vm.qcow2 ]; then
 fi
 
 virt-install --name=linuxconfig-vm \
-  --vcpus=1 \
+  --vcpus=3 \
   --memory=1024 \
   --location=/home/mateo-nicoud/Documents/infraVm/debian-12.5.0-amd64-netinst.iso \
   --graphics spice \
