@@ -33,13 +33,13 @@ name2=$1
 
 function test_VM_running {
 name3=$1
-if [ "$( virsh list|  grep -e ${name3} | awk '{ print $2 }')" = "${name3}" ]
+if [ "$( virsh list|  grep -e "${name3}" | awk '{ print $2 }')" = "${name3}" ]
 then
   echo_red "${name3} is already UP & RUNNING  \n on la stoppe"
   virsh shutdown "${name3}"
 fi
 }
-#TODO: function parsing preseed blue print with sed
+#TODO: function parsing preseed blue print with sed taking SSH-KEY
 #!/usr/bin/env bash
 function sed_preseed {
   DEFAULTVALUE=jamil
