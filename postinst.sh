@@ -12,6 +12,5 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQChEcCzKJDcXdOeDuivNYX9ZsUDq/hewUj/Wb
 cd /home/$USER
 chown -R $USER:$USER .ssh/
 
-# Ajout de la configuration sans mot de passe pour l'utilisateur spécifié
 echo "$USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$USER
 

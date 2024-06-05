@@ -5,7 +5,7 @@
 
 virt-install \
 	--connect=qemu:///system \
-	--name $1 \
+	--name "$1" \
 	--vcpus=4 \
 	--ram=8192 \
 	--location="http://ftp.fr.debian.org/debian/dists/Debian12.5/main/installer-amd64/" \
