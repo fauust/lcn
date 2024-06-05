@@ -13,3 +13,4 @@ virt-install										\
 	--network=default,model=virtio							\
 	--os-variant=debian12								\
 	--vcpus=4
+
