@@ -15,10 +15,6 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
           make venv
           make install-pre-commit
-      - name: Install requirements (shfmt)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y shfmt
       - name: Run pre-commit (all)
         run: |
           source .venv/bin/activate
