@@ -1,51 +1,33 @@
 #! /usr/bin/env bash
-name=$1
-userName=$2
-
-function shutdownVM {
-  ! virsh list --all | grep "$name" && virsh shutdown "$name"
+sudo chmod 755 ./scripts/*.sh
+function askName {
+  echo "Enter the name of the VM: "
+  read -r name
+  echo "$name"
 }
-function dropExistingVM {
-  virsh destroy "$name"
-  virsh undefine "$name"
-  # dangerous but useful if the *.qcow2 are stacking up in the memory
-  # sudo rm -f /var/lib/libvirt/images/debian*.qcow2
-  # sudo rm -f /var/lib/libvirt/images/*test*.qcow2
-  [[ -f /var/lib/libvirt/images/"$name".qcow2 ]] && sudo rm -f /var/lib/libvirt/images/"$name".qcow2 # tofix : need to find a way to remove the sudo
+function askUserName {
+  echo "Enter the userName you want : "
+  read -r userName
+  echo "$userName"
 }
-function createVM {
-  if [[ -f /var/lib/libvirt/images/debian-12.5.0-amd64-netinst.iso ]]; then
-    virt-install \
-      --name="$name" \
-      --autoconsole none \
-      --initrd-inject=/home/augustin/Desktop/infra_VM/scripts/"$userName"_preseed.cfg \
-      --initrd-inject=/home/augustin/Desktop/infra_VM/scripts/postinst.sh \
-      --extra-args="auto=true priority=critical preseed/file=/""$userName""_preseed.cfg" \
-      --os-variant=debian12 \
-      --disk size=10 --vcpu=4 --ram=2048 --graphics spice \
-      --location=/var/lib/libvirt/images/debian-12.5.0-amd64-netinst.iso \
-      --wait -1 \
-      --network bridge:virbr0
+function askPassword {
+  echo "Enter the password for the user $1 : "
+  read -r password
+  echo "$password"
+}
+# may ask for input here
+#name=$(askName)
+while IFS=':' read -r key value; do
+  if [ "$key" == "name" ]; then
+    name="$value"
+  elif [ "$key" == "password" ]; then
+    password="$value"
+  elif [ "$key" == "userName" ]; then
+    userName="$value"
   else
-    printf "\nERROR : could not find the file 'debian-12.5.0-amd64-netinst.iso'\nPlease check the directory '/var/lib/libvirt/images/'\nYou may always download debian iso on 'https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-12.5.0-amd64-netinst.iso'"
+    echo "Invalid Line"
   fi
-}
-function startVM {
-  virsh start "$name"
-}
+done <~/Desktop/infra_VM/.venv/secret.txt
 
-# if is running, shutdown
-shutdownVM
-
-# if exists, drop
-dropExistingVM
-
-# create a new "$name"
-if [ -f /home/augustin/Desktop/infra_VM/scripts/"$userName"_preseed.cfg ]; then
-  createVM
-else
-  echo "error"
-fi
-# start the "$name"
-startVM
-# comment the following line on production
+bash "$(pwd)"/scripts/sed_preseed.sh "$name" "$password" "$userName" &&
+  bash "$(pwd)"/scripts/emptyVM.sh "$name" "$userName"
