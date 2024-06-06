@@ -7,7 +7,7 @@ PROJECT_NAME=$2
 ### Install Apache ###
 sudo apt update -y
 sudo apt install -y apache2
-sudo usermod -aG www-data $DB_USER
+sudo usermod -aG www-data "$DB_USER"
 
 ### Install PHP and enable necessary Apache modules and PHP-FPM ###
 sudo apt install -y php8.3-fpm
@@ -16,7 +16,7 @@ sudo a2enconf php8.3-fpm
 sudo systemctl reload apache2
 
 ### Configure Apache virtual host ###
-sudo tee /etc/apache2/sites-available/$PROJECT_NAME.conf > /dev/null <<EOF
+sudo tee /etc/apache2/sites-available/"$PROJECT_NAME".conf > /dev/null <<EOF
 <VirtualHost *:80>
     ServerAdmin $DB_USER@localhost
     ServerName $PROJECT_NAME.local
@@ -34,5 +34,5 @@ sudo tee /etc/apache2/sites-available/$PROJECT_NAME.conf > /dev/null <<EOF
 EOF
 
 ### Enable the new virtual host ###
-sudo a2ensite $PROJECT_NAME.conf
+sudo a2ensite "$PROJECT_NAME".conf
 sudo systemctl reload apache2
