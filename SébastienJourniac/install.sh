@@ -16,6 +16,8 @@
 #  --autostart \
 #  --wait
 
-sudo virsh snapshot-revert vmtest snapshot1
-scp -o "StrictHostKeyChecking no" install_mariadb.sh grough@192.168.122.51:
-ssh -o "StrictHostKeyChecking no" grough@192.168.122.51 "sudo bash ./install_mariadb.sh"
+sudo virsh snapshot-revert vmtest snapmariadb
+scp -o "StrictHostKeyChecking no" installphp.sh grough@192.168.122.51:
+ssh -o "StrictHostKeyChecking no" grough@192.168.122.51 "sudo bash ./installphp.sh"
+scp -o "StrictHostKeyChecking no" installapache.sh grough@192.168.122.51:
+ssh -o "StrictHostKeyChecking no" grough@192.168.122.51 "sudo bash ./installapache.sh"
