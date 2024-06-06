@@ -30,14 +30,17 @@ if virsh snapshot-revert $VM_NAME $SNAPSHOT_NAME; then
     done
     echo "VM is up and SSH is available."
 
-    # Installation steps
-    echo "Installing necessary dependencies..."
+    # Installation of Apache2
+    echo "Installing Apache2"
 
     # Install Apache2
     execute_ssh "sudo apt-get install -y apache2"
 
     # Install necessary dependencies
     execute_ssh "sudo apt-get install -y apt-transport-https lsb-release ca-certificates curl"
+
+    # Installation of PHP 8.3
+    echo "Installing PHP 8.3..."
 
     # Add PHP 8.3 repository
     execute_ssh "sudo curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg"
@@ -49,6 +52,16 @@ if virsh snapshot-revert $VM_NAME $SNAPSHOT_NAME; then
 
     # Enable PHP 8.3 FPM on Apache
     execute_ssh "sudo a2enconf php8.3-fpm"
+
+
+    # Install Composer
+    echo "Installing Composer..."
+
+    # Download and install Composer
+    execute_ssh "sudo php8.3 -r \"copy('https://getcomposer.org/installer', 'composer-setup.php');\""
+    execute_ssh "sudo php8.3 composer-setup.php --install-dir=/usr/local/bin --filename=composer"
+    execute_ssh "sudo rm composer-setup.php"
+    echo "Composer installed successfully."
 
     # Restart Apache service
     execute_ssh "sudo systemctl restart apache2"
