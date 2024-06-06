@@ -14,13 +14,13 @@ fi
 virt-install --name=linuxconfig-vm \
   --vcpus=3 \
   --memory=1024 \
-  --location=/home/mateo-nicoud/Documents/infraVm/debian-12.5.0-amd64-netinst.iso \
+  --location="http://ftp.fr.debian.org/debian/dists/Debian12.5/main/installer-amd64/" \
   --graphics spice \
   --disk size=5,path=/var/lib/libvirt/images/linuxconfig-vm.qcow2 \
   --os-variant=debian12 \
   --initrd-inject=preseed.cfg \
+  --initrd-inject=postinst.sh \
   --noautoconsole \
-  --wait -1 \
-  --check all=off
+  --wait -1
 
 virsh start linuxconfig-vm

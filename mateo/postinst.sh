@@ -12,15 +12,15 @@ apt install -y openssh-server
 apt install -y sudo
 apt install -y vim
 apt install -y composer
-apt install -y php-fpm
+apt install -y php8.2-fpm
 apt install -y apache2
 apt install -y mariadb
 
 
 
-sudo a2enmod proxy_fcgi setenvif
-sudo chmod -R 775 /etc/apache2/sites-available/
-sudo chown -R root:www-data /etc/apache2/sites-available
+sudo a2dismod mpm_prefork
+sudo a2enmod proxy_fcgi setenvif mpm_event
+sudo a2enconf php8.2-fpm
 
 echo "mateo-nicoud ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 
