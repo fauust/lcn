@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+ssh-keygen -f "/home/thouvenot/.ssh/known_hosts" -R "192.168.122.85"
+
 virt-install\
   --connect=qemu:///system \
   --name=VM\
