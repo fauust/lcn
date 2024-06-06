@@ -33,9 +33,9 @@ done
 
 echo "Port $PORT on $SERVER is now available!"
 
-scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null laravel.sh vm.debian:/home/dumasg/
+#scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null laravel.sh vm.debian:/home/dumasg/
 
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vm.debian chmod +x /home/dumasg/laravel.sh
+#ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vm.debian chmod +x /home/dumasg/laravel.sh
 
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vm.debian sudo ./laravel.sh
+#ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vm.debian sudo ./laravel.sh
 
