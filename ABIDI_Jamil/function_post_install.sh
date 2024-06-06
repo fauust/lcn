@@ -22,7 +22,7 @@ function print_color(){
 #   Service Name. eg: firewalld, mariadb
 #######################################
 function check_service_status(){
-  service_is_active=$(sudo systemctl is-active $1)
+  service_is_active=$(sudo systemctl is-active "$1")
 
   if [ "$service_is_active" = "active" ]
   then
