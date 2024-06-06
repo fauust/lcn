@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1091
 . ./function_post_install.sh
+# shellcheck disable=SC2209
 DEFAULTPASSWD=test
 MARIADB_ROOT_PWD="${1:-$DEFAULTPASSWD}"
 
