@@ -20,6 +20,12 @@ INTERVAL=1
 #Timeout for the connection (second)
 TIMEOUT=4
 
+#Check for nc command
+if ! command -v nc >/dev/null; then
+  echo "Install nc command"
+  exit 1
+fi
+
 # Loop until the port is available
 while true; do
   #Use nc to check port availability
