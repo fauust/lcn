@@ -121,7 +121,7 @@ done
 echo "Port $PORT on $SERVER is now available!"
 
 # Copy files to the VM
-scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$SERVICES_SCRIPT" apache2.sh "$USER@$SERVER:/home/$USER/"
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$SERVICES_SCRIPT" apache2.sh php.sh "$USER@$SERVER:/home/$USER/"
 scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$VM_APP_CONF" "$USER@$SERVER:/home/$USER/"
 
 # Execute the script on the VM
