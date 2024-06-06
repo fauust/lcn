@@ -3,7 +3,7 @@
 . ./print_bash.sh
 ###################DESCRIPTION######################
 #
-#le script dit être lancé en SUDO
+#the script must be launch as a SUDO
 #
 ########################################################
 function install_VM {
@@ -27,9 +27,9 @@ function clear_Vm {
 name2=$1
       test_VM_running "${name2}"
 #TODO: la suite est à finir mais faut tenir les délais
-      virsh destroy "${name2}"
-      virsh undefine "${name2}"
-      rm -f "/var/lib/libvirt/images/${name}.img"
+      virsh destroy "${name2}" 2>/dev/null
+      virsh undefine "${name2}" 2>/dev/null
+      rm -f "/var/lib/libvirt/images/${name}.img" 2>/dev/null
 }
 
 function test_VM_running {
@@ -40,7 +40,7 @@ then
   virsh shutdown "${name3}"
 fi
 }
-#TODO: function parsing preseed blue print with sed taking SSH-KEY
+
 #!/usr/bin/env bash
 function sed_preseed {
   DEFAULTVALUE=jamil
@@ -50,13 +50,14 @@ function sed_preseed {
 #  DEFAULT_SSH_KEY=
 
   NAME="${1:-$DEFAULTVALUE}"
-  PASSWD="${2:-$DEFAULTPASSWD}"
+  PASSWD="$(openssl passwd -6 ${2:-$DEFAULTPASSWD})"
+echo "PASSWD= $PASSWD"
   IP="${3:-$DEFAULT_IP}"
 
   cp ./preseed_blue_print.cfg ./preseed.cfg
-  sed -i  "s/NAME_BP/$NAME/g"  ./preseed.cfg
-  sed -i "s/PWD_BP/$PASSWD/g"  ./preseed.cfg
-  sed -i "s/IP_BP/$IP/g"  ./preseed.cfg
+  sed -i  "s/NAME_BP/${NAME}/g"  ./preseed.cfg
+  sed -i "s#PWD_BP#${PASSWD}#g"  ./preseed.cfg
+  sed -i "s/IP_BP/${IP}/g"  ./preseed.cfg
 #  sed -i 's/SSH_KEY/$SSH_KEY/g'  ./preseed_update_test.cfg
 }
 
