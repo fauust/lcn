@@ -6,9 +6,13 @@ virt-install     --connect=qemu:///system \
                  --disk size=20,path="/var/lib/libvirt/images/vmtest.qcow2,bus=virtio,cache=none" \
                  --initrd-inject=preseed.cfg \
                  --initrd-inject=postinst.sh \
+                 --initrd-inject=apache.sh \
                  --noautoconsole \
                  --location http://ftp.debian.org/debian/dists/bookworm/main/installer-amd64/ \
                  --graphics spice \
                  --noautoconsole \
                  --autostart \
                  --wait
+
+
+
