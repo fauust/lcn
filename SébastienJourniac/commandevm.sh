@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 mkdir -p /home/grough/.ssh
-echo "SHA256:iA8MwsVTDcujzpsfBBIeWLDDWUDqEGyK5zQiKrxaemk journiac@pc-de-sebastien" > /home/grough/.ssh/authorized_keys
+echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF7gBP07fjsIF+r9/R++RvTOJHxVBEqr/B+sZGED/u0R journiac@pc-de-sebastien" > /home/grough/.ssh/authorized_keys
 chmod 600 /home/grough/.ssh/authorized_keys
 chmod 700 /home/grough/.ssh
 chown -R grough:grough /home/grough/.ssh
