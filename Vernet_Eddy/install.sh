@@ -10,4 +10,14 @@ virt-install --connect=qemu:///system \
   --initrd-inject=preseed.cfg \
   --initrd-inject=postinst.sh \
   --autostart \
-  --wait
+  --wait -1
+
+
+while ! nc -z 192.168.122.42 22; do
+  sleep 1 # wait for 1/10 of the second before check again
+done
+
+
+  # install apache
+scp -o "StrictHostKeyChecking no" install_apache.sh 192.168.122.42:
+ssh -o "StrictHostKeyChecking no" 192.168.122.42 "sudo bash ./install_apache.sh"
