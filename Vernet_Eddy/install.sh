@@ -4,9 +4,10 @@ virt-install --connect=qemu:///system \
   --name=vm_2 \
   --vcpus=2 \
   --memory=2048 \
-  --location=/var/lib/libvirt/images/debian-12.5.0-amd64-netinst.iso \
+  --location=http://ftp.debian.org/debian/dists/bookworm/main/installer-amd64/ \
   --disk size=5 \
   --noautoconsole \
   --initrd-inject=preseed.cfg \
+  --initrd-inject=postinst.sh \
   --autostart \
   --wait
