@@ -7,11 +7,14 @@ RAM=2048
 LOCATION="http://ftp.fr.debian.org/debian/dists/Debian12.5/main/installer-amd64/"
 DISK_SIZE=50
 SERVER="192.168.122.42"
+PORT=22
 USERNAME="axpoty"
 SSH_KEY="/home/axpoty/.ssh/id_ed25519.pub"
 PRESEED_CFG_TEMPLATE="preseed.cfg.template"
 PRESEED_CFG="preseed.cfg"
 POSTINST_SH="postinst.sh"
+SERVICES_SCRIPT="services.sh"
+VM_APP_CONF="vm-app.conf"
 HOSTNAME="atopy"
 DOMAIN="local"
 MIRROR_HOSTNAME="deb.debian.org"
@@ -26,7 +29,7 @@ USER_FULLNAME="Axel Poty"
 PASSWORD_CRYPT="$6$/QaDAPd5inw5jsmC$7Qb/GwggrunaXEqn7kV/qBGlmnkbiPRam.u4I2srETn5B9eTJvyevLZFzCciginKwCe8aXAJOYkn2nhREiC3p0"
 
 # Parse command-line options
-while getopts ":n:c:r:l:d:s:u:k:e:i:h" opt; do
+while getopts ":n:c:r:l:d:s:p:u:k:e:i:g:v:h" opt; do
 	case ${opt} in
 	n) VM_NAME=$OPTARG ;;
 	c) VCPUS=$OPTARG ;;
@@ -34,12 +37,15 @@ while getopts ":n:c:r:l:d:s:u:k:e:i:h" opt; do
 	l) LOCATION=$OPTARG ;;
 	d) DISK_SIZE=$OPTARG ;;
 	s) SERVER=$OPTARG ;;
+	p) PORT=$OPTARG ;;
 	u) USERNAME=$OPTARG ;;
 	k) SSH_KEY=$OPTARG ;;
 	e) PRESEED_CFG_TEMPLATE=$OPTARG ;;
 	i) POSTINST_SH=$OPTARG ;;
+	g) SERVICES_SCRIPT=$OPTARG ;;
+	v) VM_APP_CONF=$OPTARG ;;
 	h)
-		echo "Usage: $0 [-n VM_NAME] [-c VCPUS] [-r RAM] [-l LOCATION] [-d DISK_SIZE] [-s SERVER] [-u USERNAME] [-k SSH_KEY] [-e PRESEED_CFG_TEMPLATE] [-i POSTINST_SH]"
+		echo "Usage: $0 [-n VM_NAME] [-c VCPUS] [-r RAM] [-l LOCATION] [-d DISK_SIZE] [-s SERVER] [-p PORT] [-u USERNAME] [-k SSH_KEY] [-e PRESEED_CFG_TEMPLATE] [-i POSTINST_SH] [-g SERVICES_SCRIPT] [-v VM_APP_CONF]"
 		exit 0
 		;;
 	\?)
@@ -105,3 +111,19 @@ virt-install \
 	--os-type=linux \
 	--os-variant=debian12 \
 	--disk=pool=default,size="$DISK_SIZE",format=qcow2,bus=virtio
+
+# Loop until the port is available
+while ! nc -z "$SERVER" "$PORT"; do
+	echo "Waiting for port $PORT on $SERVER to be available..."
+	sleep 5 # Wait for 5 seconds before checking again
+done
+
+echo "Port $PORT on $SERVER is now available!"
+
+# Copy files to the VM
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$SERVICES_SCRIPT" apache2.sh "$USER@$SERVER:/home/$USER/"
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$VM_APP_CONF" "$USER@$SERVER:/home/$USER/"
+
+# Execute the script on the VM
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$USER@$SERVER" chmod +x "/home/$USER/$SERVICES_SCRIPT"
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$USER@$SERVER" "./$SERVICES_SCRIPT"
