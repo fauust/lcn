@@ -7,6 +7,7 @@ virt-install\
   --vcpus=4\
   --initrd-inject=preseed.cfg\
   --initrd-inject=commandevm.sh\
+  --initrd-inject=installapache.sh\
   --noautoconsole\
 	--location=/home/thouvenot/Téléchargements/debian-12.5.0-amd64-netinst.iso\
 	--graphics=spice\
