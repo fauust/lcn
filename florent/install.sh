@@ -20,6 +20,6 @@
 # 	--noautoconsole \
 # 	--wait
 
-sudo virsh snapshot-revert vm-deb snapshot1
-scp -o "StrictHostKeyChecking no" apache.sh florent@192.168.122.66:
-ssh -o "StrictHostKeyChecking no" florent@192.168.122.66 "sudo bash ./apache.sh"
+sudo virsh snapshot-revert vm-deb snapshot2
+scp -o "StrictHostKeyChecking no" mariadb.sh florent@192.168.122.66:
+ssh -o "StrictHostKeyChecking no" florent@192.168.122.66 "sudo bash ./mariadb.sh"
