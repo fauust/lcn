@@ -16,4 +16,3 @@ systemctl reload apache2
 
 ### reload service ###
 systemctl restart php8.2-fpm apache2
-
