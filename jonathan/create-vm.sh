@@ -12,10 +12,3 @@ virt-install --name=vm-try01 \
   --os-variant=debian12 \
   --wait -1
 
-
-# sleep ?A
-nc # man nc attendre que le port 22 réponde
-
-# install apache
-scp install...
-ssh vm ./install_apachekk
