@@ -20,6 +20,6 @@
 # 	--noautoconsole \
 # 	--wait
 
-sudo virsh snapshot-revert vm-deb snapshot0
-scp -o "StrictHostKeyChecking no" php.sh florent@192.168.122.66:
-ssh -o "StrictHostKeyChecking no" florent@192.168.122.66 "sudo bash ./php.sh"
+sudo virsh snapshot-revert vm-deb snapshot1
+scp -o "StrictHostKeyChecking no" apache.sh florent@192.168.122.66:
+ssh -o "StrictHostKeyChecking no" florent@192.168.122.66 "sudo bash ./apache.sh"
