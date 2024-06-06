@@ -50,7 +50,7 @@ function sed_preseed {
 #  DEFAULT_SSH_KEY=
 
   NAME="${1:-$DEFAULTVALUE}"
-  PASSWD="$(openssl passwd -6 ${2:-$DEFAULTPASSWD})"
+  PASSWD="$(openssl passwd -6 "${2:-$DEFAULTPASSWD}")"
 echo "PASSWD= $PASSWD"
   IP="${3:-$DEFAULT_IP}"
 
