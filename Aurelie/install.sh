@@ -16,10 +16,13 @@
 # Définir l'adresse IP de la machine virtuelle
 VM_IP=aurelie@192.168.122.51
 
-sudo virsh-revert vmtest apache
+sudo virsh-revert vmtest php
 
-scp -o "StrictHostKeyChecking no" apache.sh $VM_IP:
-ssh -o "StrictHostKeyChecking no" $VM_IP "sudo bash ./apache.sh"
+#scp -o "StrictHostKeyChecking no" apache.sh $VM_IP:
+#ssh -o "StrictHostKeyChecking no" $VM_IP "sudo bash ./apache.sh"
 
-scp -o "StrictHostKeyChecking no" php.sh $VM_IP:
-ssh -o "StrictHostKeyChecking no" $VM_IP "sudo bash ./php.sh"
+#scp -o "StrictHostKeyChecking no" php.sh $VM_IP:
+#ssh -o "StrictHostKeyChecking no" $VM_IP "sudo bash ./php.sh"
+
+scp -o "StrictHostKeyChecking no" mariadb.sh $VM_IP:
+ssh -o "StrictHostKeyChecking no" $VM_IP "sudo bash ./mariadb.sh"
