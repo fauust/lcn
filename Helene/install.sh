@@ -10,7 +10,7 @@ virt-install \
 	--location=/var/lib/libvirt/images/debian-12.5.0-amd64-netinst.iso \
 	--initrd-inject=preseed.cfg \
 	--initrd-inject=postinst.sh \
-	--disk size=5 \
+	--disk size=20 \
 	--os-variant=debian12 \
 	--wait -1 \
 	--debug

@@ -6,4 +6,5 @@ echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIQNoc/qgVg4reg7juqJGOS806pU8m2EB+5sgl
 chown -R helenevm:helenevm /home/helenevm/.ssh
 
 #Config No password
-echo "helenevm ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
+echo "helenevm ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/helenevm
+chmod 440 /etc/sudoers.d/helenevm
