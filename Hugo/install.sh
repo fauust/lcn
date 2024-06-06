@@ -19,7 +19,7 @@ virt-install \
     --os-type=linux \
     --noautoconsole \
     --os-variant=debian12
-    
+
 SERVER="192.168.122.42"
 PORT=22
 USER="hugouser"
@@ -28,7 +28,7 @@ USER="hugouser"
 while ! nc -z $SERVER $PORT; do
     echo "Waiting for port $PORT on $SERVER to be available..."
     sleep 5
-    ### Wait for 5 seconds before checking again ### 
+    ### Wait for 5 seconds before checking again ###
 done
 echo "Port $PORT on $SERVER is now available!"
 
