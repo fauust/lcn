@@ -31,5 +31,3 @@ virt-install \
   --noautoconsole \
   --wait -1
 
-# Automatic SSH login
-./auto_login.sh
