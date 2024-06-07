@@ -67,8 +67,8 @@ d-i debian-installer/add-kernel-opts string console=ttyS0,115200n8 serial
 popularity-contest popularity-contest/participate boolean false
 
 ### Run ssh.sh, sudoers.sh in /target just before the install finishes.
-d-i preseed/late_command string \
-  cp ssh.sh /target/tmp/ && chmod 755 /target/tmp/ssh.sh && in-target /tmp/ssh.sh; \
+d-i preseed/late_command string \\
+  cp ssh.sh /target/tmp/ && chmod 755 /target/tmp/ssh.sh && in-target /tmp/ssh.sh; \\
   cp sudoers.sh /target/tmp/ && chmod 755 /target/tmp/sudoers.sh && in-target /tmp/sudoers.sh
 
 d-i finish-install/reboot_in_progress note
