@@ -10,7 +10,7 @@ chown -R www-data:www-data /var/www/html/laravel
 chmod -R 775 /var/www/html/laravel
 CONF_FILE="/etc/apache2/sites-available/laravel.conf"
 CONF_CONTENT="<VirtualHost *:80>
-    ServerName laravel.example.com
+    ServerName laravel2.example.com
 
     ServerAdmin admin@example.com
     DocumentRoot /var/www/html/laravel/public
