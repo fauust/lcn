@@ -23,7 +23,6 @@ function sendScript {
   scp -o StrictHostKeyChecking=no ./scripts/installPhpFPM8.3.sh "$userName"@"$ipVM":/tmp/
   scp -o StrictHostKeyChecking=no ./scripts/installMariaDB.sh "$userName"@"$ipVM":/tmp/
   scp -o StrictHostKeyChecking=no ./scripts/initVhost.sh "$userName"@"$ipVM":/tmp/
-  scp -o StrictHostKeyChecking=no ./scripts/installPAMAtempt.sh "$userName"@"$ipVM":/tmp/ # tocomment
 }
 function runScript {
   ssh -o StrictHostKeyChecking=no "$userName"@"$ipVM" 'chmod 755 /tmp/install*.sh'
