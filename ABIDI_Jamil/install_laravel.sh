@@ -24,7 +24,7 @@ yes | composer create-project laravel/laravel example-app
 
 
 #initiate project
-cd ./example-app/
+cd ./example-app/ || exit
 composer install
 cat > .env<<-EOF
 
@@ -101,8 +101,10 @@ CREATE USER 'test'@'localhost' IDENTIFIED BY 'test';
 GRANT ALL PRIVILEGES ON *.* TO 'test'@'localhost';
 FLUSH PRIVILEGES;
 EOF
-
+# shellcheck disable=SC2024
 sudo mariadb  < myappdb.sql
+#cleaning after install
+rm myappdb.sql
 php artisan migrate --force
 # shellcheck disable=SC2103
 cd ..
@@ -133,7 +135,7 @@ cat > my-app.conf<<-EOF
 </VirtualHost>
 EOF
 
-#settings of apache for hte laravel project
+#settings of apache for the laravel project
 
 sudo cp my-app.conf /etc/apache2/sites-available/my-app.conf
 sudo rm /etc/apache2/sites-available/000-default.conf
