@@ -22,6 +22,13 @@ Navigate to the `mateo` directory of this project. For example:
 cd path/to/mateo
 ```
 
+Modify the ssh.sh line 3 and 4
+
+```bash
+USER="yourUser"
+HOST="enterYourHost"
+```
+
 Run the main.sh script with the following command:
 
 ```bash
