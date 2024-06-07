@@ -28,7 +28,12 @@ VM_IP="192.168.122.197"
 #ssh -o "StrictHostKeyChecking no" phil@$VM_IP
 
 # install apache
-virsh snapshot-revert testscript basicInstall
-scp -o "StrictHostKeyChecking=no" apache.sh phil@$VM_IP:.
-ssh -o "StrictHostKeyChecking=no" phil@$VM_IP "sudo bash ./apache.sh"
+#virsh snapshot-revert testscript basicInstall
+#scp -o "StrictHostKeyChecking=no" apache.sh phil@$VM_IP:.
+#ssh -o "StrictHostKeyChecking=no" phil@$VM_IP "sudo bash ./apache.sh"
 
+# install php
+virsh snapshot-revert testscript apacheInstalled
+scp -o "StrictHostKeyChecking=no" php.sh phil@$VM_IP:.
+scp -o "StrictHostKeyChecking=no" vhostphp.conf phil@$VM_IP:.
+ssh -o "StrictHostKeyChecking=no" phil@$VM_IP "sudo bash ./php.sh"
