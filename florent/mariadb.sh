@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
+
+USER="florent"
+PWD="0000"
+DB_NAME="db_vm"
+
 apt update -y
 apt upgrade -y
 apt install -y mariadb-server mariadb-client
-mysql -u root << EOF
-CREATE DATABASE laravel_db;
-CREATE USER 'florent'@'localhost' IDENTIFIED BY '0000';
-GRANT ALL ON laravel_db.* TO 'florent'@'localhost';
+mariadb -u root << EOF
+CREATE DATABASE $DB_NAME;
+CREATE USER '$USER'@'localhost' IDENTIFIED BY '$PWD';
+GRANT ALL ON $DB_NAME.* TO '$USER'@'localhost';
 FLUSH PRIVILEGES;
 EOF
