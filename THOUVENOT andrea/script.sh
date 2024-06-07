@@ -17,11 +17,21 @@
 #  --autostart \
 #	--wait
 
+IPvm=192.168.122.85
+userVM=andrea
 
 sudo virsh snapshot-revert VM snapshotVM
 sleep 2
-scp -o "StrictHostKeyChecking no" install_mariadb.sh andrea@192.168.122.85:
-ssh -o "StrictHostKeyChecking no" andrea@192.168.122.85 "sudo bash ./install_mariadb.sh"
-scp -o "StrictHostKeyChecking no" installapache.sh andrea@192.168.122.85:
-ssh -o "StrictHostKeyChecking no" andrea@192.168.122.85 "sudo bash ./installapache.sh"
+scp -o "StrictHostKeyChecking no" install_mariadb.sh $userVM@$IPvm:
+ssh -o "StrictHostKeyChecking no" $userVM@$IPvm "sudo bash ./install_mariadb.sh"
+echo "Mariadb is installed"
+scp -o "StrictHostKeyChecking no" installapache.sh $userVM@$IPvm:
+ssh -o "StrictHostKeyChecking no" $userVM@$IPvm "sudo bash ./installapache.sh"
+echo "Apache is installed"
+scp -o "StrictHostKeyChecking no" install_php.sh $userVM@$IPvm:
+ssh -o "StrictHostKeyChecking no" $userVM@$IPvm "sudo bash ./install_php.sh"
+echo "Php is installed"
+
+
+
 
