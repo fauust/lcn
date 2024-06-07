@@ -10,10 +10,10 @@ TABLE_NAME="Repertoire"
 sudo apt update && sudo apt upgrade -y
 
 # Install packages
-sudo apt install apache2 -y
-sudo apt install mariadb-server -y
-sudo systemctl enable mariadb
-sudo systemctl start mariadb
+apt install apache2 -y
+apt install mariadb-server -y
+systemctl enable mariadb
+systemctl start mariadb
 
 # Generate the SQL file from the template with variable substitution
 cat <<EOF > /tmp/setup.sql
@@ -33,3 +33,5 @@ mariadb < /tmp/setup.sql
 
 # Remove the temporary SQL file
 rm /tmp/setup.sql
+
+
