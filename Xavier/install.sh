@@ -39,12 +39,18 @@ done
 echo "---------------------------------------------"
 echo "Installing software"
 echo "---------------------------------------------"
-scripts=("install_apache.sh" "install_php.sh" "install_mariadb.sh" "install_app.sh")
+scripts=("install_apache.sh" "install_php.sh" "install_mariadb.sh")
 for script in "${scripts[@]}"; do
     line="${script//?/=}"
     printf "\n%s\n%s\n%s\n" "$line" "$script" "$line"
     eval scp "$ssh_opts" "$script" $vm_host:  &> /dev/null
-    eval ssh "$ssh_opts" $vm_host "sudo ./$script"  # &> /dev/null
+    eval ssh "$ssh_opts" $vm_host "sudo ./$script"  &> /dev/null
 done
 
 # Note : I need to put "eval" before scp and ssh otherwise $ssh_opts is not expanded correctly (it keeps the quotes)
+
+echo "---------------------------------------------"
+echo "Installing application"
+echo "---------------------------------------------"
+# shellcheck disable=SC1091
+source install_app.sh

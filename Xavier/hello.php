@@ -1,6 +1,14 @@
 <?php
-// Include the database connection file
-include_once("hello_config.php");
+
+// Connection settings
+$databaseHost = 'localhost';
+$databaseUsername = 'xav';
+$databasePassword = '1234';
+$databaseName = 'db_xav';
+//echo "Connecting to database $databaseName on $databaseHost as $databaseUsername";
+
+// Connect to the database
+$mysqli = mysqli_connect($databaseHost, $databaseUsername, $databasePassword, $databaseName);
 
 // Fetch contacts (in descending order)
 $result = mysqli_query($mysqli, "SELECT * FROM contacts ORDER BY id DESC");
@@ -9,13 +17,14 @@ $result = mysqli_query($mysqli, "SELECT * FROM contacts ORDER BY id DESC");
 <html>
 <head>
     <title>MariaDB Contacts</title>
+    <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 <h1>Contacts</h1>
 <table>
     <tr>
-        <td>Name</td>
-        <td>Age</td>
+        <th>Prénom</th>
+        <th>Age</th>
 <!--        <td><a class="button" href="add.php">Add Contact</a></td>-->
     </tr>
     <?php

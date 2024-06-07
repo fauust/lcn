@@ -2,7 +2,7 @@
 
 # Install Mariadb
 # ========================
-apt-get install -y mariadb-server mariadb-client
+apt-get install -y mariadb-server
 
 # Create a database and a user
 
