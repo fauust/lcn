@@ -22,8 +22,6 @@ if ($incremental); then
     echo "Using existing VM snapshot $snapshot_name"
     echo "---------------------------------------------"
     sudo virsh snapshot-revert deb $snapshot_name
-    # Wait for the VM to reboot (otherwise following scp and ssh commands will fail)
-    sleep 1
 else
     echo "---------------------------------------------"
     echo "Creating VM"
@@ -31,15 +29,20 @@ else
     eval ./create_vm.sh
 fi
 
+# Wait for the VM to reboot (otherwise following scp and ssh commands will fail)
+while nc -nz $vm_IP 22; do
+    sleep 1
+done
+
 # Install software
 # ================
 echo "---------------------------------------------"
 echo "Installing software"
 echo "---------------------------------------------"
-scripts=("install_apache.sh")
+scripts=("install_apache.sh" "install_php.sh")
 for script in "${scripts[@]}"; do
     echo "$script ..."
-    eval scp "$ssh_opts" "$script" $vm_host: &> /dev/null
+    eval scp "$ssh_opts" "$script" $vm_host:  &> /dev/null
     eval ssh "$ssh_opts" $vm_host "sudo ./$script"  &> /dev/null
 done
 

@@ -2,7 +2,7 @@
 
 # Install Apache
 # ========================
-apt install -y apache2
+apt-get install -y apache2
 
 # Enable Apache
 # ========================
