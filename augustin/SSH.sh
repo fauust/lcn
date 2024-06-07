@@ -33,8 +33,13 @@ function runScript {
   ssh -o StrictHostKeyChecking=no "$userName"@"$ipVM" 'bash /tmp/installMariaDB.sh'
   ssh -o StrictHostKeyChecking=no "$userName"@"$ipVM" 'bash /tmp/initVhost.sh'
 }
+function sendFiles {
+  echo "Sending the files to the VM..."
+  scp -o StrictHostKeyChecking=no /home/augustin/Desktop/infra_VM/scripts/sources/index.php "$userName"@"$ipVM":/var/www/TestingBasics/
+}
 # add the sshkey.pub to the VM
 SSHConnectReady
 sendScript
 runScript
+sendFiles
 echo "You can connect by ssh to ""$userName"@"$ipVM"

@@ -28,12 +28,6 @@ sudo tee /etc/apache2/sites-available/TestingBasics.conf > /dev/null <<EOF
 </VirtualHost>
 EOF
 
-
-sudo tee /var/www/TestingBasics/index.php > /dev/null <<EOF
-<? php
-echo "Hello World!";
-?>
-EOF
 sudo a2ensite TestingBasics
 
 sudo systemctl reload apache2.service
