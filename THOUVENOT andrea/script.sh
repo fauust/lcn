@@ -19,5 +19,7 @@
 
 
 sudo virsh snapshot-revert VM snapshotVM
-
+sleep 2
+scp -o "StrictHostKeyChecking no" install_mariadb.sh andrea@192.168.122.85:
+ssh -o "StrictHostKeyChecking no" andrea@192.168.122.85 "sudo bash ./install_mariadb.sh"
 
