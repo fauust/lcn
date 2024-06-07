@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 sudo apt-get update
-sudo apt-get install mariadb-server
+sudo apt-get install mariadb-server -y
 
 sudo systemctl start mariadb
 sudo systemctl enable mariadb
