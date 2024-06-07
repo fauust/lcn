@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-# ssh-keygen -f "/home/florent/.ssh/known_hosts" -R "192.168.122.66"
+USER="florent"
+IP="192.168.122.66"
+
+# ssh-keygen -f "/home/$USER/.ssh/known_hosts" -R $IP
 
 # virt-install \
 # 	--connect=qemu:///system \
@@ -20,6 +23,10 @@
 # 	--noautoconsole \
 # 	--wait
 
-sudo virsh snapshot-revert vm-deb snapshot2
-scp -o "StrictHostKeyChecking no" mariadb.sh florent@192.168.122.66:
-ssh -o "StrictHostKeyChecking no" florent@192.168.122.66 "sudo bash ./mariadb.sh"
+sudo virsh snapshot-revert vm-deb snapshot0
+# scp -o "StrictHostKeyChecking no" php.sh $USER@$IP:
+# ssh -o "StrictHostKeyChecking no" $USER@$IP "sudo bash ./php.sh"
+# scp -o "StrictHostKeyChecking no" apache.sh $USER@$IP:
+# ssh -o "StrictHostKeyChecking no" $USER@$IP "sudo bash ./apache.sh"
+scp -o "StrictHostKeyChecking no" mariadb.sh $USER@$IP:
+ssh -o "StrictHostKeyChecking no" $USER@$IP "sudo bash ./mariadb.sh"
