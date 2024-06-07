@@ -1,8 +1,6 @@
-#! /bin/bash
 #! /usr/bin/env bash
-password=$1
-userName=$2
-name=$3
+userName=$1
+name=$2
 
 function ipVM {
   sleep 1
@@ -10,29 +8,33 @@ function ipVM {
   ipVM=$(arp -an | grep "$macVM" | awk -F'(' '{print $2}' | awk -F')' '{print $1}')
   echo "VM's IP = " "$ipVM"
 }
-function addSshPubKey {
-  echo "Adding the ssh key to the VM..."
+function SSHConnectReady {
+  echo "Trying to connect to $userName@$ipVM"
   while !  nc -z "$ipVM" 22 ; do
-    echo "Trying to connect to $userName@$ipVM"
     echo "Waiting for the VM to be ready..."
     ipVM
-    sleep 1
+    sleep 5
   done
-  SSHPASS="$password" sshpass -e ssh-copy-id -o StrictHostKeyChecking=no -i /home/augustin/.ssh/id_dsa.pub "$userName"@"$ipVM"
+  # SSHPASS="$password" sshpass -e ssh-copy-id -o StrictHostKeyChecking=no -i /home/augustin/.ssh/id_ed25519.pub "$userName"@"$ipVM"
 }
 function sendScript {
   echo "Sending the scripts to the VM..."
-  SSHPASS="$password" sshpass -e scp -o StrictHostKeyChecking=no ./scripts/installApache2.sh "$userName"@"$ipVM":/tmp/
-  #SSHPASS="$password" sshpass -e scp -o StrictHostKeyChecking=no ./scripts/installPhpFPM8.3.sh "$userName"@"$ipVM":/tmp/
+  scp -o StrictHostKeyChecking=no ./scripts/installApache2.sh "$userName"@"$ipVM":/tmp/
+  scp -o StrictHostKeyChecking=no ./scripts/installPhpFPM8.3.sh "$userName"@"$ipVM":/tmp/
+  scp -o StrictHostKeyChecking=no ./scripts/installMariaDB.sh "$userName"@"$ipVM":/tmp/
+  scp -o StrictHostKeyChecking=no ./scripts/initVhost.sh "$userName"@"$ipVM":/tmp/
+  scp -o StrictHostKeyChecking=no ./scripts/installPAMAtempt.sh "$userName"@"$ipVM":/tmp/ # tocomment
 }
 function runScript {
-  SSHPASS="$password" sshpass -e ssh -o StrictHostKeyChecking=no "$userName"@"$ipVM" 'chmod 755 /tmp/install*.sh'
+  ssh -o StrictHostKeyChecking=no "$userName"@"$ipVM" 'chmod 755 /tmp/install*.sh'
   echo "Running the scripts on the VM..."
-  SSHPASS="$password" sshpass -e ssh -o StrictHostKeyChecking=no "$userName"@"$ipVM" 'bash /tmp/installApache2.sh'
-  #SSHPASS="$password" sshpass -e ssh -o StrictHostKeyChecking=no "$userName"@"$ipVM" 'bash /tmp/installPhpFPM8.3.sh'
+  ssh -o StrictHostKeyChecking=no "$userName"@"$ipVM" 'bash /tmp/installApache2.sh'
+  ssh -o StrictHostKeyChecking=no "$userName"@"$ipVM" 'bash /tmp/installPhpFPM8.3.sh'
+  ssh -o StrictHostKeyChecking=no "$userName"@"$ipVM" 'bash /tmp/installMariaDB.sh'
+  ssh -o StrictHostKeyChecking=no "$userName"@"$ipVM" 'bash /tmp/initVhost.sh'
 }
-ipVM
 # add the sshkey.pub to the VM
-addSshPubKey
+SSHConnectReady
 sendScript
 runScript
+echo "You can connect by ssh to ""$userName"@"$ipVM"
