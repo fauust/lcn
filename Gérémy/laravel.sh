@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+DB_CONNECTION="mysql"
+DB_HOST="localhost"
+DB_PORT="3306"
+DB_DATABASE="madb"
+DB_USERNAME="Gerem"
+DB_PASSWORD="test"
 
 ### Add certificates ###
 apt reinstall ca-certificates -y
@@ -17,6 +23,15 @@ mv composer.phar /usr/local/bin/composer
 ### Create project Laravel ###
 cd /var/www/html/ || exit
 yes | composer create-project laravel/laravel my-app
+
+### Env ###
+cd /var/www/html/my-app/ || exit
+sed -i "s/DB_CONNECTION=sqlite/DB_CONNECTION=$DB_CONNECTION/" .env
+sed -i "s/# DB_HOST=127.0.0.1/DB_HOST=$DB_HOST/" .env
+sed -i "s/# DB_PORT=3306/DB_PORT=$DB_PORT/" .env
+sed -i "s/# DB_DATABASE=laravel/DB_DATABASE=$DB_DATABASE/" .env
+sed -i "s/# DB_USERNAME=root/DB_USERNAME=$DB_USERNAME/" .env
+sed -i "s/# DB_PASSWORD=/DB_PASSWORD=$DB_PASSWORD/" .env
 
 ### Add conf for Laravel app ###
 cd /etc/apache2/sites-available/ || exit

@@ -7,7 +7,7 @@ apt update && apt upgrade -y
 apt install -y apache2
 
 ### Installation Php ###
-apt install -y php-fpm php-mysql php-sqlite3 curl php-cli php-mbstring php-xml git unzip
+apt install -y php-fpm php-mysql php-sqlite3 curl php-cli php-mbstring php-xml git unzip vim
 
 ### link Apache and Php ###
 a2enmod proxy_fcgi setenvif
