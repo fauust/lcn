@@ -2,6 +2,7 @@
 
 USER="florent"
 IP="192.168.122.66"
+NC="nc -vz $IP 22"
 
 # ssh-keygen -f "/home/$USER/.ssh/known_hosts" -R $IP
 
@@ -23,10 +24,14 @@ IP="192.168.122.66"
 # 	--noautoconsole \
 # 	--wait
 
-sudo virsh snapshot-revert vm-deb snapshot0
-# scp -o "StrictHostKeyChecking no" php.sh $USER@$IP:
-# ssh -o "StrictHostKeyChecking no" $USER@$IP "sudo bash ./php.sh"
-# scp -o "StrictHostKeyChecking no" apache.sh $USER@$IP:
-# ssh -o "StrictHostKeyChecking no" $USER@$IP "sudo bash ./apache.sh"
+while [ "$NC" != 0 ]; do
+    echo "VM starting..."
+    sleep 1
+done
+
+scp -o "StrictHostKeyChecking no" php.sh $USER@$IP:
+ssh -o "StrictHostKeyChecking no" $USER@$IP "sudo bash ./php.sh"
+scp -o "StrictHostKeyChecking no" apache.sh $USER@$IP:
+ssh -o "StrictHostKeyChecking no" $USER@$IP "sudo bash ./apache.sh"
 scp -o "StrictHostKeyChecking no" mariadb.sh $USER@$IP:
 ssh -o "StrictHostKeyChecking no" $USER@$IP "sudo bash ./mariadb.sh"
