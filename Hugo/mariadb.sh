@@ -1,7 +1,6 @@
 #!/bin/bash
 
 ### Variables ###
-DB_ROOT_PASS=$1
 DB_USER=$2
 DB_PASS=$3
 PROJECT_NAME=$4
