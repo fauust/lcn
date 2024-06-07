@@ -8,15 +8,16 @@ chown mateo-nicoud:mateo-nicoud /home/mateo-nicoud/.ssh
 chown mateo-nicoud:mateo-nicoud /home/mateo-nicoud/.ssh/authorized_keys
 chmod 700 /home/mateo-nicoud/.ssh
 chmod 600 /home/mateo-nicoud/.ssh/authorized_keys
-apt install -y openssh-server
-apt install -y sudo
-apt install -y vim
-apt install -y php8.2-fpm
-apt install -y php-xml
-apt install -y php-dom
-apt install -y apache2
-apt install -y mariadb
-apt install -y php-mysql
+apt install -y \
+  openssh-server \
+  sudo \
+  vim \
+  php8.2-fpm \
+  php-xml \
+  php-dom \
+  apache2 \
+  mariadb \
+  php-mysql
 
 sudo a2dismod mpm_prefork
 sudo a2enmod proxy_fcgi setenvif mpm_event
