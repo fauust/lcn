@@ -1,9 +1,15 @@
 -- setup.sql
 
 
--- Create User with password
+-- Create User & table  with password
+CREATE DATABASE IF NOT EXISTS ${DB_NAME};
 CREATE USER '${MDB_USER}'@'localhost' IDENTIFIED BY '${MDB_PASSWORD}';
-GRANT ALL PRIVILEGES ON *.* TO '${MDB_USER}'@'localhost';
-
+GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${MDB_USER}'@'localhost';
+USE ${DB_NAME};
+CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 -- Apply Changes
 FLUSH PRIVILEGES;
