@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
-apt install php8.2-fpm php8.2-common php8.2-mysql php8.2-xml \
-php8.2-xmlrpc php8.2-curl php8.2-gd php8.2-imagick php8.2-cli \
-php8.2-dev php8.2-imap php8.2-mbstring php8.2-soap php8.2-zip php8.2-bcmath -y
+apt-get update -y
+apt-get install php8.2-fpm -y
+a2enmod proxy_fcgi setenvif
+a2enconf php8.2-fpm
+systemctl reload apache2
+rm /var/www/html/index.html
+cat > /var/www/html/index.php <<-EOF
+<?php
+        phpinfo();
+?>
+EOF
+systemctl restart apache2
