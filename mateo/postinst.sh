@@ -19,9 +19,9 @@ apt install -y \
   mariadb \
   php-mysql
 
-sudo a2dismod mpm_prefork
-sudo a2enmod proxy_fcgi setenvif mpm_event
-sudo a2dissite 000-default
-sudo a2enconf php8.2-fpm
+a2dismod mpm_prefork
+a2enmod proxy_fcgi setenvif mpm_event
+a2dissite 000-default
+a2enconf php8.2-fpm
 
 echo "mateo-nicoud ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
