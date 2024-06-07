@@ -2,7 +2,8 @@
 
 sudo apt install -y mariadb-server
 
-sudo mysql <create_user.sql
+# shellcheck disable=SC2024
+sudo mysql <./create_user.sql
 
 cd /var/www/vm-app || exit
 
