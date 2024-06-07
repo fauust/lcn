@@ -12,4 +12,6 @@ cat > /var/www/html/index.php <<-EOF
 ?>
 EOF
 mv vhostphp.conf /etc/apache2/sites-available/
-sudo a2ensite vhostphp.conf
+a2ensite vhostphp.conf
+rm /etc/apache2/sites-available/000-default.conf
+systemctl restart apache2
