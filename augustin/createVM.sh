@@ -12,7 +12,7 @@ function dropExistingVM {
   virsh destroy "$name"
   virsh undefine "$name"
   # dangerous but useful if the *.qcow2 are stacking up in the memory
-  sudo rm -f /var/lib/libvirt/images/*.qcow2
+  # sudo rm -f /var/lib/libvirt/images/*.qcow2
   # sudo rm -f /var/lib/libvirt/images/*test*.qcow2
   [[ -f /var/lib/libvirt/images/"$name".qcow2 ]] && sudo rm -f /var/lib/libvirt/images/"$name".qcow2 # tofix : need to find a way to remove the sudo
 }
@@ -23,6 +23,7 @@ function createVM {
       --autoconsole none \
       --initrd-inject=/home/augustin/Desktop/infra_VM/scripts/"$userName"_preseed.cfg \
       --initrd-inject=/home/augustin/Desktop/infra_VM/scripts/postinst.sh \
+      --initrd-inject=/home/augustin/.ssh/id_ed25519.pub \
       --extra-args="auto=true priority=critical preseed/file=/""$userName""_preseed.cfg" \
       --os-variant=debian12 \
       --disk size=10 --vcpu=4 --ram=2048 --graphics spice \
