@@ -16,3 +16,11 @@ sudo sed -i 's/# DB_PORT=.*/DB_PORT=3306/' .env
 
 sudo systemctl restart mariadb
 sudo php artisan migrate
+
+cd ~ || exit
+
+# shellcheck disable=SC2024
+sudo mysql <./data_dump.sql
+
+# shellcheck disable=SC2002
+cat welcome.blade.php | sudo tee /var/www/vm-app/resources/views/welcome.blade.php
