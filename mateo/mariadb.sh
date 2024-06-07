@@ -11,7 +11,7 @@ sudo systemctl enable mariadb
 # Configuration de la base de données et de l'utilisateur
 dbname="laraveldb"
 dbuser="mateo-nicoud"
-dbpass="password"
+dbpass="123"
 
 # Création de la base de données
 sudo mysql -e "CREATE DATABASE IF NOT EXISTS $dbname;"
@@ -30,3 +30,6 @@ sudo mysql -e "USE $dbname;CREATE TABLE IF NOT EXISTS permissions (
     permission VARCHAR(255) NOT NULL
 );
 "
+
+# Insertion d'un élément dans la table permissions
+sudo mysql -e "USE $dbname; INSERT INTO permissions (utilisateur, permission) VALUES ('mateo', 'admin');"
