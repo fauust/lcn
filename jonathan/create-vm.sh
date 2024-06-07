@@ -11,3 +11,4 @@ virt-install --name=vm-try01 \
   --disk size=10 \
   --os-variant=debian12 \
   --wait -1
+

@@ -15,6 +15,7 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
           make venv
           make install-pre-commit
+      # //TEMP only validate diffs
       - name: Run pre-commit (all)
         run: |
           source .venv/bin/activate
