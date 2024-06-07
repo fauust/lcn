@@ -12,7 +12,7 @@ cd /home/axpoty/vm-app || exit
 
 # Install laravel dependencies
 composer install
-php artisan migrate
+#php artisan migrate
 cd ..
 
 # Move app to /var/www
