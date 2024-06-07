@@ -4,7 +4,7 @@ sudo apt install -y mariadb-server
 
 sudo mysql <create_user.sql
 
-cd /var/www/vm-app
+cd /var/www/vm-app || exit
 
 sudo sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
 sudo sed -i 's/# DB_DATABASE=.*/DB_DATABASE=vm-app/' .env

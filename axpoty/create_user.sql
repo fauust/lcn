@@ -1,3 +1,3 @@
 CREATE USER 'axpoty'@'localhost' IDENTIFIED BY '1234';
-GRANT ALL PRIVILEGES ON *.* TO 'axpoty'@'localhost' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON 'vm-app'.* TO 'axpoty'@'localhost' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
