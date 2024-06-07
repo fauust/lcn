@@ -28,11 +28,8 @@ fi
 
 # Loop until the port is available
 while true; do
-  #Use nc to check port availability
-  nc -zv -w $TIMEOUT "$HOST" "$PORT" &> /dev/null
-
   #Checking the order return code
-  if mycmd; then
+  if nc -zv -w $TIMEOUT "$HOST" "$PORT" &> /dev/null; then
     echo "Le port $PORT sur l'hôte $HOST est maintenant ouvert."
     break
   else
