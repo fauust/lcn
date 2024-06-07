@@ -30,7 +30,7 @@ done
 
 echo "Port $PORT on $SERVER is now available!"
 
-scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null apache.sh laravel.sh maria.sh mydump.sql createUser.sh vm.debian:/home/dumasg/
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null apache.sh laravel.sh maria.sh mydump.sql createUser.sh welcome.blade.php vm.debian:/home/dumasg/
 
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vm.debian chmod +x /home/dumasg/apache.sh
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vm.debian chmod +x /home/dumasg/maria.sh
@@ -41,4 +41,6 @@ ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vm.debian sudo .
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vm.debian sudo ./maria.sh
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vm.debian sudo ./laravel.sh
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vm.debian sudo ./createUser.sh
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null vm.debian sudo cp /home/dumasg/welcome.blade.php /var/www/html/my-app/resources/views/
+
 
