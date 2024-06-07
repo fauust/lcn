@@ -13,7 +13,7 @@ sudo a2enconf php8.2-fpm
 
 # Create sample PHP file
 # ========================
-html_root="/var/www/testapache"
+html_root="/var/www/testapp"
 mkdir -p $html_root
 
 cat > "$html_root"/index.php <<-EOF

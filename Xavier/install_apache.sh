@@ -10,7 +10,7 @@ systemctl enable apache2
 
 # Create a test website
 # ========================
-html_root="/var/www/testapache"
+html_root="/var/www/testapp"
 mkdir -p $html_root
 
 cat > "$html_root"/index.html <<-EOF
@@ -42,10 +42,10 @@ find $html_root -type f -exec chmod 640 {} \;
 
 # Set vhost
 # ========================
-vhost_file="/etc/apache2/sites-available/testapache.conf"
+vhost_file="/etc/apache2/sites-available/testapp.conf"
 cat > $vhost_file <<-EOF
 <VirtualHost *:80>
-    ServerName testapache
+    ServerName testapp
     ServerAdmin webmaster@localhost
     DocumentRoot $html_root
     ErrorLog ${APACHE_LOG_DIR}/error.log
@@ -54,7 +54,7 @@ cat > $vhost_file <<-EOF
 EOF
 
 # Enable the vhost
-a2ensite testapache
+a2ensite testapp
 
 # Reload Apache
 systemctl reload apache2

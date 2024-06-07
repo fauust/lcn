@@ -30,7 +30,7 @@ else
 fi
 
 # Wait for the VM to reboot (otherwise following scp and ssh commands will fail)
-while nc -nz $vm_IP 22; do
+while ! nc -nz $vm_IP 22; do
     sleep 1
 done
 
@@ -39,11 +39,12 @@ done
 echo "---------------------------------------------"
 echo "Installing software"
 echo "---------------------------------------------"
-scripts=("install_apache.sh" "install_php.sh")
+scripts=("install_apache.sh" "install_php.sh" "install_mariadb.sh" "install_app.sh")
 for script in "${scripts[@]}"; do
-    echo "$script ..."
+    line="${script//?/=}"
+    printf "\n%s\n%s\n%s\n" "$line" "$script" "$line"
     eval scp "$ssh_opts" "$script" $vm_host:  &> /dev/null
-    eval ssh "$ssh_opts" $vm_host "sudo ./$script"  &> /dev/null
+    eval ssh "$ssh_opts" $vm_host "sudo ./$script"  # &> /dev/null
 done
 
 # Note : I need to put "eval" before scp and ssh otherwise $ssh_opts is not expanded correctly (it keeps the quotes)
