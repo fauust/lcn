@@ -13,4 +13,4 @@ sudo apt update -y
 sudo apt install -y php8.3-fpm
 
 # Install new PHP 8.3 packages
-sudo apt install -y php8.3 php8.3-{cli,xml,dom,zip,sqlite3,bz2,curl,mbstring,intl}
+sudo apt install -y php8.3 php8.3-{cli,xml,dom,zip,mysql,bz2,curl,mbstring,intl}
