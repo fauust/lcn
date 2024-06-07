@@ -15,6 +15,7 @@ virt-install \
 	--wait -1 \
 	--debug
 
-#Install Apache
+#Copy scripts
 scp -o "StrictHostKeyChecking no" install_apache.sh $VM_IP:
 ssh -o "StrictHostKeyChecking no" $VM_IP "sudo bash ./install_apache.sh"
+
