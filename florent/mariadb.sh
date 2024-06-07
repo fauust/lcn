@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
 
-USER="florent"
-PWD="0000"
-DB_NAME="db_vm"
+# shellcheck disable=SC1090,SC1091
+source /tmp/config.sh
 
 apt update -y
 apt upgrade -y
 apt install -y mariadb-server mariadb-client
-mariadb -u root << EOF
-CREATE DATABASE $DB_NAME;
-CREATE USER '$USER'@'localhost' IDENTIFIED BY '$PWD';
-GRANT ALL ON $DB_NAME.* TO '$USER'@'localhost';
+mariadb << EOF
+CREATE DATABASE IF NOT EXISTS "$DB_NAME";
+CREATE USER IF NOT EXISTS "$USER"@'localhost' IDENTIFIED BY "$DB_PWD";
+GRANT ALL ON "$DB_NAME".* TO "$USER"@'localhost';
 FLUSH PRIVILEGES;
 EOF
