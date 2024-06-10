@@ -2,7 +2,7 @@
 
 #install php
 sudo apt update
-sudo apt install -y php-fpm curl
+sudo apt install -y php php-fpm php-xml php-dom curl git zip unzip
 
 sudo a2enmod proxy_fcgi setenvif
 sudo a2enconf php-fpm
@@ -19,5 +19,13 @@ sudo mv composer.phar /usr/local/bin/composer
 curl -fsSL https://deb.nodesource.com/setup_21.x | sudo -E bash - && sudo apt-get install -y nodejs
 
 #create new project
-#composer create-project laravel/laravel /var/www/vm_app
-#a2ensite vm_app.conf
+sudo echo "127.0.0.1	vm-app.local" | sudo tee -a /etc/hosts
+sudo mv /home/jon/vm_app.local.conf /etc/apache2/sites-available/
+sudo chown jon:jon /etc/apache2/sites-available/vm_app.local.conf
+composer create-project laravel/laravel /home/jon/vm_app
+cd /home/jon/vm_app || return
+composer install
+sudo mv /home/jon/vm_app/ /var/www/
+sudo chown -R www-data:www-data /var/www/vm_app/
+sudo a2ensite vm_app.local.conf
+sudo systemctl reload apache2.service
