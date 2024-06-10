@@ -1,9 +1,13 @@
+#!/usr/bin/env bash
+
+true > preseed.cfg
+cat << EOF > preseed.cfg
 d-i debian-installer/locale select en_US
 d-i console-setup/ask_detect boolean false
 d-i keyboard-configuration/xkb-keymap select fr(latin9)
 
 d-i netcfg/choose_interface select auto
-d-i netcfg/get_hostname string vm-deb
+d-i netcfg/get_hostname string $VM_NAME
 d-i netcfg/get_domain string
 d-i netcfg/disable_dhcp boolean false
 d-i mirror/country string manual
@@ -36,9 +40,9 @@ d-i partman/confirm boolean false
 d-i partman/confirm_nooverwrite boolean true
 
 d-i passwd/root-login boolean false
-d-i passwd/user-fullname string florent
-d-i passwd/username string florent
-d-i passwd/user-password-crypted password $6$6UHPrloRsJ2TotMt$vmK2e1v5FV/2xxd.patSn9dVN3NFJnLFy9d8ZdqMowqZkkjxnwxRXYVQSRlZZGPrXmcqLwqrzAX3wdDZncwCD.
+d-i passwd/user-fullname string $USER
+d-i passwd/username string $USER
+d-i passwd/user-password-crypted password $USER_PWD
 
 d-i base-installer/install-recommends boolean false
 tasksel tasksel/first multiselect
@@ -63,8 +67,9 @@ d-i debian-installer/add-kernel-opts string console=ttyS0,115200n8 serial
 popularity-contest popularity-contest/participate boolean false
 
 ### Run ssh.sh, sudoers.sh in /target just before the install finishes.
-d-i preseed/late_command string \
-  cp ssh.sh /target/tmp/ && chmod 755 /target/tmp/ssh.sh && in-target /tmp/ssh.sh; \
+d-i preseed/late_command string \\
+  cp ssh.sh /target/tmp/ && chmod 755 /target/tmp/ssh.sh && in-target /tmp/ssh.sh; \\
   cp sudoers.sh /target/tmp/ && chmod 755 /target/tmp/sudoers.sh && in-target /tmp/sudoers.sh
 
 d-i finish-install/reboot_in_progress note
+EOF
