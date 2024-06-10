@@ -2,10 +2,10 @@
 
 USER="mateo-nicoud"
 HOST="192.168.122.240"
-KEY_PATH="/home/mateo-nicoud/.ssh/vb"
+KEY_PATH="/home/$USER/.ssh/vb"
 
 # Supprimer l'entrée du host dans le fichier known_hosts
-ssh-keygen -f "/home/mateo-nicoud/.ssh/known_hosts" -R "$HOST"
+ssh-keygen -f "/home/$USER/.ssh/known_hosts" -R "$HOST"
 chown mateo-nicoud:mateo-nicoud /home/mateo-nicoud/.ssh/known_hosts
 
 # Envoie des scripts
@@ -19,11 +19,11 @@ ssh -i "$KEY_PATH" -o StrictHostKeyChecking=no $USER@$HOST "sudo bash ./configur
 ssh -i "$KEY_PATH" -o StrictHostKeyChecking=no $USER@$HOST "sudo bash ./mariadb.sh"
 
 # Envoie du fichier conf apache2
-scp -i "$KEY_PATH" -o StrictHostKeyChecking=no "/home/mateo-nicoud/Documents/infraVm/monprojet.conf" "$USER@$HOST:/etc/apache2/sites-available/monprojet.conf"
+scp -i "$KEY_PATH" -o StrictHostKeyChecking=no "monprojet.conf" "$USER@$HOST:/etc/apache2/sites-available/monprojet.conf"
 
 # Envoie du site
 ssh -i "$KEY_PATH" -o StrictHostKeyChecking=no $USER@$HOST "sudo bash ./configureWebsite.sh"
-scp -i "$KEY_PATH" -o StrictHostKeyChecking=no "/home/mateo-nicoud/Documents/lcn-mateo/mateo/index.php" "$USER@$HOST:/var/www/monprojet/public/index.php"
+scp -i "$KEY_PATH" -o StrictHostKeyChecking=no "index.php" "$USER@$HOST:/var/www/monprojet/public/index.php"
 
 
 # Reload final
