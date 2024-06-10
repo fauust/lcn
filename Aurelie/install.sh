@@ -16,13 +16,29 @@
 # Définir l'adresse IP de la machine virtuelle
 VM_IP=aurelie@192.168.122.51
 
-sudo virsh-revert vmtest php
+sudo virsh-revert vmtest database
 
+### script apache ####
 #scp -o "StrictHostKeyChecking no" apache.sh $VM_IP:
 #ssh -o "StrictHostKeyChecking no" $VM_IP "sudo bash ./apache.sh"
 
+### script php ###
 #scp -o "StrictHostKeyChecking no" php.sh $VM_IP:
 #ssh -o "StrictHostKeyChecking no" $VM_IP "sudo bash ./php.sh"
 
-scp -o "StrictHostKeyChecking no" mariadb.sh $VM_IP:
-ssh -o "StrictHostKeyChecking no" $VM_IP "sudo bash ./mariadb.sh"
+## script mariadb ###
+#scp -o "StrictHostKeyChecking no" mariadb.sh $VM_IP:
+#ssh -o "StrictHostKeyChecking no" $VM_IP "sudo bash ./mariadb.sh"
+
+#### script setup database ###
+#scp -o "StrictHostKeyChecking no" create_contact_table.sql $VM_IP:
+#scp -o "StrictHostKeyChecking no" setup_database.sh $VM_IP:
+#ssh -o "StrictHostKeyChecking no" $VM_IP "bash ./setup_database.sh"
+
+### Copy file index.php on VM ###
+scp -o "StrictHostKeyChecking no" index.php aurelie@192.168.122.51:/home/aurelie/index.php
+ssh -o "StrictHostKeyChecking no" aurelie@192.168.122.51 "sudo mv /home/aurelie/index.php /var/www/html/index.php"
+
+
+### restart apache ###
+ssh -o "StrictHostKeyChecking no" $VM_IP "sudo systemctl restart apache2"
