@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+//        Création des utilisateurs
         DB::table('users')->insert([
             'username' => 'Rose',
             'email' => 'rose@mail.com',
@@ -29,6 +30,7 @@ class DatabaseSeeder extends Seeder
             'image' => null,
             'bio' => 'Je songe à devenir infirmière, j\'écris mes réflexions.'
         ]);
+//        Création des lien de follow (1 = Rose, 2 = Musonda)
         DB::table('followers')->insert([
             'follower_id' => 1,
             'following_id' => 2
@@ -37,6 +39,7 @@ class DatabaseSeeder extends Seeder
             'follower_id' => 2,
             'following_id' => 1
         ]);
+//        Création des articles
         DB::table('articles')->insert([
             'user_id' => 1,
             'title' => 'Devenir enseignante',
@@ -58,9 +61,11 @@ class DatabaseSeeder extends Seeder
             'description' => 'Je suis passionnée par la médecine, je veux devenir infirmière.',
             'body' => 'Je suis passionnée par la médecine, je veux devenir infirmière. Je suis passionnée par la médecine, je veux devenir infirmière. Je suis passionnée par la médecine, je veux devenir infirmière. Je suis passionnée par la médecine, je veux devenir infirmière. Je suis passionnée par la médecine, je veux devenir infirmière.'
         ]);
+//        Création des tags
         DB::table('tags')->insert([
             'name' => 'éducation'
         ]);
+//        Création des liens entre articles et tags tag_id = 1 (éducation) article_id = 1 (Devenir enseignante)
         DB::table('article_tag')->insert([
             'article_id' => 1,
             'tag_id' => 1
