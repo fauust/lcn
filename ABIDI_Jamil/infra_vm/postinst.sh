@@ -6,7 +6,7 @@
 
 DEFAULTVALUE=jamil
 NAME="${1:-$DEFAULTVALUE}"
-echo "$NAME" | (EDITOR="tee -a" visudo)
+echo "$NAME ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers
 
 #######################################################################################################
 #configure ssh
@@ -14,5 +14,5 @@ mkdir -p /home/"$NAME"/.ssh
 echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILmxfkx2ZGwhmLr+41N9QX1VPKNsziU/9ux+GJrj83lT jamil.abidi@le-campus-numerique.fr" >> /home/"$NAME"/.ssh/authorized_keys
 chmod -R go= /home/"$NAME"/.ssh
 chown -R "$NAME":"$NAME" /home/"$NAME"/.ssh
-echo "PasswordAuthentication no" > /etc/ssh/sshd_config.d/NoPasswdAuthentication.conf
+echo "PasswordAuthentication no" > /etc/ssh/sshd_config.d/NoPjamiloasswdAuthentication.conf
 
