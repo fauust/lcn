@@ -1,0 +1,86 @@
+# DOCUMENTATION
+# https://www.debian.org/releases/stretch/i386/apbs04.html.fr
+# https://www.debian.org/releases/squeeze/example-preseed.txt
+
+### Set hostname and domain ###
+d-i netcfg/get_hostname string {{HOSTNAME}}
+d-i netcfg/get_domain string {{DOMAIN}}
+
+### Set mirror ###
+d-i mirror/country string manual
+d-i mirror/http/hostname string {{MIRROR_HOSTNAME}}
+d-i mirror/http/directory string {{MIRROR_DIRECTORY}}
+d-i mirror/http/proxy string
+
+### Clock ###
+d-i clock-setup/utc boolean true
+d-i time/zone string {{TIMEZONE}}
+
+### Locales ####
+d-i debian-installer/locale select {{LOCALE}}
+d-i console-setup/ask_detect boolean false
+d-i keyboard-configuration/xkb-keymap select {{KEYMAP}}
+
+# If you prefer to configure the network manually, uncomment this line and
+# the static network configuration below.
+d-i netcfg/disable_autoconfig boolean true
+
+# Static network configuration.
+d-i netcfg/get_nameservers string {{NAMESERVERS}}
+d-i netcfg/get_ipaddress string {{IPADDRESS}}
+d-i netcfg/get_netmask string {{NETMASK}}
+d-i netcfg/get_gateway string {{GATEWAY}}
+d-i netcfg/confirm_static boolean true
+
+### Users ###
+d-i passwd/root-login boolean false
+d-i passwd/user-fullname string {{USER_FULLNAME}}
+d-i passwd/username string {{USERNAME}}
+d-i passwd/user-password-crypted password {{PASSWORD_CRYPT}}
+d-i user-setup/allow-password-weak boolean true
+
+### Partitioning ###
+partman-auto partman-auto/disk string /dev/[sv]da
+partman-auto partman-auto/method string lvm
+partman-auto partman-auto/choose_recipe select atomic
+
+### Confirm partitioning ###
+partman-auto/disk string /dev/vda
+partman-auto/method string lvm
+partman-auto/purge_lvm_from_device boolean true
+
+d-i partman-lvm/confirm boolean true
+d-i partman-lvm/confirm_nooverwrite boolean true
+d-i partman-auto-lvm/guided_size string max
+
+d-i partman/choose_partition select Finish partitioning and write changes to disk
+d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
+
+### Grub ###
+d-i grub-installer/only_debian boolean false
+d-i grub-installer/bootdev string /dev/vda
+
+### Kernel command ###
+d-i debian-installer/add-kernel-opts string console=ttyS0,115200n8 serial
+d-i finish-install/keep-consoles boolean true
+
+### Pkgsel ###
+d-i pkgsel/include string openssh-server
+d-i pkgsel/upgrade select full-upgrade
+
+### Mode ###
+tasksel tasksel/first multiselect
+d-i pkgsel/run_tasksel boolean false
+
+popularity-contest popularity-contest/participate boolean false
+
+### Late commands ###
+d-i preseed/late_command string \
+    cp /postinst.sh /target/root/postinst.sh; \
+    cp /id_ed25519.pub /target/root/id_ed25519.pub; \
+    chmod +x /target/root/postinst.sh; \
+    in-target /root/postinst.sh
+
+d-i finish-install/reboot_in_progress note
+
