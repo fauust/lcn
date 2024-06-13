@@ -41,6 +41,6 @@ class UserTest extends TestCase
 
     }
 
-   
+
 
 }
