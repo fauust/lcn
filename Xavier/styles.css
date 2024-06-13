@@ -1,0 +1,31 @@
+table {
+  border-collapse: collapse;
+  border: 1px solid #00838f;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  font-size: 18px;
+}
+
+table td {
+  padding: 20px;
+}
+
+table td:last-child {
+  text-align: right;
+}
+
+table tr:first-child {
+  background-color: gray;
+  color: #fff;
+  font-weight: bold;
+}
+
+table tr {
+  border-bottom: 1px dotted #00838f;
+}
+
+h1 {
+  text-align: center;
+  color: #00838f;
+}

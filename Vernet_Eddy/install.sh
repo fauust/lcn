@@ -18,6 +18,9 @@ while ! nc -z 192.168.122.42 22; do
 done
 
 
-  # install apache
+  # install apache === Pour reprendre à partir d'un snapshot,tout commenter au dessus d'ici + changer le install_apache.sh par le fichier voulu (spoil, c'est install.sh)
 scp -o "StrictHostKeyChecking no" install_apache.sh 192.168.122.42:
+ssh -o "StrictHostKeyChecking no" 192.168.122.42 "sudo bash ./install_apache.sh"
+
+scp -o "StrictHostKeyChecking no" install_php.sh 192.168.122.42:
 ssh -o "StrictHostKeyChecking no" 192.168.122.42 "sudo bash ./install_apache.sh"
