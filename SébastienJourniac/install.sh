@@ -37,4 +37,5 @@ echo "Apache is installed"
 scp -o "StrictHostKeyChecking no" install_laravel.sh $uservm@$IPvm:
 ssh -o "StrictHostKeyChecking no" $uservm@$IPvm "sudo bash ./install_laravel.sh"
 echo "Laravel is installed"
-
+scp -o "StrictHostKeyChecking no" config_laravel.sh $uservm@$IPvm:
+ssh -o "StrictHostKeyChecking no" $uservm@$IPvm "bash ./config_laravel.sh"
