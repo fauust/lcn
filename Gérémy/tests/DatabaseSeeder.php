@@ -18,23 +18,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $rose = User::factory()->state([
+        $rose = User::create([
             'username' => 'Rose',
             'email' => 'rose@mail.com',
             'password' => bcrypt('pwd'),
             'image' => null,
-            'bio' => 'Je voudrais devenir enseignante pour les enfants'
-        ])->make();
-        $rose->save();
+            'bio' => 'Je voudrais devenir enseignante pour les enfants',
+            'updated_at' => now(),
+            'created_at' => now()
+        ]);
 
-        $musonda = User::factory()->state([
+        $musonda = User::create([
             'username' => 'Musonda',
             'email' => 'musonda@mail.com',
             'password' => bcrypt('pwd2'),
             'image' => null,
-            'bio' => 'Je songe à devenir infirmière, j\'écris mes réflexions'
-        ])->make();
-        $musonda->save();
+            'bio' => 'Je songe à devenir infirmière, j\'écris mes réflexions',
+            'updated_at' => now(),
+            'created_at' => now()
+        ]);
 
         $tag = Tag::create([
             'name' => 'éducation'
