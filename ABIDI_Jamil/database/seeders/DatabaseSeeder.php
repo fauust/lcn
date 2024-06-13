@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             'bio' => 'Je songe à devenir infirmière, j’écris mes réflexions',
         ]);
 
-        // Create followings
+        // Create following
         $rose->following()->attach($musonda->id);
         $musonda->following()->attach($rose->id);
 
