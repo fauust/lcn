@@ -35,4 +35,4 @@ function readFile {
 readFile &&
 bash "$(pwd)"/scripts/sed_preseed.sh "$name" "$password" "$userName" &&
 bash "$(pwd)"/scripts/createVM.sh "$name" "$userName" &&
-bash "$(pwd)"/scripts/SSH.sh "$userName" "$name"
+bash "$(pwd)"/scripts/SSH.sh  "$userName" "$name"
