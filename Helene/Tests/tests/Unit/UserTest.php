@@ -179,4 +179,72 @@ class UserTest extends TestCase
         $this->assertFalse($result2, 'Rose does not follow someone else');
     }
 
+    public function test_doesUserFollowArticle()
+    {
+        // GIVEN a context
+        $rose = User::factory()->create([
+            'username' => 'Rose',
+            'email' => 'rose@mail.com',
+            'password' => Hash::make('pwd'),
+        ]);
+
+        $musonda = User::factory()->create([
+            'username' => 'Musonda',
+            'email' => 'musonda@mail.com',
+        'password' => Hash::make('pwd2'),
+        ]);
+
+        $roseArticle = Article::factory()->create([
+            'title' => 'Éducation des enfants',
+            'slug' => 'education-des-enfants',
+            'description' => 'description de l\'article éducatif',
+            'body' => 'Article géniale sur le Montessori.',
+            'user_id' => $rose->id,
+        ]);
+
+        $musondaArticle = Article::factory()->create([
+            'title' => 'Réflexions sur la santé',
+            'slug' => 'reflexions-sur-la-sante',
+            'description' => 'description de l\'article santé',
+            'body' => 'Article sur les réflexions de Musonda concernant la santé.',
+            'user_id' => $musonda->id,
+        ]);
+
+        // Establishing follow relationship with articles
+        $musonda->favoritedArticles()->attach($roseArticle->id);
+        $rose->favoritedArticles()->attach($musondaArticle->id);
+
+        // WHEN some condition
+
+        $result = $rose->doesUserFollowArticle($musondaArticle->id, $roseArticle->id);
+//        $result2 = $musonda->doesUserFollowArticle($roseArticle->id, $musondaArticle->id);
+
+        // THEN expect some output
+        $this->assertTrue($result, 'Rose follows the article');
+//        $this->assertFalse($result2, 'Musonda does not follow the article');
+    }
+
+        public function test_setPasswordAttribute(){
+            // GIVEN a context
+            $user = new User();
+            $password = 'password';
+
+            // WHEN some condition
+            $user->password = $password;
+
+            // THEN expect some output
+            $this->assertTrue(Hash::check($password, $user->password));
+        }
+
+        public function test_getJWTIdentifier(){
+            // GIVEN a context
+            $user = new User();
+            $user->id = 1;
+
+            // WHEN some condition
+            $result = $user->getJWTIdentifier();
+
+            // THEN expect some output
+            $this->assertEquals(1, $result);
+        }
 }
