@@ -11,9 +11,10 @@ class ApiTest extends TestCase
     {
         parent::setUp();
 
+        // Exécuter les migrations
         $this->artisan('migrate');
     }
-    public function testArticleEndpoint()
+    public function test_articles()
     {
         $this->seed();
 

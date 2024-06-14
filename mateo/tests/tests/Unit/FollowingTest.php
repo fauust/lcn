@@ -37,6 +37,15 @@ class FollowingTest extends TestCase
         $this->assertTrue($user->followers->contains($follower));
     }
 
+    public function test_following()
+    {
+        $user = User::factory()->create();
+        $follower = User::factory()->create();
+        $user->followers()->attach($follower);
+
+        $this->assertTrue($follower->following->contains($user));
+    }
+
     public function test_doesUserFollowAnotherUser()
     {
         $this->seed();
@@ -47,15 +56,28 @@ class FollowingTest extends TestCase
         $this->assertTrue($rose->doesUserFollowAnotherUser($rose->id, $musonda->id));
     }
 
-//    public function test_doesUserFollowArticle()
-//    {
-//        $this->seed();
-//
-//        $musonda = User::where('username', 'Musonda')->first();
-//        $rose = User::where('username', 'Rose')->first();
-//        $articleId = Article::where('user_id',$rose->id)->first();
-//        $this->assertTrue($rose->doesUserFollowArticle($musonda->id, $articleId->id));
-//    }
+    public function test_favouriteArticles()
+    {
+        $this->seed();
+
+        $musonda = User::where('username', 'Musonda')->first();
+        $rose = User::where('username', 'Rose')->first();
+        $article = Article::where('user_id',$rose->id)->first();
+        $musonda->favoritedArticles()->attach($article->id);
+        $this->assertTrue($musonda->favoritedArticles->contains($article));
+    }
+
+    public function test_doesUserFollowArticle()
+    {
+        $this->seed();
+
+        $musonda = User::where('username', 'Musonda')->first();
+        $rose = User::where('username', 'Rose')->first();
+        $article = Article::where('user_id', $rose->id)->first();
+        $musonda->favoritedArticles()->attach($article->id);
+        $this->assertTrue($musonda->doesUserFollowArticle($musonda->id, $article->id));
+    }
+
 
 //    public function test_idAndName()
 //    {
