@@ -5,7 +5,6 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Article;
-use App\Models\Tag;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 
@@ -153,7 +152,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function test_doesUserFollowAnotherUser()
+    public function test_doesUserFollowArticle()
     {
         // GIVEN
         $rose = User::factory()->create([
@@ -170,15 +169,68 @@ class UserTest extends TestCase
             'bio' => 'Je songe à devenir infirmière, j’écris mes réflexions',
         ]);
 
-        $rose->following()->attach($musonda->id);
+        $article = Article::factory()->create([
+            'user_id' => $musonda->id,
+            'title' => 'Premier article de Musonda',
+            'body' => 'Contenu du premier article de Musonda',
+        ]);
+
+        $rose->favoritedArticles()->attach($article->id);
 
         // WHEN
-        $isFollowing = $rose->following->contains($musonda);
+        $doesFollow = $rose->favoritedArticles->contains($article);
 
         // THEN
-        $this->assertTrue($isFollowing, "Rose devrait suivre Musonda");
+        $this->assertNotNull($article, "Premier article de Musonda devrait exister");
+        $this->assertIsIterable($rose->favoritedArticles, "Les articles favoris de Rose devraient être itérables");
+        $this->assertTrue($doesFollow, "Rose devrait suivre le premier article de Musonda");
     }
 
 
+    /** @test */
+    public function test_setPasswordAttribute()
+    {
+        // GIVEN
+        $rose = User::factory()->create([
+            'username' => 'Rose',
+            'email' => 'rose@mail.com',
+            'password' => 'pwd',
+            'bio' => 'Je voudrais devenir enseignante pour enfants',
+        ]);
 
+        // WHEN
+        // Pas d'action nécessaire, car la factory utilise automatiquement la méthode setPasswordAttribute
+
+        // THEN
+        $this->assertTrue(Hash::check('pwd', $rose->password), "Le mot de passe de Rose devrait être hashé");
+    }
+
+    /** @test */
+    public function test_getJWTIdentifier()
+    {
+        // GIVEN
+        $user = User::factory()->create();
+
+        // WHEN
+        $jwtIdentifier = $user->getJWTIdentifier();
+
+        // THEN
+        $this->assertNotNull($jwtIdentifier, "getJWTIdentifier() devrait retourner une valeur non nulle");
+        $this->assertEquals($user->getKey(), $jwtIdentifier, "getJWTIdentifier() devrait retourner la clé de l'utilisateur");
+    }
+
+    /** @test */
+    public function test_getJWTCustomClaims()
+    {
+        // GIVEN
+        $user = User::factory()->create();
+
+        // WHEN
+        $jwtCustomClaims = $user->getJWTCustomClaims();
+
+        // THEN
+        $this->assertIsArray($jwtCustomClaims, "getJWTCustomClaims() devrait retourner un tableau");
+        $this->assertEquals($user->id, $jwtCustomClaims['id'], "getJWTCustomClaims() devrait contenir l'id de l'utilisateur");
+        $this->assertEquals($user->username, $jwtCustomClaims['username'], "getJWTCustomClaims() devrait contenir l'username de l'utilisateur");
+    }
 }
