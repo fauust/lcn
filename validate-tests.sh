@@ -2,6 +2,14 @@
 
 . ./bash.sh
 
+usage() {
+  cat >&2 <<-EOF
+Usage : $0 -u <user|all>
+  -u user (or all)
+  -h help
+EOF
+}
+
 typeset -r LARAVEL_URL="https://github.com/alexeymezenin/laravel-realworld-example-app/"
 typeset -r LARAVEL_DIR="/tmp/laravel-realworld-example-app"
 
@@ -10,6 +18,29 @@ for cmd in git composer phpunit php sqlite3; do
   command -v $cmd 1>/dev/null ||
     err "$cmd command not found"
 done
+
+typeset USER=""
+
+while getopts "u:h" OPTION; do
+  case $OPTION in
+    u)
+      USER="$OPTARG"
+      ;;
+    h)
+      usage
+      exit 0
+      ;;
+    *)
+      usage
+      exit 1
+      ;;
+  esac
+done
+
+[[ $USER != "" ]] || {
+  usage
+  exit 1
+}
 
 # clone and install the tooling if dir does not exists
 if [[ ! -d $LARAVEL_DIR ]]; then
@@ -22,8 +53,16 @@ if [[ ! -d $LARAVEL_DIR ]]; then
   cd - 1>/dev/null
 fi
 
-USERS=$(find ~+ -mindepth 1 -maxdepth 1 -type d | grep -v ".git" | sort)
-typeset -r USERS
+case $USER in
+  all)
+    USERS=$(find ~+ -mindepth 1 -maxdepth 1 -type d | grep -v ".git" | sort)
+    ;;
+  *)
+    USERS=$USER
+    [[ -d $USERS ]] ||
+      err "$USERS does not seem to exist"
+    ;;
+esac
 
 for user in $USERS; do
   msg="${user##*/}: starting"
