@@ -7,27 +7,27 @@ use Tests\TestCase;
 
 class ApiTest extends TestCase
 {
-    public function testArticleEndpoint()
+    protected function setUp(): void
     {
-        // URL de l'API à tester
-        $url = 'http://127.0.0.1:8000/api/articles/xvs3zjl';
+        parent::setUp();
 
-        // Effectuer une requête GET
-        $response = $this->getHttpResponse($url);
+        // Exécuter les migrations
+        $this->artisan('migrate');
+    }
+    public function test_articles()
+    {
+        $this->seed();
 
-        // Vérifier le statut de la réponse
-        $this->assertSame(200, $response->getStatusCode());
+        $url = 'api/articles/xvs3zjl';
 
-        // Vérifier le contenu JSON
+        $response = $this->get($url);
+
+        $response->assertStatus(200);
+
         $expectedJson = '{"article":{"slug":"xvs3zjl","title":"XVs3zJL","description":"L5Ro54Luo0","body":"UX8tNbKA8O","tagList":["ouk"],"createdAt":"2024-06-13T09:43:02.000000Z","updatedAt":"2024-06-13T09:43:02.000000Z","favoritesCount":0,"favorited":false,"author":{"username":"Rose","bio":"Je voudrais devenir enseignante pour enfants","image":null,"following":false}}}';
-        $actualJson = $response->getBody()->getContents();
 
-        $this->assertJsonStringEqualsJsonString($expectedJson, $actualJson);
+        $response->assertExactJson(json_decode($expectedJson, true));
     }
 
-    private function getHttpResponse($url)
-    {
-        $client = new \GuzzleHttp\Client();
-        return $client->request('GET', $url);
-    }
+
 }
