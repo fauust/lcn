@@ -233,4 +233,20 @@ class UserTest extends TestCase
         $this->assertEquals($user->id, $jwtCustomClaims['id'], "getJWTCustomClaims() devrait contenir l'id de l'utilisateur");
         $this->assertEquals($user->username, $jwtCustomClaims['username'], "getJWTCustomClaims() devrait contenir l'username de l'utilisateur");
     }
+
+    /** @test */
+    public function test_isAdmin()
+    {
+        // GIVEN
+        $adminUser = User::factory()->create(['role' => 'admin']);
+        $nonAdminUser = User::factory()->create(['role' => 'user']);
+
+        // WHEN
+        $isAdmin = $adminUser->isAdmin();
+        $isNotAdmin = $nonAdminUser->isAdmin();
+
+        // THEN
+        $this->assertTrue($isAdmin, "isAdmin() devrait retourner true pour les utilisateurs admin");
+        $this->assertFalse($isNotAdmin, "isAdmin() devrait retourner false pour les utilisateurs non-admin");
+    }
 }
