@@ -18,7 +18,7 @@ class AddRoseUserSeeder extends Seeder
         $user = User::where('email', 'rose@mail.com')->first();
 
         if(!$user) {
-            User::Create([
+            $user = User::Create([
                 'username' => 'Rose',
                 'email' => 'rose@mail.com',
                 'password' => Hash::make('pwd'),
