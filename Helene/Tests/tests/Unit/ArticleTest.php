@@ -1,49 +1,38 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use App\Models\Article;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class ArticleTest extends TestCase
 {
     use RefreshDatabase;
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
-    public function test_articles()
+
+    public function testShowArticle()
     {
-        // GIVEN : Create user and create article
-        $rose=User::factory()->create([
-            'username'=> 'Rose',
-            'email'=> 'rose@gmail.com',
-            'password' => Hash::make('pwd'),
-        ]);
+        $article = Article::factory()->create();
 
-
-        $article = Article::factory()->create([
-            'title' => 'title',
-            'description' => 'description',
-            'body' => 'body',
-            'user_id' => $rose->id,
-        ]);
-
-        // WHEN
-        $articles=$rose->articles;
-
-        //THEN
-        $this->assertCount(1,$articles,'Rose n\'a pas écrit d\'article');
-        $article=$articles->first();
-        $this->assertEquals('title', $article->title);
-        $this->assertEquals('description', $article->description);
-        $this->assertEquals('body', $article->body);
-
+        $response = $this->get('api/articles/' . $article->slug)
+            ->assertExactJson([
+                'article' => [
+                    'slug' => $article->slug,
+                    'title' => $article->title,
+                    'body' => $article->body,
+                    'description' => $article->description,
+                    'tagList' => [],
+                    'createdAt' => $article->created_at,
+                    'updatedAt' => $article->updated_at,
+                    'favorited' => false,
+                    'favoritesCount' => 0,
+                    'author' => [
+                        'username' => $article->user->username,
+                        'bio' => $article->user->bio,
+                        'image' => $article->user->image,
+                        'following' => false
+                    ]
+                ]
+            ]);
     }
-
-
 }

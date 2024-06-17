@@ -30,45 +30,61 @@ class UserTest extends TestCase
 
     public function test_articles()
     {
-        $user = User::factory()->create([
-            'username' => 'toto'
+        $title = 'TITLE';
+        $slug = 'SLUG';
+        $desc = 'DESCRIPTION';
+        $body = 'BODY';
+
+        User::factory()->create([
+            'id' => 1,
+            'username' => 'Rose',
         ]);
 
-        $articles = Article::factory()->count(1)->create([
-            'user_id' => $user->id
+        Article::factory()->create([
+            'id' => 1,
+            'user_id' => 1,
+            'title' => $title,
+            'slug' => $slug,
+            'description' => $desc,
+            'body' => $body
         ]);
 
-        $response = $this->get('api/articles/?author=' . $user->username);
+        $user = User::where('id', 1)->firstOrFail();
 
-        $expectedArticles = $articles->map(function($article) {
-            return [
-                'slug' => $article->slug,
-                    'title' => $article->title,
-                    'body' => $article->body,
-                    'description' => $article->description,
-                    'tagList' => [],
-                    'createdAt' => $article->created_at,
-                    'updatedAt' => $article->updated_at,
-                    'favorited' => false,
-                    'favoritesCount' => 0,
-                    'author' => [
-                        'username' => $article->user->username,
-                        'bio' => $article->user->bio,
-                        'image' => $article->user->image,
-                        'following' => false
-                    ]
-                    ];
-        })->toArray();
+        $item = $user->articles()->get()->firstOrFail();
 
-        $response->assertExactJson([
-            'articles' => $expectedArticles, 'articlesCount' => count($articles)
-        ]);
+        $this->assertNotEmpty($item);
+        $this->assertEquals($title, $item->title);
+        $this->assertEquals($slug, $item->slug);
+        $this->assertEquals($desc, $item->description);
+        $this->assertEquals($body, $item->body);
     }
 
-    // public function test_favouriteArticles()
-    // {
-    //     $this->assertTrue(true);
-    // }
+    public function test_favouriteArticles()
+    {
+        $user = User::factory()->create([
+            'username' => 'Rose',
+        ]);
+
+        $article1 = Article::factory()->create([
+            'title' => 'First Article',
+            'slug' => 'first-article',
+        ]);
+
+        $article2 = Article::factory()->create([
+            'title' => 'Second Article',
+            'slug' => 'second-article',
+        ]);
+
+        $user->favoritedArticles()->attach($article1->id);
+        $user->favoritedArticles()->attach($article2->id);
+
+        $favoritedArticles = $user->favoritedArticles;
+
+        $this->assertCount(2, $favoritedArticles);
+        $this->assertTrue($favoritedArticles->contains($article1));
+        $this->assertTrue($favoritedArticles->contains($article2));
+    }
 
     // public function test_followers()
     // {

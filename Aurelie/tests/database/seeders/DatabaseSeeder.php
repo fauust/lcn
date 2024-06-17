@@ -3,10 +3,15 @@
 namespace Database\Seeders;
 
 
+use App\Models\Article;
+use App\Models\Comment;
+use App\Models\Tag;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use app\Models\User;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,9 +22,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
         // Create users
-        $roseId =DB::table('users')->insertGetId([
+        $rose = User::create([
                 'username' => 'Rose',
                 'email' => 'rose@mail.com',
                 'password' => Hash::make('pwd'),
@@ -27,7 +31,7 @@ class DatabaseSeeder extends Seeder
                 'created_at' => Date::now(),
                 'updated_at' => Date::now(),
             ]);
-        $musondaId = DB::table('users')->insertGetId([
+        $musonda = User::create([
                 'username' => 'Musonda',
                 'email' => 'musonda@mail.com',
                 'password' => Hash::make('pwd2'),
@@ -37,54 +41,52 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Create followers
-        DB::table('followers')->insert([
-            ['follower_id' => $roseId,
-                'following_id' => $musondaId],
-
-            ['follower_id' => $musondaId,
-                'following_id' => $roseId],
-        ]);
+        $rose->following()->attach($musonda->id);
+        $musonda->following()->attach($rose->id);
 
         // Create articles
-        $roseArticleId = DB::table('articles')->insert([
+        $roseArticleId = Article::create([
+            'user_id' => $rose->id,
             'title' => 'Article de Rose',
             'slug' => 'slug article rose',
-            'description' => 'Contenu de l\'article de Rose',
+            'description' => 'Contenu article de Rose',
             'body' => 'Article éducatif',
-            'user_id' => $roseId,
         ]);
 
-        $musondaFirstArticleId = DB::table('articles')->insert([
+        $musondaFirstArticleId = Article::create([
+            'user_id' => $musonda->id,
             'title' => 'Premier article de Musonda',
             'slug' => 'slug article de Musonda',
             'description' => 'Contenu du premier article de Musonda',
             'body' => 'Article médical',
-            'user_id' => $musondaId,
         ]);
 
-        $musondaSecondArticleId = DB::table('articles')->insert([
+        $musondaSecondArticleId = Article::create([
+            'user_id' => $musonda->id,
             'title' => 'Deuxième article de Musonda',
             'slug' => 'slug article de Musonda',
             'description' => 'Contenu du deuxième article de Musonda',
             'body' => 'Article santé',
-            'user_id' => $musondaId,
         ]);
 
+        // Establishing follow relationship with articles
+        $musonda->favoritedArticles()->attach($roseArticleId->id);
+        $rose->favoritedArticles()->attach($musondaFirstArticleId->id);
+        $rose->favoritedArticles()->attach($musondaSecondArticleId->id);
+
+
         // Adding the “education” tag to Rose’s article
-        $tagID = DB::table('tags')->insertGetId([
+        $tagID = Tag::create([
                 'name' => 'éducation',
         ]);
 
-        DB::table('article_tag')->insert([
-            'article_id' => $roseArticleId,
-            'tag_id' => $tagID,
-        ]);
+        $roseArticleId->tags()->attach($tagID->id);
 
         // Create comments
-        DB::table('comments')->insert([
+        Comment::create([
             'body' => 'J\'adore ta manière de concevoir l\'éducation des enfants',
-            'article_id' => $roseArticleId,
-            'user_id' => $musondaId,
+            'article_id' => $roseArticleId->id,
+            'user_id' => $musonda->id,
             'created_at' => Date::now(),
             'updated_at' => Date::now(),
         ]);
