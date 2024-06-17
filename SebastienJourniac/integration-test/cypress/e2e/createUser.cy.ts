@@ -32,3 +32,14 @@ describe('post article', () => {
     cy.get('[type="submit"]').click()
   })
 })
+
+describe('list article from this user', () => {
+  it('should list article from this user', () => {
+    cy.visit('http://localhost:4137/#/login')
+    cy.get('[placeholder="Email"]').type('foo@example.com')
+    cy.get('[placeholder="Password"]').type('12345678')
+    cy.get('[type="submit"]').click()
+    cy.get('.nav-link').contains('foo').click()
+    cy.get('.article-preview').should('contain', 'Title')
+  })
+})
