@@ -2,6 +2,7 @@ import { ROUTES } from "./constant";
 let name = "bob" + Date.now();
 describe("article", () => {
   describe("post article", () => {
+    // test 1
     it("should create new user", () => {
       cy.visit(ROUTES.REGISTER);
       cy.get('[type="text"]').type(name);
