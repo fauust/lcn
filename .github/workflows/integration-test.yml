@@ -1,0 +1,84 @@
+---
+name: integration-tests
+
+on:
+  pull_request:
+
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Make sure localhost use IPv4
+        run: |
+          sed -i '/^::*/d' /etc/hosts
+      - name: Install backend requirements
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            composer \
+            php \
+            php-curl \
+            php-xml \
+            php-sqlite3 \
+            sqlite3
+      - name: Setup backend
+        run: |
+          # clone
+          git clone \
+            https://github.com/alexeymezenin/laravel-realworld-example-app
+          # apply patch for articles creation
+          cp .ci/ArticleController.php \
+            laravel-realworld-example-app/app/Http/Controllers/ArticleController.php
+          cd laravel-realworld-example-app
+          cp .env.example .env
+          composer update
+          composer install
+          php artisan serve --host localhost --port 8000 &
+      - name: Install frontend requirements
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libasound2 \
+            libgtk-3-0 libgbm-dev \
+            libgtk2.0-0 \
+            libnotify-dev \
+            libnss3 \
+            libxss1 \
+            libxtst6 \
+            xauth \
+            xvfb
+      - name: Setup frontend
+        run: |
+          # clone
+          git clone \
+            https://github.com/mutoe/vue3-realworld-example-app \
+            /tmp/vue3-realworld-example-app
+          cd /tmp/vue3-realworld-example-app
+          # install npm modules
+          npm install cypress
+          # setup env
+          cat >.env<<EOF
+          BASE_URL=/api
+          VITE_API_HOST=http://localhost:8000
+          EOF
+          # fix port: this is not needed since we call commands directly from
+          # packages.json which specify the hostname and port. But keeping it in
+          # case we want to call cypress command directly.
+          # see also:
+          # https://github.com/mutoe/vue3-realworld-example-app/issues/174
+          # sed -i 's/4173/4137/g' cypress.config.ts
+      - name: Run cypress tests
+        run: |
+          # check that backend is reachable
+          nc -zv localhost 8000
+          cd /tmp/vue3-realworld-example-app
+          for user in $(find $GITHUB_WORKSPACE -mindepth 1 -maxdepth 1 -type d | grep -vE ".git|.ci" | sort); do
+            # remove default or previous tests
+            rm -rf cypress/e2e/*cy.ts
+            if [ -d $GITHUB_WORKSPACE/${user##*/}/integration-test/cypress/e2e/ ]; then
+              rsync -av "$GITHUB_WORKSPACE/${user##*/}/integration-test/cypress/e2e/" \
+                "cypress/e2e/"
+              npm run test:e2e:ci
+            fi
+          done
