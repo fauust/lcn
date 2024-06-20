@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Make sure localhost use IPv4
         run: |
-          sed -i '/^::*/d' /etc/hosts
+          sudo sed -i '/^::*/d' /etc/hosts
       - name: Install backend requirements
         run: |
           sudo apt-get update
