@@ -1,0 +1,56 @@
+---
+- name: Load OS-specific vars
+  ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "{{ ansible_distribution }}.yml"
+        - "{{ ansible_os_family }}.yml"
+      paths:
+        - "vars"
+
+- name: Install necessary packages
+  ansible.builtin.package:
+    state: present
+    name: "{{ sshd_packages }}"
+
+- name: Configure sshd /etc/ssh/sshd_config
+  ansible.builtin.template:
+    src: "sshd_config_{{ ansible_os_family }}.j2"
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart sshd
+
+- name: Configure issue sshd
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - src: issue.j2
+      dest: /etc/issue
+    - src: issue.j2
+      dest: /etc/issue.net
+
+- name: Configure motd sshd
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - src: motd.j2
+      dest: /etc/motd
+    - src: motd.j2
+      dest: /etc/motd.tail
+
+- name: Start sshd
+  ansible.builtin.service:
+    name: "{{ sshd_service_name }}"
+    state: started
+    enabled: true
