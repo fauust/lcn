@@ -1,9 +1,9 @@
 [azure]
-myVM1
-myVM2
+vm1
+vm2
 
 [db]
-myVM1
+vm1
 
 [docker]
-myVM2
+vm2
