@@ -1,0 +1,9 @@
+[azure]
+myVM1
+myVM2
+
+[db]
+myVM1
+
+[docker]
+myVM2

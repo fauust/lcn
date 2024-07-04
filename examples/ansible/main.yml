@@ -1,0 +1,15 @@
+---
+- name: apply common configuration
+  hosts: all
+  roles:
+    - { role: sshd, tags: ["sshd"] }
+
+- name: Setup databases
+  hosts: db
+  roles:
+    - { role: fauust.mariadb, tags: ["mariadb"] }
+
+- name: Setup docker
+  hosts: docker
+  roles:
+    - { role: geerlingguy.docker, tags: ["docker"] }

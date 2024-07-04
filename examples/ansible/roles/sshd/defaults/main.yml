@@ -1,0 +1,6 @@
+---
+sshd_Port: 22
+sshd_PermitRootLogin: "no"
+sshd_PasswordAuthentication: "no"
+sshd_X11Forwarding: false
+sshd_AllowTcpForwarding: "yes"
