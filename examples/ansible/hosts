@@ -1,9 +1,0 @@
-[azure]
-vm1
-vm2
-
-[db]
-vm1
-
-[docker]
-vm2
