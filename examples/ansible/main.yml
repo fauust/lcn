@@ -1,5 +1,5 @@
 ---
-- name: apply common configuration
+- name: Apply common configuration
   hosts: all
   roles:
     - { role: sshd, tags: ["sshd"] }
