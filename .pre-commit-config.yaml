@@ -25,13 +25,6 @@ repos:
     hooks:
       - id: markdownlint
         name: Check for markdown lint (mdl)
-  - repo: https://github.com/codespell-project/codespell
-    rev: v2.3.0
-    hooks:
-      - id: codespell
-        name: Checks for common misspellings in text files
-        entry: codespell
-        language: python
   - repo: local
     hooks:
       - id: docker-lychee
