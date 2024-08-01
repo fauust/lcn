@@ -12,5 +12,4 @@ A Docker installa tion script is available at : [scripts/installDocker.sh](scrip
 
 Last time I was really into shell scripting, so I created an Apache container with a [shell script](scripts/firstContainer.sh).
 
-I will now do it with a [docker file](dockerFiles/apacheHelloworld/Dockerfile
-)
+I will now do it with a [docker file](dockerFiles/apacheHelloworld/Dockerfile).
