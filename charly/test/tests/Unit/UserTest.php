@@ -2,12 +2,13 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use App\Models\Article;
 
-class DatabaseTest extends TestCase
+class UserTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -37,7 +38,7 @@ class DatabaseTest extends TestCase
     public function test_favoritedArticles()
     {
         $this->seed(\Database\Seeders\DatabaseSeeder::class);
-        $user = User::where('username', 'Rose')->first(); // Ajoutez cette ligne
+        $user = User::where('username', 'Rose')->first();
         $this->assertNotNull($user);
         $article = Article::where('title', 'Éducation des enfants')->first();
         $this->assertNotNull($article);
@@ -50,8 +51,8 @@ class DatabaseTest extends TestCase
     public function test_followers()
     {
         $user = User::where('username', 'Musonda')->first();
-        $this->assertNotNull($user);
         $followers = $user->followers;
+        $this->assertNotNull($user);
         $this->assertCount(1, $followers);
         $this->assertEquals('Rose', $followers->first()->username);
     }
@@ -59,8 +60,8 @@ class DatabaseTest extends TestCase
     public function test_following()
     {
         $user = User::where('username', 'Rose')->first();
-        $this->assertNotNull($user);
         $following = $user->following;
+        $this->assertNotNull($user);
         $this->assertCount(1, $following);
         $this->assertEquals('Musonda', $following->first()->username);
     }
@@ -76,20 +77,43 @@ class DatabaseTest extends TestCase
     {
         $rose = User::where('username', 'Rose')->first();
         $article = Article::where('title', 'Éducation des enfants')->first();
-
         $rose->favoritedArticles()->attach($article);
         $this->assertTrue($rose->favoritedArticles->contains($article));
     }
 
     public function test_setPasswordAttribute()
     {
-        $user = User::factory()->create(['password' => 'plaintextpassword']);
-        $this->assertNotEquals('plaintextpassword', $user->password);
+        $user = User::factory()->make();
+        $password = 'testpassword';
+        $user->setPasswordAttribute($password);
+        $this->assertNotEquals($password, $user->password);
+        $this->assertTrue(Hash::check($password, $user->password));
     }
 
     public function test_getJWTIdentifier()
     {
         $user = User::factory()->create();
-        $this->assertNotNull($user->getJWTIdentifier());
+        $jwtIdentifier = $user->getJWTIdentifier();
+        $this->assertEquals($user->getKey(), $jwtIdentifier);
     }
+
+    public function test_getJWTCustomClaims()
+    {
+        $user = User::factory()->create();
+        $claims = $user->getJWTCustomClaims();
+        $this->assertArrayHasKey('username', $claims);
+        $this->assertEquals($user->username, $claims['username']);
+        $this->assertArrayHasKey('id', $claims);
+        $this->assertEquals($user->id, $claims['id']);
+    }
+
+    public function test_doesUserIsAdmin()
+    {
+        $user = User::factory()->create();
+        $this->assertFalse($user->doesUserIsAdmin($user->id));
+        $user->role = 'admin';
+        $user->save();
+        $this->assertTrue($user->doesUserIsAdmin($user->id));
+    }
+
 }

@@ -1,0 +1,8 @@
+---
+collections:
+  - community.mysql
+  - azure.azcollection
+
+roles:
+  - name: fauust.mariadb
+  - name: geerlingguy.docker

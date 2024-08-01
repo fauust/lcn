@@ -55,3 +55,8 @@ repos:
         entry: lycheeverse/lychee
         language: docker_image
         types: [markdown]
+      - id: docker-hadolint
+        name: Run hadolint with docker
+        language: docker_image
+        entry: hadolint/hadolint:latest hadolint
+        files: Dockerfile
