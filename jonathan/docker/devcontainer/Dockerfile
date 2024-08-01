@@ -1,5 +1,8 @@
 FROM debian:12
 
+# Définir explicitement le shell à /bin/bash
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Met à jour la liste des paquets et installe Git, PHP 8.0 et PHP 8.0-FPM et nettoie le cache des paquets pour réduire la taille de l'image Docker
 RUN apt-get update && \
     export DEBIAN_FRONTEND=noninteractive && \
