@@ -7,3 +7,4 @@ RUN apt-get update && apt-get upgrade -y && \
 RUN a2enmod proxy \
     a2enmod proxy_http \
     a2ensite myapache.conf
+
