@@ -1,0 +1,8 @@
+---
+services:
+  devcontainer:
+    image: dc-php8.0:1.0
+    volumes:
+      - .:/var/www/
+    ports:
+      - "9000:9000"
