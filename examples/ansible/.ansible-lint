@@ -1,0 +1,12 @@
+---
+skip_list:
+  - 'braces'
+  - 'empty-string-compare'
+  - 'experimental'
+  - 'meta-no-info'
+  - 'no-handler'
+  - 'var-naming'
+  - 'yaml'
+
+exclude_paths:
+  - .vendor
