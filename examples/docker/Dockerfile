@@ -6,7 +6,8 @@ RUN set -eux \
       bash \
       iperf \
       iproute2 \
-      mtr \
+      iputils-ping \
+      mtr-tiny \
       telnet \
     # clean apt \
     && rm -rf /var/lib/apt/lists/* \
