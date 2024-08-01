@@ -6,6 +6,7 @@ RUN set -eux \
       bash \
       iperf \
       iproute2 \
+      iputils-ping \
       mtr \
       telnet \
     # clean apt \
