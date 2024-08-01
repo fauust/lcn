@@ -6,11 +6,11 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Met à jour la liste des paquets et installe Git, PHP 8.0 et PHP 8.0-FPM et nettoie le cache des paquets pour réduire la taille de l'image Docker
 RUN apt-get update && \
     export DEBIAN_FRONTEND=noninteractive && \
-    apt-get install -y software-properties-common lsb-release ca-certificates apt-transport-https curl && \
+    apt-get install --no-install-recommends -y software-properties-common lsb-release ca-certificates apt-transport-https curl && \
     curl -fsSL https://packages.sury.org/php/apt.gpg | apt-key add - && \
     echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list &&\
     apt-get update && \
-    apt-get install -y git php8.0 php8.0-fpm && \
+    apt-get install --no-install-recommends -y git php8.0 php8.0-fpm && \
     curl -s https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer && \
     apt-get clean && \
