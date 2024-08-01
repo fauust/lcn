@@ -17,22 +17,3 @@ Last time I was really into shell scripting, so I created an Apache container wi
 
 I will now do it with a [docker file](dockerFiles/apacheHelloworld/Dockerfile
 )
-```bash
-FROM debian:12-slim
-
-RUN set -eux \
-    && apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
-      bash \
-      iperf \
-      iproute2 \
-      iputils-ping \
-      less \
-      mtr \
-      telnet \
-    && rm -rf /var/lib/apt/lists/* \
-      /var/cache/debconf/* \
-    && apt-get clean
-
-CMD ["/usr/bin/bash"]
-```
