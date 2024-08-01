@@ -1,20 +1,23 @@
-**Construire et démarrer les conteneurs :**
+# Construire et démarrer les conteneurs
 
 ```
 docker-compose up --build -d
 ```
 
-**Vérification**
+## Vérification
 
 Vérifiez que WordPress fonctionne :
 
-Ouvrez votre navigateur et allez à 
+Ouvrez votre navigateur et allez à
 
-http://localhost:8080.
+```
+http://localhost:8080
+```
 
 Vérifiez que PhpMyAdmin fonctionne :
 
-Ouvrez 
+Ouvrez
 
-http://localhost:8081.
-
+```
+http://localhost:8081
+```

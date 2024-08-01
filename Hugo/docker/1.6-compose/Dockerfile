@@ -1,7 +1,7 @@
-FROM wordpress:latest
+FROM wordpress:6.5
 
 # Installer wget et nano
-RUN apt-get update && apt-get install -y wget nano default-mysql-client \
+RUN apt-get update && apt-get install -y wget nano default-mysql-client --no-install-recommends \
 && apt-get clean \
 && rm -rf /var/lib/apt/lists/*
 # Copier le script d'installation de WordPress
