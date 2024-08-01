@@ -4,7 +4,7 @@
 
 ### LAUNCH DOCKERFILE
 
-In /lcn/florent/docker directory:
+In `/lcn/florent/docker` directory:
 
 `$ ./init.sh` or `$ bash init.sh`
 
