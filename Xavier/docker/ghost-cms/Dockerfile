@@ -6,7 +6,7 @@ RUN apt-get update -yq \
     && apt-get install nodejs -yq \
     && apt-get clean -y
 
-ADD . /app/
+COPY . /app/
 WORKDIR /app
 RUN npm install
 
