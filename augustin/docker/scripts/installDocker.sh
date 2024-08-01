@@ -15,8 +15,8 @@ sudo apt-get update && sudo apt-get install -y apparmor
 # make sure you are about to install from the Docker repo instead of the default Ubuntu repo:
 test=$(apt-cache policy docker-ce | grep "500")
 if [ "$test" -eq 0 ]; then
-  echo "Docker is not available in the default Ubuntu repo. Please check the Docker repo has been added correctly."
-  exit 1
+ echo "Docker is not available in the default Ubuntu repo. Please check the Docker repo has been added correctly."
+ exit 1
 fi
 	
 # proper install
