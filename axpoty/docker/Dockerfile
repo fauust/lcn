@@ -1,13 +1,20 @@
 FROM debian:12
 
 # Install apache2 and php extensions
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    apache2  \
-    curl  \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    apache2 \
     ca-certificates \
+    curl \
     libapache2-mod-php \
-    php-curl php-gd php-mbstring php-xml php-xmlrpc php-soap php-intl php-zip php-mysql \
+    php-curl \
+    php-gd \
+    php-intl \
+    php-mbstring \
+    php-mysql \
+    php-soap \
+    php-xml \
+    php-xmlrpc \
+    php-zip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Wordpress
