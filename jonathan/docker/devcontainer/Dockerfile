@@ -9,7 +9,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     # Récupère les variable propres à l'OS, voir plus bas (VERSION_CODENAME)
     # shellcheck source=somefile \
     source /etc/os-release && \
-    apt-get install -y \
+    apt-get install --no-install-recommends -y \
       software-properties-common \
       ca-certificates \
       apt-transport-https \
@@ -18,7 +18,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     dpkg -i /tmp/debsuryorg-archive-keyring.deb && \
     echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $VERSION_CODENAME main" >/etc/apt/sources.list.d/php.list && \
     apt-get update && \
-    apt-get install -y git php8.0 php8.0-fpm && \
+    apt-get install --no-install-recommends -y git php8.0 php8.0-fpm && \
     curl -s https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer && \
     apt-get clean && \
