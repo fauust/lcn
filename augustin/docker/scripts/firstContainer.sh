@@ -4,8 +4,8 @@ port=$1
 domain=$2
 docker pull ubuntu/apache2
 
-containerName=$(docker ps -a | grep -w bob) 
-if [[ "$containerName" != "" ]] ; then 
+containerName=$(docker ps -a | grep -w bob)
+if [[ "$containerName" != "" ]] ; then
   docker rm -f bob
 fi
 

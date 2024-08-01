@@ -21,8 +21,8 @@ async function init() {
     const password = PASSWORD_FILE ? fs.readFileSync(PASSWORD_FILE) : PASSWORD;
     const database = DB_FILE ? fs.readFileSync(DB_FILE) : DB;
 
-    await waitPort({ 
-        host, 
+    await waitPort({
+        host,
         port: 3306,
         timeout: 10000,
         waitForDns: true,

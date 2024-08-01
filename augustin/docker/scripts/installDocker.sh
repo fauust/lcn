@@ -18,7 +18,7 @@ if [ "$test" -eq 0 ]; then
  echo "Docker is not available in the default Ubuntu repo. Please check the Docker repo has been added correctly."
  exit 1
 fi
-	
+
 # proper install
 sudo apt install docker.io -y
 
