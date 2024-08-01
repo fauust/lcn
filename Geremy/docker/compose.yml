@@ -1,0 +1,73 @@
+services:
+
+  apache:
+    build :
+      context: ./apache
+      dockerfile: Dockerfile
+#    image: httpd
+    container_name: web-server
+    ports: 
+      - 80:80
+      - 443:443
+    networks:
+      - my-service
+    depends_on:
+      - mariadb
+    volumes:
+      - ~/Development/dockerCampus/iteration1/conf/index.html:/usr/local/apache2/htdocs/index.html:ro
+ #     - ~/Development/dockerCampus/iteration1/conf/myapache.conf:/usr/local/apache2/conf/httpd.conf:ro
+
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    ports:
+      - 3306:3306
+    networks:
+      - my-service
+    volumes:
+      - my-db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: madb
+      MYSQL_USER: "user1"
+      MYSQL_PASSWORD: 123
+
+
+  wordpress:
+    image: wordpress
+    restart: always
+    ports:
+      - 8900:80
+    environment:
+      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: 123
+      WORDPRESS_DB_NAME: madb
+    networks:
+      - my-service
+    volumes:
+      - wordpress:/var/www/html
+    depends_on:
+      - mariadb
+
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mariadb
+      PMA_USER: root
+      PMA_PASSWORD: 123
+    ports:
+      - 8080:80
+    depends_on:
+      - mariadb
+    networks:
+      - my-service
+
+networks:
+  my-service:
+
+volumes:
+  my-db:
+  wordpress:
