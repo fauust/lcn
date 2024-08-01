@@ -1,12 +1,11 @@
+---
 services:
-
   apache:
-    build :
+    build:
       context: ./apache
       dockerfile: Dockerfile
-#    image: httpd
     container_name: web-server
-    ports: 
+    ports:
       - 80:80
       - 443:443
     networks:
@@ -15,7 +14,6 @@ services:
       - mariadb
     volumes:
       - ~/Development/dockerCampus/iteration1/conf/index.html:/usr/local/apache2/htdocs/index.html:ro
- #     - ~/Development/dockerCampus/iteration1/conf/myapache.conf:/usr/local/apache2/conf/httpd.conf:ro
 
   mariadb:
     image: mariadb
