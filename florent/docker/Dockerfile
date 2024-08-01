@@ -15,7 +15,6 @@ RUN set -eux \
         telnet \
     && rm -rf /var/lib/apt/lists/* \
     /var/cache/debconf/* \
-    && php -v \
     && apt-get clean
 
 # Config Apache
