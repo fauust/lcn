@@ -16,7 +16,7 @@ docker build -t sebflo_container .
 
 # -d (detached mode): tells Docker to run the container in the background (detached)
 # -p (port mapping): maps a host machine port to a container port
-docker run -d -p 666:80 sebflo_container
+docker run --name=sebflo -d -p 666:80 sebflo_container 
 
 
 
