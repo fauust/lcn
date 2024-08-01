@@ -24,3 +24,11 @@ docker run --name mon_conteneur --p 80:80 --cpus="2" --memory="2g" -v volume_cre
 ```
 
 De cette manière nous pouvons aussi ajouter un network ou différents volumes.
+
+## Différence entre une VM et un Container
+
+Une vm est une machine complète avec son système d'exploitation isolé du système hôte. L'hyperviseur transforme les instructions du système guest pour qu'elles soient exécuter par le processeur de la machine hôte. De ce fait ont peut utiliser un système windows sur une machine linux sans soucis grâce à cette couche de traduction.
+
+Le container est quand à lui disponible uniquement en présence d'un noyau linux, car les containers tournent obligatoirement sur une image linux est transmettenent leurs instructions directement au système hôte. Le système d'un container restent toutefois isolé du système hôte.
+
+Une des différences d'utilisation entre les deux systèmes et leurs performances vs leurs possibilités. Les vm offrents plus de possibilité au niveau de l'os choisi mais perdent en performance à cause de la couche de traduction des instructions. Les containers offrent plus de performance mais oblige la présence d'un noyau linux sur la machine hôte, le container quand à lui tournent automatiquement sur un noyau linux.
