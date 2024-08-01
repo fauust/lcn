@@ -6,6 +6,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Met à jour la liste des paquets et installe Git, PHP 8.0 et PHP 8.0-FPM et nettoie le cache des paquets pour réduire la taille de l'image Docker
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update && \
+    # Récupère les variable propres à l'OS, voir plus bas (VERSION_CODENAME)
+    # shellcheck source=somefile \
     source /etc/os-release && \
     apt-get install -y \
       software-properties-common \
