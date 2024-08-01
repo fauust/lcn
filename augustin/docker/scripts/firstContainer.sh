@@ -6,7 +6,7 @@ docker pull ubuntu/apache2
 
 containerName=$(docker ps -a | grep -w bob) 
 if [[ "$containerName" != "" ]] ; then 
-    docker rm -f bob
+  docker rm -f bob
 fi
 
 docker run -p "$port":80 --name bob -v ~/apache2Test:/var/www/html ubuntu/apache2
