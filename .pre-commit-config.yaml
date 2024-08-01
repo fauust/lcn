@@ -25,33 +25,15 @@ repos:
     hooks:
       - id: markdownlint
         name: Check for markdown lint (mdl)
-  - repo: https://github.com/codespell-project/codespell
-    rev: v2.3.0
-    hooks:
-      - id: codespell
-        name: Checks for common misspellings in text files
-        entry: codespell
-        language: python
   - repo: local
     hooks:
-    #   - id: docker-prettier
-    #     name: Run prettier with docker
-    #     entry: tmknom/prettier:latest -l
-    #     language: docker_image
-    #     files: "\\.(\
-    #       css|less|scss\
-    #       |graphql|gql\
-    #       |html\
-    #       |js|jsx\
-    #       |json\
-    #       |md|markdown|mdown|mkdn\
-    #       |mdx\
-    #       |ts|tsx\
-    #       |vue\
-    #       |yaml|yml\
-    #       )$"
       - id: docker-lychee
         name: Run lychee on markdown files with docker
         entry: lycheeverse/lychee
         language: docker_image
         types: [markdown]
+      - id: docker-hadolint
+        name: Run hadolint with docker
+        language: docker_image
+        entry: hadolint/hadolint:latest hadolint
+        files: Dockerfile
