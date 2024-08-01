@@ -10,9 +10,6 @@ RUN apt-get update \
     php8.1-fpm \
     php8.1-mysql \
     wget \
-    mariadb-client \
-    vim \
-    nano \
     && apt-get clean \
     && printf "ServerName localhost\n" >> /etc/apache2/apache2.conf \
     && a2enmod rewrite \
