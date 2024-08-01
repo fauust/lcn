@@ -1,7 +1,6 @@
 FROM ubuntu:24.04
-LABEL authors="olinger"
 
-ENTRYPOINT ["top", "-b"]
+LABEL authors="olinger"
 
 # Utiliser l'image de base officielle d'Apache
 FROM httpd:2.4
