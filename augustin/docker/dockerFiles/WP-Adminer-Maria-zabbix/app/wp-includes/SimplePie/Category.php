@@ -79,7 +79,7 @@ class SimplePie_Category
 
 	/**
 	 * Category type
-	 * 
+	 *
 	 * category for <category>
 	 * subject for <dc:subject>
 	 *

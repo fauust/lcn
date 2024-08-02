@@ -13,7 +13,7 @@ function akismet_test_mode() {
 function akismet_http_post( $request, $host, $path, $port = 80, $ip = null ) {
 	$path = str_replace( '/1.1/', '', $path );
 
-	return Akismet::http_post( $request, $path, $ip ); 
+	return Akismet::http_post( $request, $path, $ip );
 }
 
 function akismet_microtime() {
@@ -24,7 +24,7 @@ function akismet_delete_old() {
 	return Akismet::delete_old_comments();
 }
 
-function akismet_delete_old_metadata() { 
+function akismet_delete_old_metadata() {
 	return Akismet::delete_old_comments_meta();
 }
 
@@ -35,7 +35,7 @@ function akismet_check_db_comment( $id, $recheck_reason = 'recheck_queue' ) {
 function akismet_rightnow() {
 	if ( !class_exists( 'Akismet_Admin' ) )
 		return false;
-   
+
    	return Akismet_Admin::rightnow_stats();
 }
 

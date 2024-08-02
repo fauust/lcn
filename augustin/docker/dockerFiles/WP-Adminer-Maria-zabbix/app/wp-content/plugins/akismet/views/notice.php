@@ -55,7 +55,7 @@ if ( ! isset( $type ) ) {
 		<p><strong><?php esc_html_e( 'Akismet has detected a problem.', 'akismet' ); ?></strong></p>
 		<p><?php esc_html_e( 'WP-Cron has been disabled using the DISABLE_WP_CRON constant. Comment rechecks may not work properly.', 'akismet' ); ?></p>
 	</div>
-	
+
 <?php elseif ( $type === 'alert' ) : ?>
 <div class="<?php echo isset( $parent_view ) && $parent_view === 'config' ? 'akismet-alert is-bad' : 'error'; ?>">
 	<?php /* translators: The placeholder is an error code returned by Akismet. */ ?>

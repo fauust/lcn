@@ -72,15 +72,15 @@ Thank you for using the site,
 All at ###SITENAME###
 ###SITEURL###'=>'Bonjour ###USERNAME###,
 
-Vous avez récemment cliqué sur le lien « Supprimer le site » de votre site, 
+Vous avez récemment cliqué sur le lien « Supprimer le site » de votre site,
 et avez complété le formulaire présent sur cette même page.
 
 Si vous confirmez la suppression de votre site, cliquez sur le lien ci-dessous.
-Aucune confirmation ne vous sera demandée par la suite, soyez donc totalement 
+Aucune confirmation ne vous sera demandée par la suite, soyez donc totalement
 certain·e de ce que vous faites :
 ###URL_DELETE###
 
-Si vous effacez votre site, n’hésitez pas à revenir créer un autre site à l’avenir ! 
+Si vous effacez votre site, n’hésitez pas à revenir créer un autre site à l’avenir !
 (mais souvenez-vous que votre site actuel et votre identifiant ne seront plus jamais disponibles).
 
 Merci d’avoir utilisé ce site,
@@ -147,7 +147,7 @@ Please click the following link to confirm the invite:
 %4$s'=>'Bonjour,
 
 Vous avez été invité·e à rejoindre « %1$s » sur
-%2$s en tant que %3$s. 
+%2$s en tant que %3$s.
 Veuillez cliquer sur le lien suivant pour confirmer l’invitation :
 %4$s','Core Developer'=>'Développeur c&oelig;ur','No valid plugins were found.'=>'Aucune extension valide trouvée.','The plugin contains no files.'=>'Cette extension ne contient aucun fichier.','The package could not be installed.'=>'L’archive n’a pas pu être installée.','Attachment Post URL'=>'Adresse de la page du fichier joint','admin menuAll Links'=>'Tous les liens','%s plugins'=>'%s extensions','%s plugin'=>'%s extension','Failed to optimize the %1$s table. Error: %2$s'=>'Impossible d’optimiser la table %1$s. Erreur : %2$s','Successfully optimized the %s table.'=>'La table %s a bien été optimisée.','The %s table is already optimized.'=>'La table %s a déjà été optimisée.','Successfully repaired the %s table.'=>'La table %s a bien été réparée.','The %s table is okay.'=>'La table %s est correcte.','View version %s details.'=>'Afficher les détails de la version %s.','Tumblr'=>'Tumblr','<a href="%1$s" class="update-browser-link">Update %2$s</a> or learn how to <a href="%3$s" class="browse-happy-link">browse happy</a>'=>'<a href="%1$s" class="update-browser-link">Mettez %2$s à jour</a>, ou apprenez à <a href="%3$s" class="browse-happy-link">naviguer sereinement</a>','Scale images to match the large size selected in %1$simage options%2$s (%3$d &times; %4$d).'=>'Redimensionner les images pour correspondre à la taille large définie dans les %1$sréglages des médias%2$s (%3$d &times; %4$d).','Audio, Video, or Other File'=>'Audio, vidéo ou un autre format','Insert media from another website'=>'Insérer un média depuis un autre site','<strong>Error:</strong> Could not connect to the server. Please verify the settings are correct.'=>'<strong>Erreur :</strong> connexion au serveur impossible, veuillez vérifier que les réglages sont corrects.','<strong>Drag and Drop</strong> &mdash; To rearrange the boxes, drag and drop by clicking on the title bar of the selected box and releasing when you see a gray dotted-line rectangle appear in the location you want to place the box.'=>'<strong>Glisser/déposer</strong> - Pour réarranger les sections, glissez/déposez-les en cliquant sur la barre de titre de la section sélectionnée, et relâchez-la lorsque vous apercevez un rectangle avec une bordure grise à l’emplacement où vous souhaitez placer la section.','You can use the following controls to arrange your Dashboard screen to suit your workflow. This is true on most other administration screens as well.'=>'Vous pouvez utiliser les contrôles suivants pour organiser l’écran du tableau de bord afin qu’il s’adapte à votre manière de l’utiliser. La plupart des écrans de la console d’administration peuvent également être organisés de cette manière.','The left-hand navigation menu provides links to all of the WordPress administration screens, with submenu items displayed on hover. You can minimize this menu to a narrow icon strip by clicking on the Collapse Menu arrow at the bottom.'=>'La navigation située à gauche de l’écran fournit tous les liens pour accéder à la console d’administration de WordPress, avec les sous-menus qui s’affichent au survol. Vous pouvez réduire ce menu à ses seules icônes en cliquant sur la flèche de repliement située en bas du menu.','Overview'=>'Vue d’ensemble','Updates %s'=>'Mises à jour %s','Installed Plugins'=>'Extensions installées','Plugins %s'=>'Extensions %s','All Users'=>'Tous les comptes','Confirm Deletion'=>'Confirmer cette action','Role'=>'Rôle','Add Existing User'=>'Ajouter un compte existant','Search Users'=>'Rechercher des comptes','User removed from this site.'=>'Compte supprimé de ce site.','Changed roles.'=>'Rôles modifiés.','Caution:'=>'Attention :','Add New User'=>'Ajouter un compte','User added.'=>'Compte ajouté.','Super Admin'=>'Super-admin','Version %s'=>'Version %s','Update Available <span class="count">(%s)</span>'=>'À mettre à jour <span class="count">(%s)</span>' . "\0" . 'À mettre à jour <span class="count">(%s)</span>','Deactivate'=>'Désactiver','Delete Site'=>'Supprimer le site','Settings saved.'=>'Réglages enregistrés.','For more information:'=>'Plus d’informations :','About Pages'=>'À propos des pages','Title and Post Editor'=>'Titre et éditeur de publications','Customizing This Display'=>'Personnaliser cet écran','Note: Neither of these options blocks access to your site &mdash; it is up to search engines to honor your request.'=>'Note : Aucune de ces options ne bloque l’accès à votre site &mdash; c’est au moteur de recherche de respecter votre demande.','Post name'=>'Titre de la publication','sample permalink structuresample-post'=>'exemple-article','sample permalink basearchives'=>'archives','This importer is not installed. Please install importers from <a href="%s">the main site</a>.'=>'Cet importateur n’est pas installé. Veuillez installer les outils d’importation depuis <a href="%s">le site principal</a>.','Site Language'=>'Langue du site','Attempt to notify any blogs linked to from the post'=>'Tenter de notifier les sites liés depuis la publication','Hi,
 You\'ve been invited to join \'%1$s\' at
@@ -158,7 +158,7 @@ this email. This invitation will expire in a few days.
 Please click the following link to activate your user account:
 %%s'=>'Bonjour,
 Vous avez reçu une invitation à rejoindre « %1$s » sur
-%2$s avec le rôle « %3$s ». 
+%2$s avec le rôle « %3$s ».
 Si vous ne souhaitez pas rejoindre ce site, veuillez ignorer
 cet e-mail. L’invitation expirera dans quelques jours.
 
