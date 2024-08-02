@@ -4,7 +4,7 @@ services:
     container_name: wordpress_wpApp
     # restart: always
     ports:
-      - 80:80
+      - 0.0.0.0:8080:80
     environment:
       WORDPRESS_DB_HOST: mariadb:3306
       WORDPRESS_DB_USER: root
@@ -17,7 +17,7 @@ services:
       - back
 
   mariadb:
-    image: mariadb:11.5.1-ubi9-rc
+    image: mariadb:11.4
     container_name: mariadb_wpApp
     # restart: always
     environment:
@@ -33,7 +33,7 @@ services:
     container_name: adminer_wpApp
     # restart: always
     ports:
-      - 8080:8080
+      - 127.0.0.1:8081:8080
     depends_on:
       - mariadb
     networks:
@@ -53,3 +53,5 @@ networks:
   front:
 
   back:
+    internal: true
+  monitoring:
