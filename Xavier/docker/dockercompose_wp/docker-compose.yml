@@ -12,7 +12,7 @@ services:
       MARIADB_USER: xav
       MARIADB_PASSWORD: titi
     networks:
-      - wp-network
+      - db-network
 
   wordpress:
     container_name: mywp
@@ -28,7 +28,8 @@ services:
     volumes:
       - /srv/docker/wordpress:/var/www/html
     networks:
-      - wp-network
+      - db-network
+      - front-network
 
   phpMyAdmin:
     container_name: mypma
@@ -40,8 +41,11 @@ services:
       PMA_HOST: mydb
       MYSQL_ROOT_PASSWORD: toto
     networks:
-      - wp-network
+      - db-network
+      - front-network
 
 
 networks:
-  wp-network:
+  db-network:
+    internal: true
+  front-network:
