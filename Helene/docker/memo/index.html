@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conteneurs vs Machines Virtuelles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        caption {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Avantages et Inconvénients des Conteneurs par rapport aux Machines Virtuelles</h1>
+<table>
+    <caption>Comparaison des Conteneurs et des Machines Virtuelles</caption>
+    <thead>
+    <tr>
+        <th>Types / Eléménts</th>
+        <th>Machine Virtuelle</th>
+        <th>Container</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Images</td>
+        <td>Virtualisation de l'environnement hardware, ce qui permet d'exécuter plusieurs systèmes d'exploitation sur un même hôte.</td>
+        <td>Virtualisation de l'environnement applicatif, ce qui permet de créer des images légères et portables contenant uniquement les dépendances de l'application.</td>
+    </tr>
+    <tr>
+        <td>Multitâches</td>
+        <td>Peut exécuter plusieurs applications et services sur une seule machine virtuelle.</td>
+        <td>Destiné à exécuter une seule application ou service par conteneur, ce qui offre une isolation plus légère et une utilisation plus efficace des ressources.</td>
+    </tr>
+    <tr>
+        <td>Utilisation</td>
+        <td>Une seule machine virtuelle pour chaque application ou service.</td>
+        <td>Plusieurs conteneurs peuvent fonctionner sur une seule machine hôte, partageant le même noyau et les mêmes ressources système.</td>
+    </tr>
+    <tr>
+        <td>Taille</td>
+        <td>Les machines virtuelles ont tendance à être plus lourdes en termes de ressources, car elles nécessitent un système d'exploitation complet.</td>
+        <td>Les conteneurs sont créés à partir d'images légères et partagent le même noyau avec l'hôte, ce qui les rend plus rapides à démarrer et à exécuter.</td>
+    </tr>
+    <tr>
+        <td>Persistance des données</td>
+        <td>Les données sont généralement persistantes, stockées dans des disques virtuels ou des volumes.</td>
+        <td>Les données peuvent être persistantes lorsqu'elles sont stockées dans des volumes Docker, mais les conteneurs sont souvent considérés comme éphémères et jetables.</td>
+    </tr>
+    <tr>
+        <td>Configuration</td>
+        <td>Nécessite une configuration distincte pour chaque machine virtuelle, y compris le système d'exploitation, les paramètres réseau, etc.</td>
+        <td>La configuration est encapsulée dans une image Docker, ce qui rend le déploiement et la gestion plus cohérents et reproductibles.</td>
+    </tr>
+    <tr>
+        <td>Performance</td>
+        <td>En raison de la virtualisation complète du matériel, les machines virtuelles peuvent avoir des performances légèrement inférieures en raison de l'overhead supplémentaire.</td>
+        <td>Les conteneurs partagent le même noyau avec l'hôte, ce qui minimise l'overhead et permet une utilisation plus efficace des ressources système. Cela se traduit généralement par des performances plus élevées et un démarrage plus rapide des applications.</td>
+    </tr>
+    <tr>
+        <td>Isolation</td>
+        <td>Isolation plus forte entre les machines virtuelles, car chaque machine virtuelle dispose de son propre système d'exploitation et de ses propres ressources.</td>
+        <td>L'isolation est plus légère entre les conteneurs, car ils partagent le même noyau avec l'hôte. Bien que cela offre une efficacité accrue des ressources, cela peut également présenter des risques de sécurité si les conteneurs ne sont pas correctement isolés les uns des autres.</td>
+    </tr>
+    <tr>
+        <td>Portabilité</td>
+        <td>Les machines virtuelles peuvent être déplacées entre différents hyperviseurs et environnements de cloud computing, mais nécessitent généralement une conversion entre formats de machine virtuelle.</td>
+        <td>Les conteneurs Docker sont hautement portables et peuvent être exécutés sur n'importe quel système compatible Docker sans modification. Cela permet une plus grande flexibilité dans le déploiement et la gestion des applications.</td>
+    </tr>
+    <tr>
+        <td>Gestion des ressources</td>
+        <td>Les machines virtuelles ont tendance à consommer plus de ressources, car elles nécessitent un système d'exploitation complet pour chaque instance.</td>
+        <td>Les conteneurs sont plus légers en termes de ressources, car ils partagent le même noyau avec l'hôte et n'incluent que les dépendances nécessaires à l'application. Cela permet une utilisation plus efficace des ressources et une densité plus élevée sur un même hôte.</td>
+    </tr>
+    <tr>
+        <td>Temps de démarrage</td>
+        <td>Les machines virtuelles peuvent prendre plus de temps à démarrer en raison de la nécessité de démarrer un système d'exploitation complet pour chaque instance.</td>
+        <td>Les conteneurs Docker ont des temps de démarrage beaucoup plus rapides, car ils évitent le démarrage d'un système d'exploitation complet et se concentrent uniquement sur le démarrage de l'application ou du service spécifique. Cela permet un déploiement plus rapide des applications et une mise à l'échelle dynamique en fonction des besoins.</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
