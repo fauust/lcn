@@ -1,25 +1,24 @@
 ---
 services:
-  # apache:
-  #   build:
-  #     context: ./apache
-  #     dockerfile: Dockerfile
-  #   container_name: web-server
-  #   ports:
-  #     - 80:80
-  #     - 443:443
-  #   networks:
-  #     - external_network
-  #   depends_on:
-  #     - mariadb
-  #   volumes:
-  #     - ~/Development/dockerCampus/iteration1/conf/index.html:/usr/local/apache2/htdocs/index.html:ro
+  nginx:
+    image: nginx:1.27
+    container_name: web-server
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - external_network
+      - front_network
+    depends_on:
+      - mariadb
+    volumes:
+      - ./nginx/mynginx.conf:/etc/nginx/conf.d/mynginx.conf:ro
 
   mariadb:
     image: mariadb:11.4
     container_name: mariadb
     networks:
-      - internal_network
+      - back_network
     volumes:
       - /srv/my-app/mariadb:/var/lib/mysql
     environment:
@@ -45,8 +44,8 @@ services:
     secrets:
       - wordpress_db_password
     networks:
-      - external_network
-      - internal_network
+      - front_network
+      - back_network
     volumes:
       - /srv/my-app/wordpress:/var/www/html
     depends_on:
@@ -67,12 +66,14 @@ services:
     depends_on:
       - mariadb
     networks:
-      - external_network
-      - internal_network
+      - front_network
+      - back_network
 
 networks:
   external_network:
-  internal_network:
+  front_network:
+    internal: true
+  back_network:
     internal: true
 
 secrets:
