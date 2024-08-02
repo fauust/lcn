@@ -29,8 +29,6 @@ services:
       db:
         condition: service_healthy
     restart: on-failure:3
-    ports:
-      - 8080:80
     environment:
       PMA_HOST: db
       PMA_USER: root
@@ -56,13 +54,12 @@ services:
     restart: on-failure:3
     volumes:
       - ./wordpress:/var/www/html
-    ports:
-      - 8900:80
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: root
       WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_root_password #123
       WORDPRESS_DB_NAME: wordpress
+      VIRTUAL_HOST: foobar.local
     networks:
       - wpsite
       - backend
@@ -88,12 +85,27 @@ services:
       context: debug
       dockerfile: debug.Dockerfile
 
+  nginx-base:
+    image: nginx:latest
+    container_name: nginx-base
+    networks:
+      - wpsite
+      - frontend
+    volumes:
+      - ./mynginx.conf:/etc/nginx/conf.d/mynginx.conf
+    ports:
+      - "8080:80"
+
 volumes:
   db_data:
   wordpress:
+  nginx:
 
 networks:
+  frontend:
+    external: true
   wpsite:
+    internal: true
   backend:
     internal: true
 
