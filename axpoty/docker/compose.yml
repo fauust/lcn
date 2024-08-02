@@ -1,0 +1,25 @@
+services:
+  wordpress:
+    image: wordpress:6.5
+    ports:
+      - 80:80
+    hostname: wordpress.local
+  mariadb:
+    image: mariadb:11.2
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: 1234
+    volumes:
+      - mariadb-data:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.2.1
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mariadb
+    depends_on:
+      - mariadb
+    hostname: phpmyadmin.local
+volumes:
+  mariadb-data:
