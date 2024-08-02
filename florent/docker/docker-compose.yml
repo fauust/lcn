@@ -1,3 +1,4 @@
+---
 name: dockerProject
 
 services:
@@ -9,9 +10,9 @@ services:
       - PGID=1000
       - TZ=Europe/Paris
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=sebflo #optional
-      - MYSQL_USER=admin #optional
-      - MYSQL_PASSWORD=root #optional
+      - MYSQL_DATABASE=sebflo
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=root
     volumes:
       - /srv/mariadb:/var/lib/mysql
     ports:
@@ -19,7 +20,6 @@ services:
     restart: unless-stopped
     networks:
       - lamp
-  
   php_apache:
     image: php:8.3-apache
     container_name: php_apache
