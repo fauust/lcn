@@ -37,7 +37,7 @@ Créez un fichier nommé `Dockerfile` avec le contenu suivant :
 
 ```Dockerfile
 # Utiliser l'image Apache officielle
-FROM httpd:latest
+FROM httpd:2.4
 
 # Copier le fichier index.html dans le répertoire de documents d'Apache
 COPY index.html /usr/local/apache2/htdocs/
@@ -51,7 +51,7 @@ EXPOSE 80
 Pour construire l'image Docker à partir du Dockerfile, utilisez la commande suivante :
 
 ```
-docker build -t mon-apache-image .  # docker build -t apache-memo:latest .
+docker build -t mon-apache-image .  # docker build -t apache-memo:2.4 .
 ```
 
 3. Lancer un conteneur
@@ -69,7 +69,7 @@ Pour vérifier que le conteneur fonctionne correctement, utilisez :
 ```
 docker ps
 ```
-Vous pouvez accéder à la page web en visitant [Localhost](http://localhost:8080) dans votre navigateur.
+Vous pouvez accéder à la page web en visitant votre localhost configuré dans votre navigateur.
 5. Supprimer un conteneur
 
 Pour supprimer un conteneur arrêté, utilisez la commande suivante :
