@@ -33,7 +33,7 @@ Voici les instructions Dockerfile les plus courantes que vous pouvez utiliser po
 
 ### 1. Créer le Dockerfile
 
-Créez un fichier nommé `Dockerfile` avec le contenu suivant que vous pouvez trouver ici: https://github.com/HeleneFnt/lcn/blob/docker/Helene/docker/memo/Dockerfile
+Créez un fichier nommé `Dockerfile` avec le contenu suivant [Dockerfile](./Dockerfile).
 
 
 2. Construire l'image Docker
@@ -60,6 +60,7 @@ Pour vérifier que le conteneur fonctionne correctement, utilisez :
 docker ps
 ```
 Vous pouvez accéder à la page web en visitant votre localhost configuré dans votre navigateur.
+
 5. Supprimer un conteneur
 
 Pour supprimer un conteneur arrêté, utilisez la commande suivante :
