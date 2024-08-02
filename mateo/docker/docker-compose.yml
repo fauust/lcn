@@ -76,9 +76,13 @@ services:
       - /var/log:/host/var/log:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
-      - NETDATA_CLAIM_TOKEN=R4HeeaL-qL6lYsrGh55Slbl4XVEjQjnAZWZPD4nDeVSsBCYaVxLzgkWjdEBvgzEABIA2UbqRKfgmDSlPmcuaU0j3fbfLZEout5g3-fc5xBHf4GKw8_DSnyLMLX3XNa1UmDQakP8
-      - NETDATA_CLAIM_URL=https://app.netdata.cloud
-      - NETDATA_CLAIM_ROOMS=e4543b96-36cb-4807-a23d-a64803d13aeb
+      - NETDATA_CLAIM_TOKEN=/run/secrets/netdata_claim_token
+      - NETDATA_CLAIM_URL=/run/secrets/netdata_claim_url
+      - NETDATA_CLAIM_ROOMS=/run/secrets/netdata_claim_rooms
+    secrets:
+      - netdata_claim_token
+      - netdata_claim_url
+      - netdata_claim_rooms
 
   adminer:
     image: adminer:4.8.1
