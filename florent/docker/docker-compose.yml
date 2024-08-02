@@ -13,10 +13,6 @@ services:
       - MYSQL_DATABASE=sebflo
       - MYSQL_USER=admin
       - MYSQL_PASSWORD=root
-    volumes:
-      - /srv/mariadb:/var/lib/mysql
-    ports:
-      - 3333:3306
     restart: unless-stopped
     networks:
       - db
