@@ -1,0 +1,37 @@
+name: dockerProject
+
+services:
+  mariadb:
+    image: mariadb:10.6.18
+    container_name: mariadb
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=sebflo #optional
+      - MYSQL_USER=admin #optional
+      - MYSQL_PASSWORD=root #optional
+    volumes:
+      - /srv/mariadb:/var/lib/mysql
+    ports:
+      - 3333:3306
+    restart: unless-stopped
+    networks:
+      - lamp
+  
+  php_apache:
+    image: php:8.3-apache
+    container_name: php_apache
+    ports:
+      - 2024:80
+    volumes:
+      - ./apache.conf:/etc/apache2/sites-available/apache.conf
+      - /srv/app:/var/www/html/
+    restart: unless-stopped
+    networks:
+      - lamp
+
+networks:
+  lamp:
+    external: false
