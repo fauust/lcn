@@ -1,0 +1,51 @@
+---
+name: dockerProject
+
+services:
+  mariadb:
+    image: mariadb:10.6.18
+    container_name: mariadb
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=aurand
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=root
+    restart: unless-stopped
+    networks:
+      - db
+  wordpress:
+    image: wordpress:6.6.1-php8.3-apache
+    container_name: wordpress
+    ports:
+      - 1337:80
+    environment:
+      WORDPRESS_DB_HOST: mariadb:3306
+      WORDPRESS_DB_USER: admin
+      WORDPRESS_DB_PASSWORD: root
+      WORDPRESS_DB_NAME: aurand
+    volumes:
+      - /srv/wordpress:/var/www/html
+    networks:
+      - db
+      - wp
+    restart: unless-stopped
+  phpmyadmin:
+    image: phpmyadmin:5.2.1-apache
+    container_name: phpmyadmin
+    ports:
+      - 8081:80
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+    restart: unless-stopped
+    networks:
+      - db
+      - wp
+networks:
+  db:
+    external: false
+  wp:
+    external: true
