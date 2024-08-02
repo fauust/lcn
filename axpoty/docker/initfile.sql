@@ -1,0 +1,10 @@
+CREATE USER IF NOT EXISTS root@localhost IDENTIFIED BY 'rootpassord';
+SET PASSWORD FOR root@localhost = PASSWORD('rootpassword');
+GRANT ALL ON *.* TO root@localhost WITH GRANT OPTION;
+CREATE USER IF NOT EXISTS root@'%' IDENTIFIED BY 'rootpassword';
+SET PASSWORD FOR root@'%' = PASSWORD('rootpassword');
+GRANT ALL ON *.* TO root@'%' WITH GRANT OPTION;
+CREATE USER IF NOT EXISTS wordpress@'%' IDENTIFIED BY 'userpassword';
+SET PASSWORD FOR wordpress@'%' = PASSWORD('userpassword');
+CREATE DATABASE IF NOT EXISTS wordpressdb;
+GRANT ALL ON wordpressdb.* TO wordpress@'%';
