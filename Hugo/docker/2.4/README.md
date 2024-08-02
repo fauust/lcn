@@ -6,7 +6,7 @@
 docker swarm init
 ```
 
-## Build & deploy services 
+## Build & deploy services
 
 ```
 docker-compose down
