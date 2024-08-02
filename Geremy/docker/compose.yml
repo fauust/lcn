@@ -1,64 +1,65 @@
 ---
 services:
-  apache:
-    build:
-      context: ./apache
-      dockerfile: Dockerfile
-    container_name: web-server
-    ports:
-      - 80:80
-      - 443:443
-    networks:
-      - my-service
-    depends_on:
-      - mariadb
-    volumes:
-      - ~/Development/dockerCampus/iteration1/conf/index.html:/usr/local/apache2/htdocs/index.html:ro
+  # apache:
+  #   build:
+  #     context: ./apache
+  #     dockerfile: Dockerfile
+  #   container_name: web-server
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+  #   networks:
+  #     - external_network
+  #   depends_on:
+  #     - mariadb
+  #   volumes:
+  #     - ~/Development/dockerCampus/iteration1/conf/index.html:/usr/local/apache2/htdocs/index.html:ro
 
   mariadb:
-    image: mariadb
+    image: mariadb:11.4
     container_name: mariadb
-    ports:
-      - 3306:3306
     networks:
-      - my-service
+      - internal_network
     volumes:
-      - my-db:/var/lib/mysql
+      - /srv/my-app/mariadb:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: /run/secrets/db_root_password
-      MYSQL_DATABASE: madb
-      MYSQL_USER: "user1"
-      MYSQL_PASSWORD: /run/secrets/db_password
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MARIADB_DATABASE: database
+      MARIADB_USER: "user1"
+      MARIADB_PASSWORD_FILE: /run/secrets/db_password
     secrets:
       - db_password
       - db_root_password
 
   wordpress:
-    image: wordpress
+    image: wordpress:6.6.1
+    container_name: wordpress_service
     restart: always
     ports:
       - 8900:80
     environment:
-      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DB_HOST: mariadb:3306
+      WORDPRESS_DB_NAME: database
       WORDPRESS_DB_USER: root
-      WORDPRESS_DB_PASSWORD: /run/secrets/wordpress_db_password
-      WORDPRESS_DB_NAME: madb
+      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/wordpress_db_password
     secrets:
       - wordpress_db_password
     networks:
-      - my-service
+      - external_network
+      - internal_network
     volumes:
-      - wordpress:/var/www/html
+      - /srv/my-app/wordpress:/var/www/html
     depends_on:
       - mariadb
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin/phpmyadmin:5.2
+    container_name: pma_service
     restart: always
     environment:
       PMA_HOST: mariadb
       PMA_USER: root
-      PMA_PASSWORD: /run/secrets/pma_password
+      PMA_PASSWORD_FILE: /run/secrets/pma_password
     secrets:
       - pma_password
     ports:
@@ -66,24 +67,20 @@ services:
     depends_on:
       - mariadb
     networks:
-      - my-service
+      - external_network
+      - internal_network
 
 networks:
-  my-service:
-
-
-volumes:
-  my-db:
-  wordpress:
-
+  external_network:
+  internal_network:
+    internal: true
 
 secrets:
-  context: ./secrets
   db_password:
-    file: db_password.txt
+    file: ./secrets/db_password.txt
   db_root_password:
-    file: db_root_password.txt
+    file: ./secrets/db_root_password.txt
   pma_password:
-    file: pma_password.txt
+    file: ./secrets/pma_password.txt
   wordpress_db_password:
-    file: wordpress_db_password.txt
+    file: ./secrets/wordpress_db_password.txt
