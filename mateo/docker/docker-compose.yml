@@ -2,6 +2,14 @@
 services:
   wordpress:
     image: wordpress:6.6.1
+    deploy:
+      resources:
+        limits:
+          cpus: '0.6'
+          memory: 1024M
+        reservations:
+          cpus: '0.2'
+          memory: 256M
     ports:
       - "8080:80"
     volumes:
@@ -47,7 +55,7 @@ services:
     image: netdata/netdata:stable
     container_name: netdata
     pid: host
-    # network_mode: host
+    network_mode: host
     restart: unless-stopped
     cap_add:
       - SYS_PTRACE
@@ -68,16 +76,9 @@ services:
       - /var/log:/host/var/log:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
-      - NETDATA_CLAIM_TOKEN_FILE=/run/secrets/netdata_claim_token
-      - NETDATA_CLAIM_URL_FILE=/run/secrets/netdata_claim_url
-      - NETDATA_CLAIM_ROOMS_FILE=/run/secrets/netdata_claim_rooms
-    secrets:
-      - netdata_claim_token
-      - netdata_claim_url
-      - netdata_claim_rooms
-    networks:
-      - internal
-      - external
+      - NETDATA_CLAIM_TOKEN=R4HeeaL-qL6lYsrGh55Slbl4XVEjQjnAZWZPD4nDeVSsBCYaVxLzgkWjdEBvgzEABIA2UbqRKfgmDSlPmcuaU0j3fbfLZEout5g3-fc5xBHf4GKw8_DSnyLMLX3XNa1UmDQakP8
+      - NETDATA_CLAIM_URL=https://app.netdata.cloud
+      - NETDATA_CLAIM_ROOMS=e4543b96-36cb-4807-a23d-a64803d13aeb
 
   adminer:
     image: adminer:4.8.1
