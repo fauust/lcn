@@ -33,18 +33,8 @@ Voici les instructions Dockerfile les plus courantes que vous pouvez utiliser po
 
 ### 1. Créer le Dockerfile
 
-Créez un fichier nommé `Dockerfile` avec le contenu suivant :
+Créez un fichier nommé `Dockerfile` avec le contenu suivant que vous pouvez trouver ici: https://github.com/HeleneFnt/lcn/blob/docker/Helene/docker/memo/Dockerfile
 
-```Dockerfile
-# Utiliser l'image Apache officielle
-FROM httpd:2.4
-
-# Copier le fichier index.html dans le répertoire de documents d'Apache
-COPY index.html /usr/local/apache2/htdocs/
-
-# Exposer le port 80 (port par défaut pour HTTP)
-EXPOSE 80
-```
 
 2. Construire l'image Docker
 
