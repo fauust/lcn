@@ -1,0 +1,60 @@
+---
+services:
+  mariadb:
+    # add the mariadb service
+    image: mariadb:11-ubi
+    container_name: wp_mariadb
+    restart: unless-stopped
+    volumes:
+      - ./mariadb:/var/lib/mysql
+    environment:
+      - MARIADB_ROOT_PASSWORD=password
+      - MARIADB_DATABASE=wordpress
+    networks:
+      - inside
+
+  wordpress:
+    image: wordpress:php8.3-apache
+    container_name: wordpress
+    volumes:
+      - ./config/php.conf.ini:/usr/local/etc/php/conf.d/php.ini
+      - ./wordpress:/var/www/html
+    depends_on:
+      - mariadb
+    restart: unless-stopped
+    networks:
+      - outside
+      - inside
+    ports:
+      - 8002:80
+    environment:
+      - WORDPRESS_DB_HOST=mariadb
+      - WORDPRESS_DB_USER=root
+      - WORDPRESS_DB_PASSWORD=password
+      - WORDPRESS_DB_NAME=wordpress
+
+  # optional GUI for mariadb
+  adminer:
+    image: phpmyadmin:5.2.1
+    container_name: wp_phpmyadmin
+    depends_on:
+      - mariadb
+    restart: unless-stopped
+    networks:
+      - inside
+      - outside
+    ports:
+      - 8081:8080
+
+networks:
+  inside:
+    driver: bridge
+  outside:
+    external: true
+# To use the CLI to access mariadb directly execute the following:
+# docker exec -it mariadb mysql --user=root --password
+
+# Login details for the mariadb GUI:
+# Server = name of the mariadb container.
+# Username = root
+# Password = password (same as the password mentioned above)
