@@ -1,0 +1,56 @@
+services:
+  wordpress:
+    image: wordpress:6.6.1-php8.3-apache
+    container_name: wordpress_wpApp
+    # restart: always
+    ports:
+      - 80:80
+    environment:
+      WORDPRESS_DB_HOST: mariadb:3306
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: root
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - ./app:/var/www/html
+    networks:
+      - front
+      - back
+    
+  mariadb:
+    image: mariadb:11.5.1-ubi9-rc
+    container_name: mariadb_wpApp
+    # restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wordpress
+    volumes:
+      - ./database:/var/lib/mysql
+    networks:
+      - back
+
+  adminer:
+    image: adminer:4.8.1
+    container_name: adminer_wpApp
+    # restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - mariadb
+    networks:
+      - back
+      - front
+    environment:
+      ADMINER_DESIGN: pepa-linha
+      ADMINER_DEFAULT_SERVER: mariadb
+  
+  # zabbix:
+  #   image: zabbix/zabbix-appliance:alpine-6.0.0
+  #   container_name: zabbix_wpApp
+  #   # restart: always
+  # networks:
+  #   - admin
+networks:
+  front:
+
+  back:
+    
