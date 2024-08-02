@@ -1,0 +1,55 @@
+services:
+  wordpress:
+    build: .  # Build the WordPress image from the Dockerfile in the current directory
+    container_name: wordpress
+    ports:
+      - 80:80
+    hostname: wordpress.local  # Set the hostname for the WordPress container
+    networks:
+      - frontend
+      - backend
+
+  mariadb:
+    image: mariadb:11.2
+    container_name: db
+    environment:
+      MARIADB_ROOT_PASSWORD: 1234  # Set the root password for MariaDB (will be reset by init script)
+    volumes:
+      - /srv/mariadb:/var/lib/mysql  # Persist the MariaDB data in a Docker volume
+      - ./initfile.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - backend
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.2.1
+    container_name: phpmyadmin
+    ports:
+      - 8080:80  # Map port 8080 on the host to port 80 in the container
+    environment:
+      - PMA_ARBITRARY=1  # Allow arbitrary server connections
+      - PMA_HOST=mariadb  # Set the default server to 'mariadb'
+    depends_on:
+      - mariadb  # Ensure the MariaDB container starts before phpMyAdmin
+    hostname: phpmyadmin.local
+    networks:
+      - frontend
+      - backend
+
+volumes:
+  mariadb-data:  # Define the Docker volume for MariaDB data
+
+networks:
+  frontend:
+    name: frontend-network  # Name the frontend network 'frontend-network'
+  backend:
+    name: backend-network  # Name the backend network 'backend-network'
+    internal: true  # Make the backend network internal (not accessible from outside Docker)
+    ipam: # Network configuration
+      config:
+        - subnet: 172.28.0.0/16
+          ip_range: 172.28.5.0/24
+          gateway: 172.28.5.254
+          aux_addresses:  # Assign specific IP addresses to services
+            wordpress: 172.28.1.5
+            phpmyadmin: 172.28.1.6
+            mariadb: 172.28.1.7
