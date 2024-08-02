@@ -19,19 +19,38 @@ services:
       - 3333:3306
     restart: unless-stopped
     networks:
-      - lamp
-  php_apache:
-    image: php:8.3-apache
-    container_name: php_apache
+      - db
+  wordpress:
+    image: wordpress:6.6.1-php8.3-apache
+    container_name: wordpress
+    environment:
+      WORDPRESS_DB_HOST: mariadb:3306
+      WORDPRESS_DB_USER: admin
+      WORDPRESS_DB_PASSWORD: root
+      WORDPRESS_DB_NAME: sebflo
     ports:
       - 2024:80
     volumes:
-      - ./apache.conf:/etc/apache2/sites-available/apache.conf
-      - /srv/app:/var/www/html/
+      - /srv/wordpress:/var/www/html/
     restart: unless-stopped
     networks:
-      - lamp
+      - db
+      - wp
+  phpmyadmin:
+    image: phpmyadmin:5.2.1-apache
+    container_name: phpmyadmin
+    environment:
+      - PMA_HOST=mariadb
+      - PMA_PORT=3306
+    ports:
+      - 8081:80
+    restart: unless-stopped
+    networks:
+      - db
+      - wp
 
 networks:
-  lamp:
+  db:
     external: false
+  wp:
+    external: true
