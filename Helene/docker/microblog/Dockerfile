@@ -1,4 +1,5 @@
 # Utiliser l'image de Python 3.9 (Alpine)
+
 FROM python:3.9-alpine
 
 # Définir le label de l'auteur
@@ -8,12 +9,13 @@ LABEL authors="helene"
 WORKDIR /app
 
 # Installer les commandes nécessaires à la récupération de l'application
-RUN apk add git \
+RUN apk add --no-cache git \
     && git clone https://github.com/fheslouin/microblog /app \
     && rm -rf /app/.git* \
     && apk del git \
     # Installer les dépendances Python \
-    && pip install -r requirements.txt
+    && pip install --no-cache-dir -r requirements.txt \
+    && rm -rf /var/cache/apk/*
 
 # Définir des variables d'environnement
 ENV FLASK_APP=/app/microblog.py
