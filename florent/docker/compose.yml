@@ -75,11 +75,11 @@ services:
       - NETDATA_CLAIM_TOKEN={{TOKEN_NETDATA}}
       - NETDATA_CLAIM_URL={{TOKEN_URL}}
       - NETDATA_CLAIM_ROOMS={{TOKEN_ROOMS}}
+
 volumes:
   netdataconfig:
   netdatalib:
   netdatacache:
-
 
 networks:
   db:
