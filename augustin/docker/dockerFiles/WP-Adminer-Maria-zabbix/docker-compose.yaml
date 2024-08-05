@@ -92,7 +92,7 @@ secrets:
   netdata_claim_rooms:
     file: ./secrets.yml
     name: NETDATA_CLAIM_ROOMS
-    
+
 networks:
   front:
   back:
