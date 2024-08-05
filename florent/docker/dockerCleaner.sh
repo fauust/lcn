@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2046
+export TOKEN_NETDATA="gb82MyJ7W3giiMD8MJK7COLY6rnnyFt0HlnMwbHnwiabIz_txHg0gia7cDR3kwKYd0PTjk0DyZLZ8ow1RvPucWOBnTbIOpP4nrsUlA7LQJjTImC2yAafavTtrw23KSnpxTU8Jdk"
+export TOKEN_URL="https://app.netdata.cloud"
+export TOKEN_ROOMS="c11b5442-2ed2-4435-bbe4-57d886afeab4"
 
-# Cleaning docker container and images except hadolint
-HADOLINT=$(docker images hadolint/hadolint -q)
-docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && EXCEPT=$HADOLINT
-docker images -q | grep -v "$EXCEPT" | xargs -r docker rmi
-docker compose up
+docker compose down
+# docker compose up
+docker compose up -d
