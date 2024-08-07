@@ -1,8 +1,0 @@
----
-- name: Check if libvirt is already installed
-  ansible.builtin.shell: ansible-galaxy collection list | grep libvirt
-  register: libvirt_installed
-
-- name: install ansible collection for libvirt
-  ansible.builtin.shell: ansible-galaxy collection install community.libvirt
-  when: libvirt_installed.stdout is not search('community.libvirt')
