@@ -1,0 +1,90 @@
+- name: Create Azure VM
+  hosts: localhost
+  connection: local
+  collections:
+    - azure.azcollection
+  tasks:
+    - include_vars: lib/azureVmWorkerVars.yml
+    - name: Create virtual network
+      azure_rm_virtualnetwork:
+        resource_group: "{{ RESOURCE_GROUP }}"
+        name: "{{ VIRTUAL_NETWORK }}"
+        address_prefixes: "10.0.0.0/16"
+    - name: Add subnet
+      azure_rm_subnet:
+        resource_group: "{{ RESOURCE_GROUP }}"
+        name: "{{ SUBNET }}"
+        address_prefix: "10.0.1.0/24"
+        virtual_network: "{{ VIRTUAL_NETWORK }}"
+    - name: Create public IP address
+      azure_rm_publicipaddress:
+        resource_group: "{{ RESOURCE_GROUP }}"
+        allocation_method: Static
+        name: "{{ PUBLIC_IP_ADDRESS }}"
+      register: output_ip_address
+    - name: Public IP of VM
+      debug:
+        msg: "The public IP is {{ output_ip_address.state.ip_address }}."
+    - name: Create Network Security Group that allows SSH
+      azure_rm_securitygroup:
+        resource_group: "{{ RESOURCE_GROUP }}"
+        name: myNetworkSecurityGroup
+        rules:
+          - name: SSH
+            protocol: Tcp
+            destination_port_range: 22
+            access: Allow
+            priority: 1001
+            direction: Inbound
+          - name: HTTP
+            protocol: Tcp
+            destination_port_range: 80
+            access: Allow
+            priority: 1002
+            direction: Inbound
+          - name: HTTPS
+            protocol: Tcp
+            destination_port_range: 443
+            access: Allow
+            priority: 1003
+            direction: Inbound
+          - name: UDP #(overlay network)
+            protocol: Udp
+            destination_port_range: 4789
+            access: Allow
+            priority: 1004
+            direction: Inbound
+          - name: TCP_UDP #(container network discovery)
+            protocol: Tcp
+            destination_port_range: 7946
+            access: Allow
+            priority: 1005
+            direction: Inbound
+    - name: Create virtual network interface card
+      azure_rm_networkinterface:
+        resource_group: "{{ RESOURCE_GROUP }}"
+        name: "{{ NETWORK_INTERFACE }}"
+        virtual_network: "{{ VIRTUAL_NETWORK }}"
+        subnet: "{{ SUBNET }}"
+        ip_configurations:
+          - name: "{{ IP_CONFIGURATION }}"
+            public_ip_address_name: "{{ PUBLIC_IP_ADDRESS }}"
+            primary: true
+        security_group: myNetworkSecurityGroup
+    - name: Create VM
+      azure_rm_virtualmachine:
+        resource_group: "{{ RESOURCE_GROUP }}"
+        name: "{{ VIRTUAL_MACHINE}}"
+        vm_size: Standard_B1s
+        admin_username: "{{ USERNAME }}"
+        ssh_password_enabled: false
+        ssh_public_keys:
+          - path: "/home/{{ USERNAME }}/.ssh/authorized_keys"
+            key_data: "{{ SSH }}"
+        network_interfaces: "{{ NETWORK_INTERFACE }}"
+        image:
+          offer: debian-11
+          publisher: Debian
+          sku: 11-backports-gen2
+          version: latest
+        managed_disk_type: "Standard_LRS"

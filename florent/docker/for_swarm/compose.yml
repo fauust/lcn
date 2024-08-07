@@ -99,6 +99,8 @@ volumes:
 
 networks:
   db:
-    driver: overlay
+    # external: false
+    driver: overlay # for SWARM
   wp:
-    driver: overlay
+    # external: true
+    driver: overlay # for SWARM
