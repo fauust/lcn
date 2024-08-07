@@ -1,6 +1,0 @@
----
-- import_tasks: installLibvirt.yml
-- import_tasks: installAnsibleLib.yml
-- import_tasks: installDependances.yml
-- import_tasks: installAws.yml
-- import_tasks: generateSSHKey.yml

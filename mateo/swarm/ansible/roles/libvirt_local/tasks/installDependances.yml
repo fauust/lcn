@@ -1,9 +1,0 @@
----
-- name: Install dependances from file
-  ansible.builtin.shell: sudo pip3 install -r ./requirements.txt
-
-- name: Install npm
-  apt:
-    name: npm
-    state: present
-  become: true
