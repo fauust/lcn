@@ -1,36 +1,39 @@
 # DOCKER
 
-### LAUNCH DOCKERFILE (archive folder)
+## SWARM (via AZURE)
 
-In `/lcn/florent/docker/archive` directory:
+### in ***for_azure*** folder
 
-`$ ./init.sh` or `$ bash init.sh`
-
-### USE *DIVE*
-
-`$ docker run -v /var/run/docker.sock:/var/run/docker.sock -it wagoodman/dive:latest <DOCKER_IMAGE>`
-
----
-
-### DOCKER SWARM (via AZURE)
-
-- launch playbook "azureVmManager" and "azureVmWorker" for create the VMs in project directory
+- launch playbook `azureVmManager` and `azureVmWorker` for create the VMs
 
 ```bash
 $ ansible-playbook azureVmManager.yml
 $ ansible-playbook azureVmWorker.yml
 ```
 
-- after VM created, connection to VMs with ssh
+- after VMs created, connect to VMs with ssh
 
-- in each VM, install docker [https://docs.docker.com/engine/install/debian/#install-using-the-repository]
+```bash
+$ ssh <username>@<azureVmManager_ip>
+```
 
-- launch SWARM in "azureVmManager"
+- in each VMs, install docker [https://docs.docker.com/engine/install/debian/#install-using-the-repository]
+
+- and add user in docker group in `azureVmManager` (optional: `azureVmWorker`)
+
+```bash
+$ sudo usermod -aG docker <username>
+$ logout # to take changes into account
+
+# and reconnect !
+```
+
+- launch SWARM in `azureVmManager`
 
 ```bash
 $ docker swarm init
 
-# Output
+# OUTPUT
 
 # Swarm initialized: current node (o5hydmdkjp4hddf2w0hi09ii8) is now a manager.
 
@@ -41,16 +44,51 @@ $ docker swarm init
 # To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
 ```
 
-- in "azureVmWorker"
+- copy, the following code, in `azureVmWorker`
 
 ```bash
 $ docker swarm join --token <token generated> <azureVmManager_ip>:2377
 ```
 
-- in AZURE
-- - in VIRTUALS MACHINES section
-- - - click on "azureVmManager" VM
-- - - in tab "networking" > "network parameter"
-- - - - click on "create a port rule" > "entry port rule"
-- - - - - in "destination port ranges" > paste the port indicated in the previous command (here 2377)
-- - - - - protocol > TCP
+- create wordpress volume in `azureVmWorker`
+
+```bash
+$ sudo mkdir /srv/wordpress
+```
+
+### in ***for_swarm*** folder
+
+- create `.env` in `lib` folder (create folder if doesn't exists) and define environment variables:
+
+```bash
+# .env
+NETDATA_CLAIM_TOKEN=<token_value>
+NETDATA_CLAIM_URL=<url_value>
+NETDATA_CLAIM_ROOMS=<rooms_value>
+```
+
+<br>
+
+- copy `compose.yml`and `lib` folder to `azureVmManager`
+
+```bash
+$ scp for_swarm/compose.yml <username>@<azureVmManager_ip>:compose.yml
+$ scp -r for_swarm/lib <username>@<azureVmManager_ip>:
+```
+
+- create wordpress docker network
+
+```bash
+$ docker network create --driver overlay <network_name>
+
+# <network_name>: see compose.yml, section networks
+```
+
+- launch docker SWARM
+
+```bash
+$ docker stack deploy -c <yaml_file> <stack_name> # --detach=false for verbose option
+
+# for delete stack
+$ docker stack rm <stack_name>
+```

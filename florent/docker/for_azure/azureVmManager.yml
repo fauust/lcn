@@ -60,6 +60,24 @@
             access: Allow
             priority: 1005
             direction: Inbound
+          - name: SWARM
+            protocol: Tcp
+            destination_port_range: 2377
+            access: Allow
+            priority: 1006
+            direction: Inbound
+          - name: WP
+            protocol: Tcp
+            destination_port_range: 2024
+            access: Allow
+            priority: 1007
+            direction: Inbound
+          - name: PHPMYADMIN
+            protocol: Tcp
+            destination_port_range: 8081
+            access: Allow
+            priority: 1008
+            direction: Inbound
     - name: Create virtual network interface card
       azure_rm_networkinterface:
         resource_group: "{{ RESOURCE_GROUP }}"

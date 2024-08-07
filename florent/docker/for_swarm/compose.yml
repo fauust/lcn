@@ -61,6 +61,8 @@ services:
 
   netdata:
     image: netdata/netdata:stable
+    env_file:
+      - lib/.env
     deploy:
       placement:
         constraints:
@@ -87,10 +89,6 @@ services:
       - /etc/os-release:/host/etc/os-release:ro
       - /var/log:/host/var/log:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    environment:
-      - NETDATA_CLAIM_TOKEN={{TOKEN_NETDATA}}
-      - NETDATA_CLAIM_URL={{TOKEN_URL}}
-      - NETDATA_CLAIM_ROOMS={{TOKEN_ROOMS}}
 
 volumes:
   netdataconfig:
