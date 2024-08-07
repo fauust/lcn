@@ -1,0 +1,160 @@
+---
+# tasks file for build_vm
+
+# ------------------------
+# Install python3-libvirt
+# ------------------------
+- name: Ensure requirements in place
+  ansible.builtin.package:
+    name:
+      - python3-libvirt
+    state: present
+  become: true
+
+# ------------------------
+# Get the VMs list
+# ------------------------
+- name: Get VMs list
+  community.libvirt.virt:
+    command: list_vms
+  register: existing_vms
+  changed_when: no
+
+# ------------------------
+# Print the VMs list
+# ------------------------
+
+
+- name: Debug - The vm name to be created is
+  debug:
+    var: vm_name
+
+- name: Debug - The vm list is
+  debug:
+    var: existing_vms.list_vms
+
+
+# --------------------------------------------------------
+# Download image, configure it, and create VM
+# This block is executed only if the VM does not exist
+# (when: "vm_name not in existing_vms.list_vms"
+# --------------------------------------------------------
+- name: Download iso, and create VM if it does not exist
+  block:
+    # ------------------------
+    # Download image to /tmp
+    # ------------------------
+    - name: Download base image in .qcow2 format
+      get_url:
+        url: "{{ base_image_url }}"
+        dest: "/tmp/{{ base_image_name }}"
+        checksum: "sha512:{{ base_image_sha }}"
+
+    # ------------------------
+    # Move image to libvirt directory (needs sudo)
+    # ------------------------
+    - name: Copy base image to libvirt directory
+      copy:
+        dest: "{{ libvirt_pool_dir }}/{{ vm_name }}.qcow2"
+        src: "/tmp/{{ base_image_name }}"
+        force: no
+        remote_src: yes
+        mode: 0660
+      register: copy_results
+
+    - name: Create temp disk image
+      command: |
+        qemu-img create -f qcow2 temp_disk.qcow2 10G 
+
+    - name: Expand image with temp disk
+      command: |
+        virt-resize --expand /dev/vda1 {{ libvirt_pool_dir }}/{{ vm_name }}.qcow2 temp_disk.qcow2
+
+    - name: Create backup
+      command: |
+        mv {{ libvirt_pool_dir }}/{{ vm_name }}.qcow2 {{ libvirt_pool_dir }}/{{ vm_name }}.qcow2.bak
+
+    - name: Replace disk with new one
+      command: |
+        mv temp_disk.qcow2 {{ libvirt_pool_dir }}/{{ vm_name }}.qcow2
+    # ------------------------
+    # Configure the image with virt-customize
+    # ------------------------
+    - name: Configure the image
+      command: |
+        virt-customize -a {{ libvirt_pool_dir }}/{{ vm_name }}.qcow2 \
+        --hostname {{ vm_name }} \
+        --root-password password:{{ vm_root_pass }} \
+        --install openssh-server \
+        --ssh-inject 'root:file:{{ ssh_key }}' \
+        --selinux-relabel
+      #            --uninstall cloud-init
+      when: copy_results is changed
+
+    # ------------------------
+    # Define the VM using the XML template
+    # ------------------------
+    - name: Define a VM 
+      community.libvirt.virt:
+        command: define
+        xml: "{{ lookup('template', 'config_vm.xml.j2') }}"
+
+  when: "vm_name not in existing_vms.list_vms"
+
+# ------------------------
+# Wait for the VM to start
+# ------------------------
+- name: Ensure VM is started
+  community.libvirt.virt:
+    name: "{{ vm_name }}"
+    state: running
+  register: vm_start_results
+  until: "vm_start_results is success"
+  retries: 15
+  delay: 2
+
+# ------------------------
+# Wait for the VM to have a valid IP
+# ------------------------
+- name: Wait for the VM to have an IPv4 address
+  shell: "virsh domifaddr {{ vm_name }} | grep ipv4"
+  register: cmd_result
+  retries: 60
+  delay: 1
+  until: cmd_result.rc == 0
+  ignore_errors: yes
+
+# ------------------------
+# Get the VM IP address and print it out
+# ------------------------
+- name: Get VM IP address using domifaddr
+  shell: virsh domifaddr {{ vm_name }} | grep ipv4 | awk '{print $4}' | cut -d/ -f1
+  register: vm_ip
+
+- name: print IP address
+  debug:
+    var: vm_ip.stdout
+
+# ------------------------
+# Add the VM IP to /etc/hosts
+# ------------------------
+- name: add IP to /etc/hosts
+  ansible.builtin.lineinfile:
+    path: "/etc/hosts"
+    regexp: '.*{{ vm_name }}\.local'
+    line: '{{ vm_ip.stdout }} {{ vm_name }}.local'
+
+# ------------------------
+# Add an entry to the ~/.ssh/config file
+# ------------------------
+- name: Add an entry to the ~/.ssh/config file
+  ansible.builtin.blockinfile:
+    path: "/home/xavier/.ssh/config"
+    # Create a backup file including the timestamp information
+    backup: true
+    prepend_newline: true
+    block: |
+      Host {{ vm_name }}
+          HostName {{ vm_ip.stdout }}'
+          User root
+          IdentityFile ~/.ssh/id_ed25519_XF
