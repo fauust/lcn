@@ -1,0 +1,116 @@
+services:
+  db:
+    image: mariadb:11.4
+    container_name: db
+    volumes:
+      - "./db_data:/var/lib/mysql"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: on-failure:3
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password #123
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: "wordpress"
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password #123
+    networks:
+      - backend
+    secrets:
+      - db_root_password
+      - db_password
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5
+    container_name: phpmyadmin
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: on-failure:3
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD_FILE: /run/secrets/db_root_password #123
+    networks:
+      - wpsite
+      - backend
+    secrets:
+      - db_root_password
+
+  wordpress:
+    image: wordpress:php8.1
+    container_name: wordpress
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: on-failure:3
+    volumes:
+      - ./wordpress:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_root_password #123
+      WORDPRESS_DB_NAME: wordpress
+      VIRTUAL_HOST: foobar.local
+    networks:
+      - wpsite
+      - backend
+    secrets:
+      - db_root_password
+
+  # this service runs won't run unless you specify the "debug" profile
+  # docker compose --profile debug up -d
+
+  # this service won't run unless you specify the "debug" profile
+  # docker compose --profile debug up -d --build
+  network-debug:
+    profiles: ["debug"]
+    container_name: network-debug
+    # tty: true # enable terminal = option -t
+    # stdin_open: true # enable terminal = option -i
+    networks:
+      - wpsite
+      - backend
+    volumes:
+      - ./data:/data
+    build:
+      context: debug
+      dockerfile: debug.Dockerfile
+
+  nginx-base:
+    image: nginx:latest
+    container_name: nginx-base
+    networks:
+      - wpsite
+      - frontend
+    volumes:
+      - ./mynginx.conf:/etc/nginx/conf.d/mynginx.conf
+    ports:
+      - "8080:80"
+
+volumes:
+  db_data:
+  wordpress:
+  nginx:
+
+networks:
+  frontend:
+    external: true
+  wpsite:
+    internal: true
+  backend:
+    internal: true
+
+secrets:
+  db_password:
+    file: db_password.txt
+  db_root_password:
+    file: db_root_password.txt
