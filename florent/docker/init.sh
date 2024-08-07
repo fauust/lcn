@@ -1,17 +1,7 @@
 #!/usr/bin/env bash
+export TOKEN_NETDATA="gb82MyJ7W3giiMD8MJK7COLY6rnnyFt0HlnMwbHnwiabIz_txHg0gia7cDR3kwKYd0PTjk0DyZLZ8ow1RvPucWOBnTbIOpP4nrsUlA7LQJjTImC2yAafavTtrw23KSnpxTU8Jdk"
+export TOKEN_URL="https://app.netdata.cloud"
+export TOKEN_ROOMS="c11b5442-2ed2-4435-bbe4-57d886afeab4"
 
-handle_error() {
-  read -r -n 1 -s
-}
-
-trap 'handle_error' ERR EXIT
-
-# -t: allows you to name your Docker image
-# .: the directory where the Dockerfile is located
-docker build -t sebflo_container .
-
-# -d (detached mode): tells Docker to run the container in the background (detached)
-# -p (port mapping): maps a host machine port to a container port
-docker run --name=sebflo -d -p 2024:80 sebflo_container
-
-trap - ERR EXIT
+docker compose down
+docker compose up -d

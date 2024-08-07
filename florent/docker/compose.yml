@@ -4,6 +4,10 @@ name: dockerProject
 services:
   mariadb:
     image: mariadb:10.6.18
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
     container_name: mariadb
     environment:
       - PUID=1000
@@ -19,6 +23,10 @@ services:
 
   wordpress:
     image: wordpress:6.6.1-php8.3-apache
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
     container_name: wordpress
     environment:
       WORDPRESS_DB_HOST: mariadb:3306
@@ -36,6 +44,10 @@ services:
 
   phpmyadmin:
     image: phpmyadmin:5.2.1-apache
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
     container_name: phpmyadmin
     environment:
       - PMA_HOST=mariadb
@@ -49,6 +61,10 @@ services:
 
   netdata:
     image: netdata/netdata:stable
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
     container_name: netdata
     pid: host
     network_mode: host
@@ -83,6 +99,6 @@ volumes:
 
 networks:
   db:
-    external: false
+    driver: overlay
   wp:
-    external: true
+    driver: overlay
