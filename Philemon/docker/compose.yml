@@ -1,0 +1,115 @@
+services:
+  apache:
+    image: httpd:2.4
+    restart: unless-stopped
+    container_name: apache
+    depends_on:
+      - mariadb
+    ports:
+      - 127.0.0.1:8080:80 # Map port 8080 on the host to port 80 in the container
+      - 127.0.0.1:443:443 # Map port 443 on the host to port 443 in the container
+    networks:
+      - frontnet
+    volumes:
+      - /srv/www:/usr/local/apache2/htdocs
+
+  mariadb: # not accessible from the outside (host machine) but accessible from other containers on the same network
+    image: mariadb:11.4.2
+    restart: unless-stopped
+    container_name: mariadb
+    networks:
+      - backnet
+    volumes:
+      - /srv/mariadb:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_DATABASE: db-test
+      MYSQL_USER: db-user
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+      - db_root_password
+
+  wordpress:
+    image: wordpress:6.5
+    restart: unless-stopped
+    container_name: wordpress
+    depends_on:
+      - mariadb
+    ports:
+      - 127.0.0.1:8000:80 # Map port 8000 on the host to port 80 in the container
+    networks:
+      - frontnet
+      - backnet
+    volumes:
+      - /srv/wordpress:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_NAME: db-test
+      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+
+  phpmyadmnin:
+    image: phpmyadmin:5.2
+    restart: unless-stopped
+    container_name: phpmyadmin
+    depends_on:
+      - mariadb
+    ports:
+      - 127.0.0.1:8081:80 # Map port 8081 on the host to port 80 in the container
+    networks:
+      - frontnet
+      - backnet
+    environment:
+      PMA_HOST: mariadb
+      PMA_PASSWORD_FILE: /run/secrets/pma_password
+    secrets:
+      - pma_password
+
+  netdata:
+    image: netdata/netdata:stable
+    container_name: netdata
+    pid: host
+    network_mode: host
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - netdataconfig:/etc/netdata
+      - netdatalib:/var/lib/netdata
+      - netdatacache:/var/cache/netdata
+      - /:/host/root:ro,rslave
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /var/log:/host/var/log:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - NETDATA_CLAIM_TOKEN=SDXfM1m_E7nz5KY2O0znF313-OiZGzBhYcZa4k_WimJe5drwHpoJ3jZOm3A8LfBkwkg3QRFS9zu_QQ3V0ic8bkEtfYs7gSOqmNzvrdbifvCSxsERVn3muSyWdBst4jjENG2_pNQ
+      - NETDATA_CLAIM_URL=https://app.netdata.cloud
+      - NETDATA_CLAIM_ROOMS=4ce7e2d3-990c-4db6-ad6e-062c8ed1b16a
+volumes:
+  netdataconfig:
+  netdatalib:
+  netdatacache:
+
+secrets:
+  db_password:
+    file: ~/Workspace/Infra & VM/Projet/lcn_faustin-myfork/Philemon/docker/secret/db_password.txt
+  db_root_password:
+    file: ~/Workspace/Infra & VM/Projet/lcn_faustin-myfork/Philemon/docker/secret/db_root_password.txt
+  pma_password:
+    file: ~/Workspace/Infra & VM/Projet/lcn_faustin-myfork/Philemon/docker/secret/pma_password.txt
+
+networks:
+  frontnet:
+  backnet:
+    internal: true # Make the backend network internal (not accessible from outside Docker).
