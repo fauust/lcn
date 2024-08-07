@@ -1,0 +1,34 @@
+- name: install vagrant plugin for libvirt
+  hosts: localhost
+  gather_facts: yes
+  become: true
+  become_method: sudo
+  vars_files:
+    - group_vars/secret.yml
+  vars:
+    - ansible_user: "{{ ansible_user }}"
+  tasks:
+    - name: Check if libvirt is installed
+      ansible.builtin.shell: dpkg -l | grep libvirt
+      register: libvirt_installed
+      ignore_errors: yes
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+      when: libvirt_installed.stdout == ""
+
+    - name: Check if vagrant is already installed
+      ansible.builtin.shell: dpkg -l | grep vagrant
+      register: vagrant_installed
+      ignore_errors: yes
+
+    - name: install libvirt
+      include_role:
+        name: libvirt_install
+      when: libvirt_installed.stdout == ""
+
+    - name: install vagrant
+      include_role:
+        name: install_vagrant
+      when: vagrant_installed.stdout == ""

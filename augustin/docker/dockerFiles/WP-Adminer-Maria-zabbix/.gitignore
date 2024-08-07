@@ -1,8 +1,4 @@
 app
 adminer
 database
-bullshit.sh
-addresses.txt
-addresses_with_ports.txt
-addresses_ports_service.txt
 secrets.yml
