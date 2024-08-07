@@ -1,14 +1,14 @@
 # swarm
 An example of Docker swarm deployment of a Wordpress app in a swarm of 3 VMs
 
-Tuto : 
+Tuto :
 
-[https://docs.docker.com/engine/swarm/swarm-tutorial/](https://docs.docker.com/engine/swarm/swarm-tutorial/) 
+[https://docs.docker.com/engine/swarm/swarm-tutorial/](https://docs.docker.com/engine/swarm/swarm-tutorial/)
 
 Préalable
 ---------
 
-### Créer 3 VM 
+### Créer 3 VM
 
 avec Libvirt, par exemple. Chaque VM a un disque de 10G, 1 CPU, 2G de RAM. (total 6G)
 
@@ -36,7 +36,7 @@ Pour les créer : `ansible-playbook build_vm.yml`
 *   Pour voir la liste des VMs : `virsh list --all`
 *   Pour les démarrer :  
     *   `virsh` `list --all` `|` `awk` `'/swarm_/ { system("virsh start " $2) }'`
-*   Pour voir leurs adresses IP : 
+*   Pour voir leurs adresses IP :
     *   `virsh` `list --all` `|` `awk` `'/swarm_/ { system("virsh domifaddr " $2) }'`
 
 | VM  | IP  | Role |
@@ -45,20 +45,20 @@ Pour les créer : `ansible-playbook build_vm.yml`
 | swarm\_worker1 | 192.168.122.144 | Worker 1 |
 | swarm\_worker2 | 192.168.122.161 | Worker 2 |
 
-### Installer Docker-CE sur chacune des VM : 
+### Installer Docker-CE sur chacune des VM :
 
 https://docs.docker.com/engine/install/debian/
 
 Création du manager
 -------------------
 
-Se connecter en SSH sur la VM “master”  : dans l'exemple : 
+Se connecter en SSH sur la VM “master”  : dans l'exemple :
 
 *   `ssh root@192.168.122.118`
 *   Mais comme notre role `build_vm` a automatiquement créé une entrée dans `~/.ssh/config`, on peut taper directement :
-    
+
     `ssh swarm_master`
-    
+
 
 ```text-plain
 docker swarm init --advertise-addr 192.168.122.118
@@ -123,9 +123,9 @@ helloworld
 Déployer des services depuis un stack.yml (équivalent docker-compose.yml)
 -------------------------------------------------------------------------
 
-Avec Docker Swarm, les fichiers `stack.yaml` jouent un rôle central. Ces fichiers ressemblent beaucoup aux fichiers `docker-compose.yml` utilisés dans Docker Compose - La principale différence réside dans leur utilisation. 
+Avec Docker Swarm, les fichiers `stack.yaml` jouent un rôle central. Ces fichiers ressemblent beaucoup aux fichiers `docker-compose.yml` utilisés dans Docker Compose - La principale différence réside dans leur utilisation.
 
-*   Docker Compose est principalement utilisé pour **définir et exécuter des applications multi-conteneurs sur un seul hôte**. Il est idéal pour le développement, les tests et les environnements de production de petite taille. 
+*   Docker Compose est principalement utilisé pour **définir et exécuter des applications multi-conteneurs sur un seul hôte**. Il est idéal pour le développement, les tests et les environnements de production de petite taille.
 *   En revanche, les fichiers `stack.yaml` sont utilisés avec Docker Swarm, qui est conçu pour **l'orchestration de conteneurs sur plusieurs hôtes**, offrant une haute disponibilité et une meilleure montée en charge.
 *   Dans Docker Swarm, les fichiers `stack.yaml` peuvent inclure des spécificités qui ne sont pas présentes ou nécessaires dans Docker Compose. Par exemple, dans Swarm, vous pouvez spécifier des paramètres de déploiement pour vos services, tels que le nombre de réplicas, les contraintes de déploiement sur certains nœuds, ou les politiques de mise à jour.
 
@@ -167,7 +167,7 @@ services:
 Pour déployer les services sur les VMs :
 
 1.  Copier le fichier `docker-compose-stack.yml` sur le manager (scp …)
-2.  **Depuis le manager (ssh)** : taper la commande : 
+2.  **Depuis le manager (ssh)** : taper la commande :
 
 ```text-plain
 docker stack deploy -c docker-compose-stack.yml wp_stack

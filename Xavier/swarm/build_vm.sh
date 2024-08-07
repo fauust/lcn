@@ -6,6 +6,7 @@ NC='\033[0m' # No Color
 print_title() {
   msg=$1
   line="${msg//?/=}"
+  # shellcheck disable=SC2059
   printf "\n${COLOR}${line}\n${msg}\n${line}${NC}\n"
 }
 
@@ -20,7 +21,7 @@ print_choices() {
   echo ""
 }
 
-# Get user input 
+# Get user input
 get_user_input() {
   print_choices
   choice=100

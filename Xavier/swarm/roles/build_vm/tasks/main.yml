@@ -64,7 +64,7 @@
 
     - name: Create temp disk image
       command: |
-        qemu-img create -f qcow2 temp_disk.qcow2 10G 
+        qemu-img create -f qcow2 temp_disk.qcow2 10G
 
     - name: Expand image with temp disk
       command: |
@@ -94,7 +94,7 @@
     # ------------------------
     # Define the VM using the XML template
     # ------------------------
-    - name: Define a VM 
+    - name: Define a VM
       community.libvirt.virt:
         command: define
         xml: "{{ lookup('template', 'config_vm.xml.j2') }}"
