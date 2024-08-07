@@ -1,0 +1,52 @@
+---
+version: '2.29'
+
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress
+    environment:
+      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DB_USER: helenedocker
+      WORDPRESS_DB_PASSWORD: test
+      WORDPRESS_DB_NAME: dockerDB
+    ports:
+      - "9000:80"
+    volumes:
+      - apache-data:/usr/local/apache2/htdocs  # persistant volume for Apache
+    networks:
+      - helnetwork
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.1
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: mariadb
+      PMA_USER: helenedocker
+      PMA_PASSWORD: test
+    depends_on:
+      - mariadb # To make sure this container starts before phpmyadmin
+    ports:
+      - "8081:80"
+    networks:
+      - helnetwork
+
+  mariadb:
+    image: mariadb:11.5.1-ubi9-rc
+    container_name: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: dockerDB
+      MYSQL_USER: helenedocker
+      MYSQL_PASSWORD: test
+    volumes:
+      - /srv/mariadb:/var/lib/mysql # persistant volume for MariadB
+    networks:
+      - helnetwork
+
+volumes:
+  mysql-data:
+  apache-data:
+
+networks:
+  helnetwork:
