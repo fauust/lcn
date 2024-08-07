@@ -1,5 +1,4 @@
 ---
-version: '2.29'
 
 services:
   wordpress:
@@ -13,7 +12,7 @@ services:
     ports:
       - "9000:80"
     volumes:
-      - apache-data:/usr/local/apache2/htdocs  # persistant volume for Apache
+      - apache-data:/usr/local/apache2/htdocs   # persistant volume for Apache
     networks:
       - helnetwork
 
@@ -44,9 +43,42 @@ services:
     networks:
       - helnetwork
 
+  netdata:
+    image: netdata/netdata:stable
+    container_name: netdata
+    pid: host
+    network_mode: host
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - netdataconfig:/etc/netdata
+      - netdatalib:/var/lib/netdata
+      - netdatacache:/var/cache/netdata
+      - /:/host/root:ro,rslave
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /etc/localtime:/host/etc/localtime:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /var/log:/host/var/log:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - NETDATA_CLAIM_TOKEN=Uifb9AJgYTIBXjJVZ7mf4PDIvMvMp0y_hllAUdTSWScsFcDLlNOJsZBml1NvjPsMNlQeyrxjaDFf_f8mo4In_DQcZHP82kJbOpvbOc5xnAQmi6rRIw1UB9NkadbV1UoNoAhu24U
+      - NETDATA_CLAIM_URL=https://app.netdata.cloud
+      - NETDATA_CLAIM_ROOMS=da483e65-d808-4605-a3da-8e8a876bb5e1
+
+
 volumes:
-  mysql-data:
   apache-data:
+  mysql-data:
+  netdataconfig:
+  netdatalib:
+  netdatacache:
 
 networks:
   helnetwork:
