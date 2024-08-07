@@ -1,0 +1,23 @@
+- name: Configure nodes and deploy services
+  hosts: "{{ vm_name }}"
+  vars_files:
+    - group_vars/secret.yml
+  tasks:
+    - block:
+        - name: Configure node manager
+          include_role:
+            name: configure_node_manager
+      when: "{{ number }} == 1"
+
+    - block:
+        - name: Configure node worker
+          include_role:
+            name: configure_node_worker
+      when: "{{ number }} > 1"
+
+    - block:
+        - name: Deploy swarm service
+          include_role:
+            name: deploy_swarm_service
+      when: "{{ number }} == {{ number_max }}"
+      delegate_to: "{{ node_manager_vm }}"

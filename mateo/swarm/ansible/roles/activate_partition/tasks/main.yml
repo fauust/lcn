@@ -1,0 +1,26 @@
+---
+# tasks file for activate_partition
+- name: Refresh inventory to ensure new instances exist in inventory
+  ansible.builtin.meta: refresh_inventory
+
+- name: Wait for ping to be available
+  ansible.builtin.wait_for:
+    host: "{{ vm_name }}"
+    port: 22
+    delay: 10
+    timeout: 300
+    state: started
+
+- name: Installer les outils nécessaires
+  ansible.builtin.apt:
+    name:
+      - cloud-guest-utils
+    state: present
+
+- name: Redimensionner la partition avec growpart
+  ansible.builtin.command:
+    cmd: growpart /dev/vda 1
+
+- name: Redimensionner le système de fichiers ext4
+  ansible.builtin.command:
+    cmd: resize2fs /dev/vda1

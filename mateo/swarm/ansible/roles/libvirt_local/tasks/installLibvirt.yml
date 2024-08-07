@@ -1,0 +1,41 @@
+---
+# sudo apt update
+- name: update apt cache
+  apt:
+    update_cache: yes
+  ignore_errors: yes
+
+# kvm ok
+- name: Check if hosts is ready for libvirt
+  command: kvm-ok
+  register: kvm_ok
+
+# apt install qemu-kvm
+- name: Install KVM
+  apt:
+    name: qemu-kvm
+    state: present
+  when: kvm_ok.rc == 0
+
+# dpkg -l | grep libvirt
+- name: Check if libvirt is installed
+  ansible.builtin.shell: dpkg -l | grep libvirt
+  register: libvirt_installed
+  when: kvm_ok.rc == 0
+
+# sudo apt install libvirt-bin libvirt-daemon-system
+- name: Install libvirt
+  apt:
+    name: "{{ item }}"
+    state: present
+  when: libvirt_installed.stdout == "" and kvm_ok.rc == 0
+  loop:
+    - libvirt-daemon-system
+
+# sudo adduser $USER libvirt
+- name: Add user to libvirt group
+  user:
+    name: "{{ ansible_user }}"
+    groups: libvirt
+    append: yes
+  when: libvirt_installed.stdout == "" and kvm_ok.rc == 0

@@ -1,0 +1,18 @@
+- name: Check hosts packages
+  hosts: localhost
+  connection: local
+  become: true
+  become_method: sudo
+  vars_files:
+    - group_vars/secret.yml
+  roles:
+    - libvirt_local
+#- name: Check host for frontend
+#  hosts: localhost
+#  connection: local
+#  become: true
+#  become_method: sudo
+#  vars_files:
+#    - group_vars/secret.yml
+#  roles:
+#    - check_frontend

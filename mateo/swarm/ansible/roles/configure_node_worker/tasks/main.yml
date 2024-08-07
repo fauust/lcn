@@ -1,0 +1,12 @@
+---
+# tasks file for configure_node_worker
+- name: get IP of the new VM
+  shell: hostname -I | awk '{print $1}'
+  register: output_ip_address
+
+- name: Add nodes
+  community.docker.docker_swarm:
+    state: join
+    advertise_addr: "{{ output_ip_address.stdout }}"
+    join_token: "{{ manager_token }}"
+    remote_addrs: "{{ manager_node_ip }}"
