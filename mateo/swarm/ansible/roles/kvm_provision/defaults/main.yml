@@ -1,6 +1,0 @@
----
-# defaults file for kvm_provision
-base_image_name: debian-12-nocloud-amd64.qcow2
-base_image_url: https://cloud.debian.org/images/cloud/bookworm/latest/{{ base_image_name }}
-base_image_sha: d6a14e0870d4f06167b3c1885949d2897f6abd48af881402e3b1c6edc790d652
-libvirt_pool_dir: "/var/lib/libvirt/images"
