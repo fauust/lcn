@@ -1,4 +1,4 @@
-# Docker 2.4
+# Docker 2.5
 
 ## Docker Swarm initialisé
 

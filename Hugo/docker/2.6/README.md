@@ -1,4 +1,4 @@
-# Docker 2.4
+# Docker 2.6
 
 ## Docker Swarm initialisé
 
@@ -11,10 +11,4 @@ docker swarm init
 ```
 docker-compose down
 dokcer-compose up --build -d
-```
-
-## Test request with siege
-
-```
-siege [ip-docker-wordpress]
 ```
