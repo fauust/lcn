@@ -53,9 +53,9 @@ Cela signifie que le port ne sera pas accessible depuis l'extérieur de la machi
 Deux réseaux sont définis : frontnet et backnet.  
 Isolation du réseau backnet, donc du conteneur sur ce reseau qui contient la BDD, pour qu'il ne soit pas accéssible de l'extérieur.
 
-## Secret
+## Secrets
 
-work in progress !
+Mots de passes mis dans un dossier secrets et ajouté au .gitignore.
 
 ## Monitoring
 
@@ -66,8 +66,8 @@ Utilisation de Netdata, solution de monitoring simple. Mais pas très opti.
 
 DOCKER:
 Un conteneur utilisent directement les ressources du noyau de l'OS hôte.
-Il permet d'empaqueter une application, un service, de manière isolée. Peut s'exécuter partout.
-En général le conteneur est + leger qu'une VM.
+Il permet d'empaqueter une application avec toutes ses dépendances, un service, de manière isolée. Peut s'exécuter partout sans se soucier des differences entre les environnements.
+Les avantages du conteneur : légèreté, portabilité, facilité de déploiement.
 Le conteneur est "jetables", son état n'est pas conservés.
 
 VM:
