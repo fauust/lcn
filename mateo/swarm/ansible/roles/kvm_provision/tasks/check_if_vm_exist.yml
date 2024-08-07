@@ -1,0 +1,10 @@
+---
+- name: Vérifier si la VM existe déjà
+  ansible.builtin.shell: virsh dominfo "{{ vm_name }}"
+  register: vm_exists
+  failed_when: false
+  changed_when: false
+# - name: Afficher le résultat
+#   debug:
+#     msg: "{{ vm_exists.stdout }}"
+#   when: vm_exists.rc == 0

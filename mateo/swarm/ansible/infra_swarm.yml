@@ -1,0 +1,28 @@
+- name: Deploys swarm based on cloud image
+  hosts: localhost
+  gather_facts: yes
+  become: true
+  become_method: sudo
+  vars_files:
+    - group_vars/secret.yml
+  vars:
+    vm_user: "{{ user_vm_swarm }}"
+    disk_size_vm: "{{ disk_size_vm_swarm }}"
+    pool_dir: "/var/lib/libvirt/images"
+    vm_vcpus: "{{ vcpu_vm_swarm }}"
+    vm_ram_mb: "{{ memory_vm_swarm }}"
+    cleanup: "{{ cleanup_tmp }}"
+    net: "{{ vm_net }}"
+    ssh_key: "/home/{{ ansible_user }}/{{ path_to_public_key }}"
+    vm_user_pass: "{{ password_vm_swarm }}"
+    vm_root_pass: "{{ swarm_rootpass }}"
+  tasks:
+    - name: KVM Provision role
+      include_role:
+        name: kvm_provision
+    - name: activate partition
+      include_role:
+        name: activate_partition
+        apply:
+          delegate_to: "{{ vm_name }}"
+      when: VM_environment == "kvm"

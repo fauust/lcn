@@ -1,0 +1,4 @@
+---
+- name: Install aws
+  ansible.builtin.shell: ansible-galaxy collection install amazon.aws
+  become: true
