@@ -1,3 +1,4 @@
+---
 - name: Create Azure VM
   hosts: localhost
   connection: local
@@ -48,13 +49,13 @@
             access: Allow
             priority: 1003
             direction: Inbound
-          - name: UDP #(overlay network)
+          - name: UDP # (overlay network)
             protocol: Udp
             destination_port_range: 4789
             access: Allow
             priority: 1004
             direction: Inbound
-          - name: TCP_UDP #(container network discovery)
+          - name: TCP_UDP # (container network discovery)
             protocol: Tcp
             destination_port_range: 7946
             access: Allow
