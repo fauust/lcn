@@ -1,0 +1,170 @@
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: mariadb-app
+  labels:
+    app: mariadb
+spec:
+  containers:
+    - name: mariadb-app
+      image: "mariadb:10.6.18"
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "root"
+        - name: MYSQL_DATABASE
+          value: "sebflo"
+        - name: MYSQL_USER
+          value: "admin"
+        - name: MYSQL_PASSWORD
+          value: "root"
+---
+# TO DELETE IF DOESN'T WORK
+kind: Service
+apiVersion: v1
+metadata:
+  name: mariadb-service
+spec:
+  selector:
+    app: mariadb
+  ports:
+    - port: 3306
+      targetPort: 3306
+  type: ClusterIP
+---
+# TO DELETE IF DOESN'T WORK
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: pma-sql-config
+# data:
+#   data.sql: |
+#     -- Replace this with the content of the create_tables.sql script provided by phpMyAdmin
+#     CREATE DATABASE IF NOT EXISTS phpmyadmin;
+#     USE phpmyadmin;
+#     -- Add all the SQL commands to create the necessary tables for phpMyAdmin storage
+---
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: pma-db
+spec:
+  template:
+    spec:
+      containers:
+        - name: db
+          image: "mariadb:10.6.18"
+          command: ["sh", "-c", "mysql -h mariadb-service -u root -proot < /data.sql"]
+          volumeMounts:
+            - name: sql-script
+              mountPath: /data.sql
+              subPath: data.sql
+      restartPolicy: OnFailure
+      volumes:
+        - name: sql-script
+          configMap:
+            name: pma-sql-config
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: pma-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pma
+  template:
+    metadata:
+      labels:
+        app: pma
+    spec:
+      containers:
+        - name: pma-app
+          image: "phpmyadmin:5.2.1-apache"
+          env:
+            - name: PMA_HOST
+              value: "mariadb-service"
+            - name: PMA_PORT
+              value: "3306"
+            - name: PMA_USER
+              value: "admin"
+            - name: PMA_PASSWORD
+              value: "root"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: pma-service
+spec:
+  selector:
+    app: pma
+  ports:
+    - port: 8081
+      targetPort: 80
+      nodePort: 30081
+  type: NodePort
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: wp-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wp
+  template:
+    metadata:
+      labels:
+        app: wp
+    spec:
+      containers:
+        - name: wp-app
+          image: "wordpress:6.6.1-php8.3-apache"
+          env:
+            - name: WORDPRESS_DB_HOST
+              value: "mariadb-service:3306"
+            - name: WORDPRESS_DB_USER
+              value: "admin"
+            - name: WORDPRESS_DB_PASSWORD
+              value: "root"
+            - name: WORDPRESS_DB_NAME
+              value: "sebflo"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: wp-service
+spec:
+  selector:
+    app: wp
+  ports:
+    - port: 2024
+      targetPort: 80
+      nodePort: 30024
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+spec:
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            path: /pma
+            backend:
+              service:
+                name: pma-service
+                port:
+                  number: 80
+          - pathType: Prefix
+            path: /wp
+            backend:
+              service:
+                name: wp-service
+                port:
+                  number: 80
+---
