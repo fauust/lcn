@@ -1,0 +1,104 @@
+---
+name: dockerProject
+
+services:
+  mariadb:
+    image: mariadb:10.6.18
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
+    container_name: mariadb
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=sebflo
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=root
+    restart: unless-stopped
+    networks:
+      - db
+
+  wordpress:
+    image: wordpress:6.6.1-php8.3-apache
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
+    container_name: wordpress
+    environment:
+      WORDPRESS_DB_HOST: mariadb:3306
+      WORDPRESS_DB_USER: admin
+      WORDPRESS_DB_PASSWORD: root
+      WORDPRESS_DB_NAME: sebflo
+    ports:
+      - 2024:80
+    volumes:
+      - /srv/wordpress:/var/www/html/
+    restart: unless-stopped
+    networks:
+      - db
+      - wp
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.1-apache
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
+    container_name: phpmyadmin
+    environment:
+      - PMA_HOST=mariadb
+      - PMA_PORT=3306
+    ports:
+      - 8081:80
+    restart: unless-stopped
+    networks:
+      - db
+      - wp
+
+  netdata:
+    image: netdata/netdata:stable
+    env_file:
+      - lib/.env
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
+    container_name: netdata
+    pid: host
+    network_mode: host
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - netdataconfig:/etc/netdata
+      - netdatalib:/var/lib/netdata
+      - netdatacache:/var/cache/netdata
+      - /:/host/root:ro,rslave
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /var/log:/host/var/log:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+volumes:
+  netdataconfig:
+  netdatalib:
+  netdatacache:
+
+networks:
+  db:
+    # external: false
+    driver: overlay # for SWARM
+  wp:
+    # external: true
+    driver: overlay # for SWARM
