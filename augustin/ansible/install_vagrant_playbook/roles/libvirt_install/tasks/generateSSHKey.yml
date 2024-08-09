@@ -1,0 +1,9 @@
+- name: Generate an OpenSSH keypair with the default values (4096 bits, rsa)
+  community.crypto.openssh_keypair:
+    path: /home/{{ ansible_user }}/.ssh/rsa_key_ansible_kvm_libvirt
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  become: true
+  become_user: "{{ ansible_user }}"
+  become_method: sudo
+  when: generate_ssh_key == True
