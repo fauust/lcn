@@ -81,7 +81,7 @@ services:
       - NETDATA_CLAIM_TOKEN=etI3r4VLfiDaRoOQ8ultss78sd8kcRvUEpcnbMJrIU4S8iSRb8lvUDOY3Yygm4M-d9nMvTEvELEmdQwHOtaorEpwcdvVLTIASnN9qsoE7cgYHGsMPSizxK950H0F39zKekEcLDw
       - NETDATA_CLAIM_URL=https://app.netdata.cloud
       - NETDATA_CLAIM_ROOMS=4a3b53b6-46f5-4d6a-a645-3cb5921dd3dd
-      
+
 networks:
   frontend:
     driver: bridge

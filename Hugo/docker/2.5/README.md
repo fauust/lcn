@@ -14,7 +14,7 @@ dokcer-compose up --build -d
 ```
 ## Simulation de l'utilisation normale
 
-Pour simuler une utilisation normale de l'application WordPress, 
+Pour simuler une utilisation normale de l'application WordPress,
 envoyez plusieurs requêtes successives
 
 ```

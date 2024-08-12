@@ -6,7 +6,7 @@
 docker swarm init
 ```
 
-## Build and deploy 
+## Build and deploy
 
 ```
 docker stack deploy -c docker-stack.yml [name-app]
@@ -33,5 +33,5 @@ docker stack rm [name-app]
 ## Ip node
 
 ```
-docker node inspect [id-nope] --format '{{ .Status.Addr }}'   
+docker node inspect [id-nope] --format '{{ .Status.Addr }}'  
 ```
