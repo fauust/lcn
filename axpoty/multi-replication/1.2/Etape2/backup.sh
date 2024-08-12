@@ -11,7 +11,7 @@ PRIMARY_HOST="sql-01"
 mkdir -p $BACKUP_DIR
 
 # Dump database to backup folder
-mariadb-dump -uroot -p$ROOT_PASSWORD -h$PRIMARY_HOST --all-databases >$BACKUP_DIR/$DATE.sql
+mariadb-dump -uroot -p$ROOT_PASSWORD -h$PRIMARY_HOST --all-databases >$BACKUP_DIR/"$DATE".sql
 
 ## DEBUG
 # Check if dump is successful

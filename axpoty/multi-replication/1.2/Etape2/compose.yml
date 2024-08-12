@@ -30,7 +30,7 @@ services:
 networks:
   mariadb:
     driver: bridge
-   
+
 volumes:
   sql-01:
   sql-svg:
