@@ -1,0 +1,66 @@
+---
+#########################
+### MARIADB [PRIMARY] ###
+#########################
+---
+kind: Pod
+metadata:
+  name: sql-01
+  labels:
+    app: sql-01-app
+spec:
+  containers:
+    - name: sql-01
+      image: mariadb:10.6.18
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "root"
+        - name: MYSQL_DATABASE
+          value: "mydb"
+        - name: MYSQL_USER
+          value: "admin"
+        - name: MYSQL_PASSWORD
+          value: "root"
+      ports:
+        - containerPort: 3306
+      volumeMounts:
+        - name: data
+          mountPath: /docker-entrypoint-initdb.d
+  volumes:
+    - name: data
+      configMap:
+        name: database
+apiVersion: v1
+---
+kind: ConfigMap
+metadata:
+  name: database
+data:
+  init.sql:
+    CREATE DATABASE IF NOT EXISTS mydb;
+
+    USE mydb;
+
+    CREATE TABLE IF NOT EXISTS persons (
+      id INT PRIMARY KEY,
+      name VARCHAR(50),
+      age INT
+    );
+
+    INSERT INTO persons (id, name, age) VALUES
+      (1, 'Alice', 30),
+      (2, 'Bob', 25),
+      (3, 'Charlie', 28);
+apiVersion: v1
+---
+kind: Service
+metadata:
+  name: sql-01-service
+spec:
+  selector:
+    app: sql-01-app
+  ports:
+    - port: 3306
+      targetPort: 3306
+  type: ClusterIP
+apiVersion: v1

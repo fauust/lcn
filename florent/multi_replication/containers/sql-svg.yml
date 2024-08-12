@@ -1,0 +1,33 @@
+---
+#########################
+### MARIADB [REPLICA] ###
+#########################
+---
+kind: Deployment
+metadata:
+  name: sql-svg
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sql-svg-app
+  template:
+    metadata:
+      labels:
+        app: sql-svg-app
+    spec:
+      containers:
+        - name: sql-svg
+          image: mariadb:10.6.18
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "root"
+            - name: MYSQL_DATABASE
+              value: "mydb"
+            - name: MYSQL_USER
+              value: "admin"
+            - name: MYSQL_PASSWORD
+              value: "root"
+          ports:
+            - containerPort: 3306
+apiVersion: apps/v1
