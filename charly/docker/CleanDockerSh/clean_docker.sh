@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e  # Arrêter le script en cas d'erreur
+set -x # Afficher les commandes exécutées
 
 # Arrêter tous les conteneurs en cours d'exécution
 if [ "$(docker ps -q)" ]; then
