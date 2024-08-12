@@ -3,7 +3,7 @@ services:
   mariadb:
     image: mariadb:lts
     container_name: sql-01
-    environment: 
+    environment:
       MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_pwd
       MARIADB_DATABASE_FILE: /run/secrets/db_name
     volumes:
@@ -17,7 +17,7 @@ services:
   mariadb-backup:
     image: mariadb:lts
     container_name: sql-svg
-    environment: 
+    environment:
       MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_pwd
       MARIADB_DATABASE_FILE: /run/secrets/db_name
     volumes:
@@ -29,10 +29,10 @@ services:
 
 
 secrets:
-   db_root_pwd:
-     file: ./secrets/db_root_pwd.txt
-   db_name:
-     file: ./secrets/db_name.txt
+  db_root_pwd:
+    file: ./secrets/db_root_pwd.txt
+  db_name:
+    file: ./secrets/db_name.txt
 
 volumes:
   shared-data:

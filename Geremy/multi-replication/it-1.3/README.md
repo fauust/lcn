@@ -7,8 +7,8 @@ FLUSH PRIVILEGES;
 SHOW MASTER STATUS;
 ```
 
+# Commande à effectuer dans la ou les replica
 
-# Commande à effectuer dans la ou les replica 
 ```
 CHANGE MASTER TO
   MASTER_HOST='mariadb-primary',
