@@ -1,0 +1,59 @@
+---
+services:
+  wp:
+    container_name: wp
+    image: wordpress:latest
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: sql-primary
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wordpress:/var/www/html
+    networks:
+      - wpnet
+    depends_on:
+      - sql-primary
+
+  sql-primary:
+    container_name: sql-primary
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpress
+    volumes:
+      - ./primary.conf:/etc/mysql/my.cnf
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - wpnet
+
+  sql-replica01:
+    container_name: sql-replica01
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpress
+    volumes:
+      - ./replica01.conf:/etc/mysql/my.cnf
+    networks:
+      - wpnet
+
+  sql-replica02:
+    container_name: sql-replica02
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpress
+    volumes:
+      - ./replica02.conf:/etc/mysql/my.cnf
+    networks:
+      - wpnet
+
+networks:
+  wpnet:
+
+volumes:
+  wordpress:
+  db:
