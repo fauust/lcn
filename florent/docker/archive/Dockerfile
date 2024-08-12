@@ -1,6 +1,7 @@
 FROM debian:12-slim
 
 # Install Apache & PHP + std utilities
+# hadolint ignore=DL3008
 RUN set -eux \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
