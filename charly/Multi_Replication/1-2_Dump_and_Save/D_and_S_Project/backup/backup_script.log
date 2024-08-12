@@ -1,0 +1,91 @@
+Error response from daemon: container aa16bf023420181932076717cd748abf2a48f5a1895e665c92fecd3751a49a06 is not running
+Erreur lors de la sauvegarde à 2024-08-12_14:35:01
+Error response from daemon: No such container: sql-01
+Erreur lors de la sauvegarde à 2024-08-12_14:40:01
+sh: 1: exec: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-12_14:45:01
+sh: 1: exec: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-12_14:50:01
+sh: 1: exec: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-12_14:55:02
+sh: 1: exec: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-12_15:00:01
+sh: 1: exec: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-12_15:05:01
+sh: 1: exec: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-12_15:10:01
+Unable to find image 'mysql:latest' locally
+latest: Pulling from library/mysql
+d9a40b27c30f: Pulling fs layer
+fe4b01031aab: Pulling fs layer
+aa72c34c4347: Pulling fs layer
+473ade985fa2: Pulling fs layer
+cc168a9482de: Pulling fs layer
+3ca3786815dd: Pulling fs layer
+3e3fac98ea83: Pulling fs layer
+10e5505c3ae4: Pulling fs layer
+a79ade39aab9: Pulling fs layer
+ae34d51c6da2: Pulling fs layer
+3ca3786815dd: Waiting
+3e3fac98ea83: Waiting
+10e5505c3ae4: Waiting
+a79ade39aab9: Waiting
+ae34d51c6da2: Waiting
+473ade985fa2: Waiting
+cc168a9482de: Waiting
+fe4b01031aab: Verifying Checksum
+fe4b01031aab: Download complete
+aa72c34c4347: Verifying Checksum
+aa72c34c4347: Download complete
+473ade985fa2: Verifying Checksum
+473ade985fa2: Download complete
+cc168a9482de: Verifying Checksum
+cc168a9482de: Download complete
+d9a40b27c30f: Verifying Checksum
+d9a40b27c30f: Download complete
+3ca3786815dd: Verifying Checksum
+3ca3786815dd: Download complete
+10e5505c3ae4: Verifying Checksum
+10e5505c3ae4: Download complete
+ae34d51c6da2: Verifying Checksum
+ae34d51c6da2: Download complete
+d9a40b27c30f: Pull complete
+fe4b01031aab: Pull complete
+aa72c34c4347: Pull complete
+473ade985fa2: Pull complete
+cc168a9482de: Pull complete
+3ca3786815dd: Pull complete
+3e3fac98ea83: Verifying Checksum
+3e3fac98ea83: Download complete
+3e3fac98ea83: Pull complete
+10e5505c3ae4: Pull complete
+a79ade39aab9: Verifying Checksum
+a79ade39aab9: Download complete
+a79ade39aab9: Pull complete
+ae34d51c6da2: Pull complete
+Digest: sha256:d8df069848906979fd7511db00dc22efeb0a33a990d87c3c6d3fcdafd6fc6123
+Status: Downloaded newer image for mysql:latest
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_15:15:11
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_15:20:02
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_15:25:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_15:30:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_15:35:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_15:40:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_15:45:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_15:50:02
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_15:55:02
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_16:00:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_16:05:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_16:10:01

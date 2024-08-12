@@ -1,0 +1,40 @@
+services:
+  sql-01:
+    image: mariadb:latest
+    restart: unless-stopped
+    container_name: sql-01
+    environment:
+      MYSQL_ROOT_PASSWORD: Totodu26
+      MYSQL_DATABASE: mydb
+    volumes:
+      - db_data_sql01:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - my-network
+
+  sql-svg:
+    image: mariadb:latest
+    restart: unless-stopped
+    container_name: sql-svg
+    environment:
+      MYSQL_ROOT_PASSWORD: Totodu26
+      MYSQL_DATABASE: mydb
+    volumes:
+      - db_data_sqlsvg:/var/lib/mysql
+    networks:
+      - my-network
+
+  mysql-client:
+    image: mysql:latest
+    restart: unless-stopped
+    container_name: mysql-client
+    entrypoint: ["tail", "-f", "/dev/null"]
+    networks:
+      - my-network
+
+volumes:
+  db_data_sql01:
+  db_data_sqlsvg:
+
+networks:
+  my-network:
