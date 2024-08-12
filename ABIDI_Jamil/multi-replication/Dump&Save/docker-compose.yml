@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+  sql-01:
+    container_name: sql-01
+    restart: unless-stopped
+    image: mariadb:10.11
+    environment:
+      - MARIADB_ROOT_PASSWORD=password1234
+      - MARIADB_DATABASE=wordpress
+    volumes:
+      - ./sql-01:/var/lib/mysql
+      - shared-data:/mnt/data
+      - ./initdb:/docker-entrypoint-initdb.d # Script d'initialisation SQL
+
+  sql-svg:
+    container_name: sql-svg
+    restart: unless-stopped
+    image: mariadb:10.11
+    environment:
+      - MARIADB_ROOT_PASSWORD=password1234
+    volumes:
+      - ./sql-svg:/var/lib/mysql
+      - shared-data:/mnt/data
+
+  # Service dédié à l'exécution du cron job
+  backup-cron:
+    container_name: backup-cron
+    restart: unless-stopped
+    image: alpine:3.14
+    volumes:
+      - shared-data:/mnt/data # Volume partagé pour les sauvegardes
+      - ./cron-scripts:/scripts # Répertoire pour stocker le script de sauvegarde
+      - /etc/localtime:/etc/localtime:ro # Synchronisation de l'heure locale
+    entrypoint: /scripts/start-cron.sh
+
+volumes:
+  shared-data:
