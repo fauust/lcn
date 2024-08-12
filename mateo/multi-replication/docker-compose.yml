@@ -33,6 +33,7 @@ services:
       MYSQL_PASSWORD: h
     volumes:
       - ./01:/var/lib/mysql
+      - ./backups:/var/backups
     logging:
       driver: "json-file"
       options:
