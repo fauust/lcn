@@ -1,0 +1,28 @@
+---
+services:
+  sql-01:
+    image: mariadb:10.11
+    container_name: sql-01
+    environment:
+      - MYSQL_ROOT_PASSWORD=dbpassword
+      - MYSQL_USER=root
+    volumes:
+      - ./sql-01:/var/lib/mysql
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - ./backups:/mnt/data
+    ports:
+      - "3306:3306"
+
+  sql-svg:
+    image: mariadb:10.11
+    container_name: sql-svg
+    environment:
+      - MYSQL_ROOT_PASSWORD=dbpassword
+      - MYSQL_USER=root
+    volumes:
+      - ./sql-svg:/var/lib/mysql
+      - ./backups:/mnt/data
+      - ./backup.sh:/backup.sh
+
+volumes:
+  data:
