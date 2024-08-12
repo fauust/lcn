@@ -8,7 +8,7 @@ services:
       MARIADB_DATABASE_FILE: /run/secrets/db_name
     volumes:
       - /srv/it1.2/sql-01:/var/lib/mysql
-      - ./Users.sql:/data/Users.sql:ro
+      - ./Users.sql:/docker-entrypoint-initdb.d/Users.sql
       - shared-data:/mnt/data
     secrets:
       - db_root_pwd
