@@ -13,6 +13,9 @@ mkdir -p $BACKUP_DIR
 # Dump database to backup folder
 mariadb-dump -uroot -p$ROOT_PASSWORD -h$PRIMARY_HOST --all-databases >$BACKUP_DIR/"$DATE".sql
 
+# Inject dumped database in sql-svg server
+mariadb -uroot -p$ROOT_PASSWORD <$BACKUP_DIR/"$DATE".sql
+
 ## DEBUG
 # Check if dump is successful
 #if [ $? -eq 0 ]; then
