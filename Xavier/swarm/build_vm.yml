@@ -1,0 +1,14 @@
+---
+- name: Create Debian VM using build_vm role
+  hosts: localhost
+  become: true
+  roles:
+    - role: build_vm
+      vars:
+        vm_name: swarm_master
+    - role: build_vm
+      vars:
+        vm_name: swarm_worker1
+    - role: build_vm
+      vars:
+        vm_name: swarm_worker2

@@ -1,0 +1,56 @@
+---
+- name: Deploy a VM with Debian
+  hosts: localhost
+  gather_facts: yes
+  become: true
+  vars:
+    COLLECTIONS_PATHS: .vendor/collections
+    ANSIBLE_ROLES_PATH: roles_path=.vendor/roles
+    pool_dir: "/var/lib/libvirt/images"
+    base_image_name: debian-12-nocloud-amd64.qcow2
+    debian_image_url: "https://cloud.debian.org/images/cloud/bookworm/latest/{{ base_image_name }}"
+    vm_name: debianvm
+    vcpus: 2
+    ram_mb: 2048
+    cleanup: true
+    net: default
+    ssh_pub_key: "/home/helene/.ssh/id_rsa.pub"
+    image_name: "debian-cloudimg"
+    image_path: "{{ pool_dir }}/{{ image_name }}.qcow2"
+
+  tasks:
+    - name: Download Debian Cloud Image
+      get_url:
+        url: "{{ debian_image_url }}"
+        dest: "{{ image_path }}"
+        mode: '0644'
+
+    - name: Define VM parameters
+      set_fact:
+        vm_params:
+          name: "{{ vm_name }}"
+          image: "{{ image_path }}"
+          vcpus: "{{ vcpus }}"
+          ram_mb: "{{ ram_mb }}"
+          net: "{{ net }}"
+          ssh_key: "{{ ssh_pub_key }}"
+
+    - name: Provision VM
+      include_role:
+        name: kvm_frontend
+      vars:
+        libvirt_pool_dir: "{{ pool_dir }}"
+        vm_name: "{{ vm_params.name }}"
+        vm_image: "{{ vm_params.image }}"
+        vm_vcpus: "{{ vm_params.vcpus }}"
+        vm_ram_mb: "{{ vm_params.ram_mb }}"
+        vm_net: "{{ vm_params.net }}"
+        cleanup_tmp: "{{ cleanup }}"
+        ssh_key: "{{ vm_params.ssh_key }}"
+
+    - name: Print IP debianvm
+      shell: virsh domifaddr {{ vm_name }} | grep ipv4 | awk '{ print $4}'
+      register: vm_debian_ip
+      retries: 10000
+      delay: 1
+      until: vm_debian_ip.stdout.find('/24') != -1

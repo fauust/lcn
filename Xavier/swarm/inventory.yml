@@ -1,0 +1,6 @@
+---
+all:
+  hosts:
+    swarm_master:
+    worker1:
+    worker2:

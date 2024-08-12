@@ -1,0 +1,12 @@
+---
+# defaults file for build_vm
+base_image_name: debian-12-nocloud-amd64-20240717-1811.qcow2
+base_image_url: https://cloud.debian.org/images/cloud/bookworm/20240717-1811/{{ base_image_name }}
+base_image_sha: bd25c7ab7bc690069f9185b46b8eefd0d7e303fab40f2ea2dfe9770f7e503201e8f945bdd66bbeaac066fdc8c5e02ade367b0c944dbb9108e049ca0457bf6ee1
+libvirt_pool_dir: "/var/lib/libvirt/images"
+vm_name: my_vm
+vm_ram_mb: 1024
+vm_vcpus: 1
+vm_net: default
+vm_root_pass: 1234
+ssh_key: /home/xavier/.ssh/id_ed25519.pub
