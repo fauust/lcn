@@ -1,14 +1,16 @@
 ---
+###############
+### MARIADB ###
+###############
 kind: Pod
-apiVersion: v1
 metadata:
-  name: mariadb-app
+  name: mariadb
   labels:
-    app: mariadb
+    app: mariadb-app
 spec:
   containers:
-    - name: mariadb-app
-      image: "mariadb:10.6.18"
+    - name: mariadb
+      image: mariadb:10.6.18
       env:
         - name: MYSQL_ROOT_PASSWORD
           value: "root"
@@ -18,110 +20,109 @@ spec:
           value: "admin"
         - name: MYSQL_PASSWORD
           value: "root"
----
-# TO DELETE IF DOESN'T WORK
-kind: Service
 apiVersion: v1
+---
+kind: Service
 metadata:
   name: mariadb-service
 spec:
   selector:
-    app: mariadb
+    app: mariadb-app
   ports:
     - port: 3306
       targetPort: 3306
   type: ClusterIP
----
-# TO DELETE IF DOESN'T WORK
-kind: ConfigMap
 apiVersion: v1
-metadata:
-  name: pma-sql-config
-# data:
-#   data.sql: |
-#     -- Replace this with the content of the create_tables.sql script provided by phpMyAdmin
-#     CREATE DATABASE IF NOT EXISTS phpmyadmin;
-#     USE phpmyadmin;
-#     -- Add all the SQL commands to create the necessary tables for phpMyAdmin storage
 ---
-kind: Job
-apiVersion: batch/v1
-metadata:
-  name: pma-db
-spec:
-  template:
-    spec:
-      containers:
-        - name: db
-          image: "mariadb:10.6.18"
-          command: ["sh", "-c", "mysql -h mariadb-service -u root -proot < /data.sql"]
-          volumeMounts:
-            - name: sql-script
-              mountPath: /data.sql
-              subPath: data.sql
-      restartPolicy: OnFailure
-      volumes:
-        - name: sql-script
-          configMap:
-            name: pma-sql-config
+########################
+### PMA (PHPMyAdmin) ###
+########################
+# kind: ConfigMap
+# metadata:
+#   name: config
+#   # HERE --> params main data for pma
+# apiVersion: v1
+---
+# kind: Job
+# metadata:
+#   name: data
+# spec:
+#   template:
+#     spec:
+#       containers:
+#         - name: data
+#           image: mariadb:10.6.18
+#           command: ["sh", "-c", "mysql -h mariadb-service -u root -proot < /data.sql"]
+#           volumeMounts:
+#             - name: data
+#               mountPath: /data.sql
+#               subPath: data.sql
+#       restartPolicy: OnFailure
+#       volumes:
+#         - name: data
+#           configMap:
+#             name: config
+# apiVersion: batch/v1
 ---
 kind: Deployment
-apiVersion: apps/v1
 metadata:
-  name: pma-deployment
+  name: pma
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pma
+      app: pma-app
   template:
     metadata:
       labels:
-        app: pma
+        app: pma-app
     spec:
       containers:
-        - name: pma-app
-          image: "phpmyadmin:5.2.1-apache"
+        - name: pma
+          image: phpmyadmin:5.2.1-apache
           env:
             - name: PMA_HOST
-              value: "mariadb-service"
+              value: "mariadb"
             - name: PMA_PORT
               value: "3306"
             - name: PMA_USER
               value: "admin"
             - name: PMA_PASSWORD
               value: "root"
+apiVersion: apps/v1
 ---
 kind: Service
-apiVersion: v1
 metadata:
   name: pma-service
 spec:
   selector:
-    app: pma
+    app: pma-app
   ports:
     - port: 8081
       targetPort: 80
       nodePort: 30081
   type: NodePort
+apiVersion: v1
 ---
+######################
+### WP (WordPress) ###
+######################
 kind: Deployment
-apiVersion: apps/v1
 metadata:
-  name: wp-deployment
+  name: wp
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: wp
+      app: wp-app
   template:
     metadata:
       labels:
-        app: wp
+        app: wp-app
     spec:
       containers:
-        - name: wp-app
-          image: "wordpress:6.6.1-php8.3-apache"
+        - name: wp
+          image: wordpress:6.6.1-php8.3-apache
           env:
             - name: WORDPRESS_DB_HOST
               value: "mariadb-service:3306"
@@ -131,24 +132,29 @@ spec:
               value: "root"
             - name: WORDPRESS_DB_NAME
               value: "sebflo"
+apiVersion: apps/v1
 ---
 kind: Service
-apiVersion: v1
 metadata:
   name: wp-service
 spec:
   selector:
-    app: wp
+    app: wp-app
   ports:
     - port: 2024
       targetPort: 80
       nodePort: 30024
   type: NodePort
+apiVersion: v1
 ---
-apiVersion: networking.k8s.io/v1
+######################################
+### Kubernetes Resources (Ingress) ###
+######################################
 kind: Ingress
 metadata:
-  name: app-ingress
+  name: ingress
+  labels:
+    app: ingress-app
 spec:
   rules:
     - http:
@@ -167,4 +173,4 @@ spec:
                 name: wp-service
                 port:
                   number: 80
----
+apiVersion: networking.k8s.io/v1
