@@ -15,7 +15,7 @@
 - name: Print CPU does not support message and fail
   fail:
     msg: "Your CPU does not support hardware virtualization"
-  when: result.stdout | int < 1  
+  when: result.stdout | int < 1
 
 - name: Update and upgrade apt packages
   apt:
@@ -37,8 +37,8 @@
     mode: '0440'
 
 - name: Install Vagrant libvirt dependances
-  apt: 
-    name: "{{ item }}"
+  apt:
+      name: "{{ item }}"
     state: present
   loop:
     - libxslt-dev

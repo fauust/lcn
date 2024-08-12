@@ -21,11 +21,12 @@ get_service_name() {
     echo "$service_name"
 }
 
-rm -f addresses.txt
-nmap -sn "$ipRange" -oG - | grep 'Up' | awk '{print $2}' > addresses.txt
 
 rm -f addresses_with_ports.txt
 rm -f addresses_ports_service.txt
+rm -f addresses.txt
+
+nmap -sn "$ipRange" -oG - | grep 'Up' | awk '{print $2}' > addresses.txt
 
 while IFS= read -r ip; do
         while IFS= read -r port ; do

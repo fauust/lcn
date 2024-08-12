@@ -6,14 +6,12 @@
   when: libvirt_installed.stdout == ""
   failed_when: false
 
-# apt install qemu-kvm 
+# apt install qemu-kvm
 - name: Install KVM
   apt:
     name: qemu-kvm
     state: present
-  when:  libvirt_installed.stdout == "" and kvm_ok.rc == 0
-
-
+  when: libvirt_installed.stdout == "" and kvm_ok.rc == 0
 
 # sudo apt install libvirt-bin libvirt-daemon-system
 - name: Install libvirt
