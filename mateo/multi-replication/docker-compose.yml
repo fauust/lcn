@@ -1,0 +1,132 @@
+services:
+  wordpress:
+    image: wordpress:6.6.1-php8.3-apache
+    ports:
+      - "127.0.0.1:8080:80"
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./custom-apache2.conf:/etc/apache2/conf-available/custom-servername.conf
+    depends_on:
+      - sql-primary
+    environment:
+      WORDPRESS_DB_HOST: sql-primary:3306
+      WORDPRESS_DB_NAME: database
+      WORDPRESS_DB_USER: replication_user
+      WORDPRESS_DB_PASSWORD: h
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    networks:
+      - docker
+    command: >
+      sh -c "echo 'Include conf-available/custom-servername.conf' >> /etc/apache2/apache2.conf && apache2ctl -D FOREGROUND"
+
+  sql-01:
+    image: mariadb:11.4
+    container_name: sql-01
+    environment:
+      MYSQL_ROOT_PASSWORD: h
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: replication_user
+      MYSQL_PASSWORD: h
+    volumes:
+      - ./01:/var/lib/mysql
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    networks:
+      - docker
+  sql-svg:
+    image: mariadb:11.4
+    container_name: sql-svg
+    depends_on:
+      - sql-01
+    environment:
+      MYSQL_ROOT_PASSWORD: h
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: replication_user
+      MYSQL_PASSWORD: h
+    volumes:
+      - ./02:/var/lib/mysql
+      - ./backups:/var/backups
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    networks:
+      - docker
+
+  sql-primary:
+    image: mariadb:11.4
+    container_name: sql-primary
+    command: --server-id=1 --log-bin=mysql-bin --binlog-format=ROW
+    environment:
+      MYSQL_ROOT_PASSWORD: h
+      MYSQL_DATABASE: database
+      MYSQL_USER: replication_user
+      MYSQL_PASSWORD: h
+    volumes:
+      - ./primary:/var/lib/mysql
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    networks:
+      - docker
+
+  sql-replica01:
+    image: mariadb:11.4
+    container_name: sql-replica01
+    depends_on:
+      - sql-primary
+    command: --server-id=2 --log-bin=mysql-bin --binlog-format=ROW
+    environment:
+      MYSQL_ROOT_PASSWORD: h
+      MYSQL_DATABASE: database
+      MYSQL_USER: replication_user
+      MYSQL_PASSWORD: h
+    volumes:
+      - ./replica:/var/lib/mysql
+      - ./backups:/var/backups
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    networks:
+      - docker
+
+  sql-replica02:
+    image: mariadb:11.4
+    container_name: sql-replica02
+    depends_on:
+      - sql-primary
+    command: --server-id=3 --log-bin=mysql-bin --binlog-format=ROW
+    environment:
+      MYSQL_ROOT_PASSWORD: h
+      MYSQL_DATABASE: database
+      MYSQL_USER: replication_user
+      MYSQL_PASSWORD: h
+    volumes:
+      - ./replica2:/var/lib/mysql
+      - ./backups:/var/backups
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    networks:
+      - docker
+
+volumes:
+  mariadb_data:
+  wordpress_data:
+
+networks:
+  docker:
