@@ -13,7 +13,10 @@
 
 ## Pour crontab
 
-Pour faire un cron -> `crontab -e`
+Afin d'avoir une pratique plus claire il faut mieux créer un fichier cron,
+que de faire `crontab -e`.
+
+`sudo nano /etc/cron.d/1_2_backup`
 
 ```
 */2 * * * * /usr/bin/docker exec sql-svg /backup.sh >> /home/hugo/Desktop/VSC/multi_replication/1.2/backups/backup.log 2>&1
@@ -26,8 +29,8 @@ Pour faire un cron -> `crontab -e`
 docker-compose up -d
 ```
 
-## Pour véirfier la base de données
+## Pour vérifier la base de données
 
 ```
-docker exec -it sql-svg mariadb -u root -pdbpassword -e "USE mydb; SHOW TABLES;"
+docker exec -it sql-01 mariadb -u root -pdbpassword -e "USE mydb; SHOW TABLES;"
 ```
