@@ -1,7 +1,5 @@
 #!/bin/sh
 
-# Installer le client MySQL pour les opérations de dump
-apk add --no-cache mysql-client bash
 
 # Créer le script de sauvegarde
 cat << 'EOF' > /scripts/mysqldump.sh

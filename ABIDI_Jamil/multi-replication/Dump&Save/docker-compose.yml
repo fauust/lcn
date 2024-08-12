@@ -26,7 +26,7 @@ services:
   backup-cron:
     container_name: backup-cron
     restart: unless-stopped
-    image: alpine:3.14
+    image: mariadb:10.11
     volumes:
       - shared-data:/mnt/data # Volume partagé pour les sauvegardes
       - ./cron-scripts:/scripts # Répertoire pour stocker le script de sauvegarde
