@@ -8,12 +8,6 @@ Start the containers
 docker compose up -d
 ```
 
-Run the post install script
-
-```bash
-./setup_primaries.sh
-```
-
 ## How to test
 
 ```bash
