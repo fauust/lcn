@@ -1,0 +1,22 @@
+---
+services:
+  sql-01:
+    container_name: sql-01
+    restart: unless-stopped
+    image: mariadb:10.11
+    environment:
+      - MARIADB_ROOT_PASSWORD=password1234
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./sql-01:/var/lib/mysql
+      - ./shared-data:/mnt/data
+
+  sql-svg:
+    container_name: sql-svg
+    restart: unless-stopped
+    image: mariadb:10.11
+    environment:
+      - MARIADB_ROOT_PASSWORD=password1234
+    volumes:
+      - ./sql-svg:/var/lib/mysql
+      - ./shared-data:/mnt/data
