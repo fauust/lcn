@@ -1,0 +1,1 @@
+*/1 * * * * jon /home/jon/Workspace/automates/create_vm/lcn_infra_vm/jonathan/multireplication/1.2/update_svg.sh >> /home/jon/update_svg.log 2>&1
