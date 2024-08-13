@@ -5,9 +5,10 @@ and replica db is initialized with [replica01.conf](./replica01.conf).
 Give the replica db a different server-id than the primary db.
 
 You also need to create a user with replication privileges on the primary db.
-See [init.sql](./init.sql) for the SQL commands to create the user.
 
-## Primary db
+## If not using env for primary and replica db
+
+### Primary db
 
 Now you need prevent any changes to the data while you view the binary log position. You'll use this to tell the slave at exactly which point it should start replicating from.
 
@@ -32,7 +33,7 @@ SHOW MASTER STATUS;
 UNLOCK TABLES;
 ```
 
-## Replica db
+### Replica db
 
 Setup the replica db with the data from the primary db.
     On the slave, configure the replica settings by running CHANGE MASTER TO. You need to specify the master host, user, password, and the binary log file and position you recorded earlier.
@@ -60,11 +61,7 @@ Check replica status:
 SHOW SLAVE STATUS \G
 ```
 
-[replicas.sh](./replicas.sh) is a script that can be used to setup both replicas after compose
-
-You need to run the script again if the primary is shutdown and restarted.
-
-## Testing
+### Testing
 
 To test the replication, create a new database on the primary db:
 
