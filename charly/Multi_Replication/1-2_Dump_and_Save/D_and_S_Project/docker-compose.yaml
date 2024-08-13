@@ -1,0 +1,45 @@
+services:
+  sql-01:
+    image: mariadb:lts
+    restart: unless-stopped
+    container_name: sql-01
+    environment:
+      MYSQL_ROOT_PASSWORD: Totodu26
+      MYSQL_DATABASE: mydb
+    volumes:
+      - db_data_sql01:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - /home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/.my.cnf:/root/.my.cnf
+      - /home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/backup:/backup
+    networks:
+      - my-network
+
+
+  sql-svg:
+    image: mariadb:lts
+    restart: unless-stopped
+    container_name: sql-svg
+    environment:
+      MYSQL_ROOT_PASSWORD: Totodu26
+      MYSQL_DATABASE: mydb
+    volumes:
+      - db_data_sqlsvg:/var/lib/mysql
+      - /home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/.my.cnf:/root/.my.cnf
+      - /home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/backup:/backup
+    networks:
+      - my-network
+
+  mysql-client:
+    image: mysql:lts
+    restart: unless-stopped
+    container_name: mysql-client
+    entrypoint: ["tail", "-f", "/dev/null"]
+    networks:
+      - my-network
+
+volumes:
+  db_data_sql01:
+  db_data_sqlsvg:
+
+networks:
+  my-network:

@@ -1,0 +1,73 @@
+---
+services:
+
+  sql-primary:
+    container_name: sql-primary
+    image: mariadb:11.4
+    restart: unless-stopped
+    volumes:
+      - /srv/docker/sql-primary:/var/lib/mysql
+      - ./conf_primary.cnf:/etc/mysql/conf.d/conf_primary.cnf
+    environment:
+      - MARIADB_ROOT_PASSWORD=toto
+      - MARIADB_DATABASE=wpdb
+      - MARIADB_USER=xav
+      - MARIADB_PASSWORD=titi
+      - MARIADB_REPLICATION_USER=replication_user
+      - MARIADB_REPLICATION_PASSWORD=titi
+    networks:
+      - db-network
+
+  sql-replica01:
+    container_name: sql-replica01
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      - MARIADB_ROOT_PASSWORD=toto
+      - MARIADB_REPLICATION_USER=replication_user
+      - MARIADB_REPLICATION_PASSWORD=titi
+      - MARIADB_MASTER_HOST=sql-primary
+    volumes:
+      - /srv/docker/sql-replica:/var/lib/mysql
+      - ./conf_replica1.cnf:/etc/mysql/conf.d/conf_replica.cnf
+    networks:
+      - db-network
+
+  sql-replica02:
+    container_name: sql-replica02
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      - MARIADB_ROOT_PASSWORD=toto
+      - MARIADB_REPLICATION_USER=replication_user
+      - MARIADB_REPLICATION_PASSWORD=titi
+      - MARIADB_MASTER_HOST=sql-primary
+    volumes:
+      - /srv/docker/sql-replica:/var/lib/mysql
+      - ./conf_replica2.cnf:/etc/mysql/conf.d/conf_replica.cnf
+    networks:
+      - db-network
+
+  wordpress:
+    container_name: wp
+    image: wordpress:6.6
+    restart: unless-stopped
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: sql-primary:3306
+      WORDPRESS_DB_USER: xav
+      WORDPRESS_DB_PASSWORD: titi
+      WORDPRESS_DB_NAME: wpdb
+    volumes:
+      - /srv/docker/wordpress:/var/www/html
+    networks:
+      - db-network
+      - front-network
+
+volumes:
+  shared-data:
+
+networks:
+  db-network:
+  front-network:

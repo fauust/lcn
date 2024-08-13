@@ -1,0 +1,325 @@
+Error response from daemon: container aa16bf023420181932076717cd748abf2a48f5a1895e665c92fecd3751a49a06 is not running
+Erreur lors de la sauvegarde à 2024-08-12_14:35:01
+Error response from daemon: No such container: sql-01
+Erreur lors de la sauvegarde à 2024-08-12_14:40:01
+sh: 1: exec: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-12_14:45:01
+sh: 1: exec: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-12_14:50:01
+sh: 1: exec: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-12_14:55:02
+sh: 1: exec: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-12_15:00:01
+sh: 1: exec: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-12_15:05:01
+sh: 1: exec: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-12_15:10:01
+Unable to find image 'mysql:latest' locally
+latest: Pulling from library/mysql
+d9a40b27c30f: Pulling fs layer
+fe4b01031aab: Pulling fs layer
+aa72c34c4347: Pulling fs layer
+473ade985fa2: Pulling fs layer
+cc168a9482de: Pulling fs layer
+3ca3786815dd: Pulling fs layer
+3e3fac98ea83: Pulling fs layer
+10e5505c3ae4: Pulling fs layer
+a79ade39aab9: Pulling fs layer
+ae34d51c6da2: Pulling fs layer
+3ca3786815dd: Waiting
+3e3fac98ea83: Waiting
+10e5505c3ae4: Waiting
+a79ade39aab9: Waiting
+ae34d51c6da2: Waiting
+473ade985fa2: Waiting
+cc168a9482de: Waiting
+fe4b01031aab: Verifying Checksum
+fe4b01031aab: Download complete
+aa72c34c4347: Verifying Checksum
+aa72c34c4347: Download complete
+473ade985fa2: Verifying Checksum
+473ade985fa2: Download complete
+cc168a9482de: Verifying Checksum
+cc168a9482de: Download complete
+d9a40b27c30f: Verifying Checksum
+d9a40b27c30f: Download complete
+3ca3786815dd: Verifying Checksum
+3ca3786815dd: Download complete
+10e5505c3ae4: Verifying Checksum
+10e5505c3ae4: Download complete
+ae34d51c6da2: Verifying Checksum
+ae34d51c6da2: Download complete
+d9a40b27c30f: Pull complete
+fe4b01031aab: Pull complete
+aa72c34c4347: Pull complete
+473ade985fa2: Pull complete
+cc168a9482de: Pull complete
+3ca3786815dd: Pull complete
+3e3fac98ea83: Verifying Checksum
+3e3fac98ea83: Download complete
+3e3fac98ea83: Pull complete
+10e5505c3ae4: Pull complete
+a79ade39aab9: Verifying Checksum
+a79ade39aab9: Download complete
+a79ade39aab9: Pull complete
+ae34d51c6da2: Pull complete
+Digest: sha256:d8df069848906979fd7511db00dc22efeb0a33a990d87c3c6d3fcdafd6fc6123
+Status: Downloaded newer image for mysql:latest
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_15:15:11
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_15:20:02
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_15:25:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_15:30:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_15:35:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_15:40:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_15:45:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_15:50:02
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_15:55:02
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_16:00:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_16:05:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_16:10:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_16:15:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_16:20:02
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_16:25:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_16:30:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_16:35:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_16:40:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-12_16:45:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-13_08:35:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-13_08:40:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-13_08:45:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-13_08:50:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-13_08:55:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-13_09:00:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-13_09:05:02
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-13_09:10:01
+docker: Error response from daemon: Cannot link to /sql-01, as it does not belong to the default network.
+Erreur lors de la sauvegarde à 2024-08-13_09:15:01
+docker: Error response from daemon: network my-network not found.
+Erreur lors de la sauvegarde à 2024-08-13_09:20:01
+docker: Error response from daemon: network my-network not found.
+Erreur lors de la sauvegarde à 2024-08-13_09:25:01
+mysqldump: [Warning] Using a password on the command line interface can be insecure.
+mysqldump: Couldn't execute 'SELECT COLUMN_NAME,                       JSON_EXTRACT(HISTOGRAM, '$."number-of-buckets-specified"')                FROM information_schema.COLUMN_STATISTICS                WHERE SCHEMA_NAME = 'mydb' AND TABLE_NAME = 'users';': Unknown table 'COLUMN_STATISTICS' in information_schema (1109)
+Erreur lors de la sauvegarde à 2024-08-13_09:30:02
+mysqldump: [ERROR] Failed to open required defaults file: /root/.my.cnf
+mysqldump: [ERROR] Fatal error in defaults handling. Program aborted!
+Erreur lors de la sauvegarde à 2024-08-13_09:35:01
+mysqldump: Got error: 1045: Access denied for user 'root'@'172.19.0.5' (using password: NO) when trying to connect
+Erreur lors de la sauvegarde à 2024-08-13_09:40:02
+mysqldump: Got error: 1045: Access denied for user 'root'@'172.19.0.5' (using password: NO) when trying to connect
+Erreur lors de la sauvegarde à 2024-08-13_09:45:01
+mysqldump: Got error: 1045: Access denied for user 'root'@'172.19.0.5' (using password: NO) when trying to connect
+Erreur lors de la sauvegarde à 2024-08-13_09:50:02
+mysqldump: Got error: 1045: Access denied for user 'root'@'172.19.0.5' (using password: NO) when trying to connect
+Erreur lors de la sauvegarde à 2024-08-13_09:55:01
+docker: Error response from daemon: network my-network not found.
+Erreur lors de la sauvegarde à 2024-08-13_10:00:01
+docker: Error response from daemon: network my-network not found.
+Erreur lors de la sauvegarde à 2024-08-13_10:05:01
+docker: Error response from daemon: network my-network not found.
+Erreur lors de la sauvegarde à 2024-08-13_10:10:01
+docker: Error response from daemon: network my-network not found.
+Erreur lors de la sauvegarde à 2024-08-13_10:15:01
+sh: 1: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-13_10:18:02
+sh: 1: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-13_10:19:10
+sh: 1: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-13_10:20:16
+Erreur : Le conteneur sql-01 n'est pas en cours d'exécution. Les dockers sont éteints.
+sh: 1: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-13_10:22:01
+sh: 1: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-13_10:23:02
+sh: 1: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-13_10:24:01
+sh: 1: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-13_10:25:02
+sh: 1: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-13_10:26:01
+sh: 1: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-13_10:27:02
+chown: changing ownership of '/home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/backup/mydb_backup_2024-08-13_10:27:01.sql': Operation not permitted
+sh: 1: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-13_10:28:01
+chown: changing ownership of '/home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/backup/mydb_backup_2024-08-13_10:27:01.sql': Operation not permitted
+chown: changing ownership of '/home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/backup/mydb_backup_2024-08-13_10:28:01.sql': Operation not permitted
+sh: 1: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-13_10:29:02
+chown: changing ownership of '/home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/backup/mydb_backup_2024-08-13_10:27:01.sql': Operation not permitted
+chown: changing ownership of '/home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/backup/mydb_backup_2024-08-13_10:28:01.sql': Operation not permitted
+chown: changing ownership of '/home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/backup/mydb_backup_2024-08-13_10:29:01.sql': Operation not permitted
+Le fichier /home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/backup/mydb_backup_2024-08-13_10:27:01.sql est vide et sera supprimé.
+Le fichier /home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/backup/mydb_backup_2024-08-13_10:28:01.sql est vide et sera supprimé.
+Le fichier /home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/backup/mydb_backup_2024-08-13_10:29:01.sql est vide et sera supprimé.
+sh: 1: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-13_10:30:01
+chown: changing ownership of '/home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/backup/mydb_backup_2024-08-13_10:30:01.sql': Operation not permitted
+Le fichier /home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/backup/mydb_backup_2024-08-13_10:30:01.sql est vide et sera supprimé.
+sh: 1: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-13_10:31:02
+chown: changing ownership of '/home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/backup/mydb_backup_2024-08-13_10:31:01.sql': Operation not permitted
+Le fichier /home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/backup/mydb_backup_2024-08-13_10:31:01.sql est vide et sera supprimé.
+sh: 1: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-13_10:32:01
+chown: changing ownership of '/home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/backup/mydb_backup_2024-08-13_10:32:01.sql': Operation not permitted
+Le fichier /home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/backup/mydb_backup_2024-08-13_10:32:01.sql est vide et sera supprimé.
+sh: 1: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-13_10:33:02
+chown: changing ownership of '/home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/backup/mydb_backup_2024-08-13_10:33:01.sql': Operation not permitted
+Le fichier /home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/backup/mydb_backup_2024-08-13_10:33:01.sql est vide et sera supprimé.
+sh: 1: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-13_10:34:02
+sh: 1: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-13_10:35:02
+sh: 1: mysqldump: not found
+Erreur lors de la sauvegarde à 2024-08-13_10:36:02
+mysqldump: Got error: 1045: Access denied for user 'root'@'172.19.0.5' (using password: NO) when trying to connect
+Erreur lors de la sauvegarde à 2024-08-13_10:37:05
+mysqldump: Got error: 1045: Access denied for user 'root'@'172.19.0.5' (using password: NO) when trying to connect
+Erreur lors de la sauvegarde à 2024-08-13_10:38:02
+mysqldump: Got error: 1045: Access denied for user 'root'@'172.19.0.5' (using password: NO) when trying to connect
+Erreur lors de la sauvegarde à 2024-08-13_10:39:01
+mysqldump: Got error: 1045: Access denied for user 'root'@'172.19.0.5' (using password: NO) when trying to connect
+Erreur lors de la sauvegarde à 2024-08-13_10:40:02
+mysqldump: Got error: 1045: Access denied for user 'root'@'172.19.0.5' (using password: NO) when trying to connect
+Erreur lors de la sauvegarde à 2024-08-13_10:41:01
+mysqldump: Got error: 1045: Access denied for user 'root'@'172.19.0.5' (using password: NO) when trying to connect
+Erreur lors de la sauvegarde à 2024-08-13_10:42:02
+mysqldump: Got error: 1045: Access denied for user 'root'@'172.19.0.5' (using password: NO) when trying to connect
+Erreur lors de la sauvegarde à 2024-08-13_10:43:01
+sh: line 1: mariadb-dump: command not found
+Erreur lors de la sauvegarde à 2024-08-13_10:44:02
+sh: line 1: mariadb-dump: command not found
+Erreur lors de la sauvegarde à 2024-08-13_10:45:01
+sh: line 1: mariadb-dump: command not found
+Erreur lors de la sauvegarde à 2024-08-13_10:46:02
+sh: line 1: mariadb-dump: command not found
+Erreur lors de la sauvegarde à 2024-08-13_10:47:01
+sh: line 1: mariadb-dump: command not found
+Erreur lors de la sauvegarde à 2024-08-13_10:48:02
+sh: line 1: mariadb-dump: command not found
+Erreur lors de la sauvegarde à 2024-08-13_10:49:01
+sh: line 1: mariadb-dump: command not found
+Erreur lors de la sauvegarde à 2024-08-13_10:50:02
+mariadb-dump: unknown variable 'column-statistics=0'
+Erreur lors de la sauvegarde à 2024-08-13_10:51:01
+mariadb-dump: unknown variable 'column-statistics=0'
+Erreur lors de la sauvegarde à 2024-08-13_10:52:01
+/home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/dump_script.sh: line 21: syntax error near unexpected token `else'
+/home/olinger/PycharmProjects/infra_vm_auto/lcn/charly/Multi_Replication/1-2_Dump_and_Save/D_and_S_Project/dump_script.sh: line 21: `else'
+mariadb-dump: Got error: 2026: "TLS/SSL error: self-signed certificate" when trying to connect
+Erreur lors de la sauvegarde à 2024-08-13_10:54:01
+mariadb-dump: Got error: 2026: "TLS/SSL error: self-signed certificate" when trying to connect
+Erreur lors de la sauvegarde à 2024-08-13_10:55:02
+mariadb-dump: unknown variable 'ssl-mode=DISABLED'
+Erreur lors de la sauvegarde à 2024-08-13_10:56:01
+mariadb-dump: unknown variable 'ssl-mode=DISABLED'
+Erreur lors de la sauvegarde à 2024-08-13_10:57:01
+mariadb-dump: unknown variable 'ssl-mode=DISABLED'
+Erreur lors de la sauvegarde à 2024-08-13_10:58:02
+mariadb-dump: unknown variable 'ssl-mode=DISABLED'
+Erreur lors de la sauvegarde à 2024-08-13_10:59:01
+mariadb-dump: unknown variable 'ssl-mode=DISABLED'
+Erreur lors de la sauvegarde à 2024-08-13_11:00:02
+mariadb-dump: Got error: 2026: "TLS/SSL error: self-signed certificate" when trying to connect
+Erreur lors de la sauvegarde à 2024-08-13_11:01:01
+mariadb-dump: Got error: 2026: "TLS/SSL error: self-signed certificate" when trying to connect
+Erreur lors de la sauvegarde à 2024-08-13_11:02:02
+mariadb-dump: Got error: 2026: "TLS/SSL error: self-signed certificate" when trying to connect
+Erreur lors de la sauvegarde à 2024-08-13_11:03:01
+mariadb-dump: Got error: 2026: "TLS/SSL error: self-signed certificate" when trying to connect
+Erreur lors de la sauvegarde à 2024-08-13_11:04:02
+mariadb-dump: Got error: 2026: "TLS/SSL error: self-signed certificate" when trying to connect
+Erreur lors de la sauvegarde à 2024-08-13_11:05:01
+sh: 1: cannot create /backup/mydb_backup_2024-08-13_11:06:01.sql: Directory nonexistent
+Erreur lors de la sauvegarde à 2024-08-13_11:06:02
+sh: 1: cannot create /backup/mydb_backup_2024-08-13_11:07:01.sql: Directory nonexistent
+Erreur lors de la sauvegarde à 2024-08-13_11:07:01
+sh: 1: cannot create /backup/mydb_backup_2024-08-13_11:08:01.sql: Directory nonexistent
+Erreur lors de la sauvegarde à 2024-08-13_11:08:01
+sh: 1: cannot create /backup/mydb_backup_2024-08-13_11:09:01.sql: Directory nonexistent
+Erreur lors de la sauvegarde à 2024-08-13_11:09:01
+sh: 1: cannot create /backup/mydb_backup_2024-08-13_11:10:01.sql: Directory nonexistent
+Erreur lors de la sauvegarde à 2024-08-13_11:10:01
+sh: 1: cannot create /backup/mydb_backup_2024-08-13_11:11:01.sql: Directory nonexistent
+Erreur lors de la sauvegarde à 2024-08-13_11:11:01
+sh: 1: cannot create /backup/mydb_backup_2024-08-13_11:12:01.sql: Directory nonexistent
+Erreur lors de la sauvegarde à 2024-08-13_11:12:01
+Error response from daemon: No such container: DB_CONTAINER
+Erreur lors de la sauvegarde à 2024-08-13_11:13:01
+Error response from daemon: No such container: DB_CONTAINER
+Erreur lors de la sauvegarde à 2024-08-13_11:14:01
+sh: 1: cannot create /backup/mydb_backup_2024-08-13_11:15:01.sql: Directory nonexistent
+Erreur lors de la sauvegarde à 2024-08-13_11:15:01
+sh: 1: cannot create /backup/mydb_backup_2024-08-13_11:16:01.sql: Directory nonexistent
+Erreur lors de la sauvegarde à 2024-08-13_11:16:01
+sh: 1: cannot create /backup/mydb_backup_2024-08-13_11:17:01.sql: Directory nonexistent
+Erreur lors de la sauvegarde à 2024-08-13_11:17:02
+Could not open required defaults file: /root/.my.cnf
+Fatal error in defaults handling. Program aborted
+Erreur lors de la sauvegarde à 2024-08-13_11:18:01
+Could not open required defaults file: /root/.my.cnf
+Fatal error in defaults handling. Program aborted
+Erreur lors de la sauvegarde à 2024-08-13_11:19:01
+Could not open required defaults file: /root/.my.cnf
+Fatal error in defaults handling. Program aborted
+Erreur lors de la sauvegarde à 2024-08-13_11:20:01
+Could not open required defaults file: /root/.my.cnf
+Fatal error in defaults handling. Program aborted
+Erreur lors de la sauvegarde à 2024-08-13_11:21:01
+Could not open required defaults file: /root/.my.cnf
+Fatal error in defaults handling. Program aborted
+Erreur lors de la sauvegarde à 2024-08-13_11:22:01
+Could not open required defaults file: /root/.my.cnf
+Fatal error in defaults handling. Program aborted
+Erreur lors de la sauvegarde à 2024-08-13_11:23:01
+Could not open required defaults file: /root/.my.cnf
+Fatal error in defaults handling. Program aborted
+Erreur lors de la sauvegarde à 2024-08-13_11:24:01
+Erreur : Le conteneur sql-01 n'est pas en cours d'exécution. Les dockers sont éteints.
+Erreur : Le conteneur sql-01 n'est pas en cours d'exécution. Les dockers sont éteints.
+Sauvegarde réussie à 2024-08-13_11:27:01
+Sauvegarde réussie à 2024-08-13_11:28:02
+Sauvegarde réussie à 2024-08-13_11:29:01
+Sauvegarde réussie à 2024-08-13_11:30:01
+Sauvegarde réussie à 2024-08-13_11:31:01
+Sauvegarde réussie à 2024-08-13_11:32:01
+Sauvegarde réussie à 2024-08-13_11:33:01
+Sauvegarde réussie à 2024-08-13_11:34:01
+Sauvegarde réussie à 2024-08-13_11:35:02
+Sauvegarde réussie à 2024-08-13_11:36:01
+Sauvegarde réussie à 2024-08-13_11:37:01
+Error response from daemon: Could not find the file /backup in container sql-svg
+sh: 1: cannot open /backup/latest_backup.sql: No such file
+rm: cannot remove '/backup/latest_backup.sql': No such file or directory
+Sauvegarde réussie à 2024-08-13_11:38:01
+Sauvegarde réussie à 2024-08-13_11:39:02
+Sauvegarde réussie à 2024-08-13_11:40:01

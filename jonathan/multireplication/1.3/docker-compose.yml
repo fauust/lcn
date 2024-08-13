@@ -1,0 +1,86 @@
+---
+services:
+  sql-primary:
+    image: mariadb:10.11
+    container_name: sql-primary
+    restart: unless-stopped
+    volumes:
+      - ./primary.cnf:/etc/mysql/conf.d/custom.cnf
+      - ./sql-primary:/var/lib/mysql
+      - ./shared-data:/mnt/data
+    environment:
+      - MARIADB_ROOT_PASSWORD=password
+      - MARIADB_USER=testuser
+      - MARIADB_PASSWORD=password
+      - MARIADB_DATABASE=wordpress
+      - MARIADB_REPLICATION_USER=repl
+      - MARIADB_REPLICATION_PASSWORD=replpw
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # wordpress dicker
+  wordpress:
+    image: wordpress:php8.3-apache
+    container_name: wp
+    volumes:
+      - ./config/php.conf.ini:/usr/local/etc/php/conf.d/php.ini
+      - ./wordpress:/var/www/html
+    depends_on:
+      - sql-primary
+    restart: unless-stopped
+    ports:
+      - 8002:80
+    environment:
+      - WORDPRESS_DB_HOST=sql-primary
+      - WORDPRESS_DB_USER=root
+      - WORDPRESS_DB_PASSWORD=password
+      - WORDPRESS_DB_NAME=wordpress
+
+  sql-replica01:
+    image: mariadb:10.11
+    container_name: sql-replica01
+    restart: unless-stopped
+    command: --server-id=2 --log-basename=replica
+    volumes:
+      - ./sql-replica01:/var/lib/mysql
+      - ./shared-data:/mnt/data
+    environment:
+      - MARIADB_ROOT_PASSWORD=password
+      - MARIADB_MASTER_HOST=sql-primary
+      - MARIADB_REPLICATION_USER=repl
+      - MARIADB_REPLICATION_PASSWORD=replpw
+      - MARIADB_HEALTHCHECK_GRANTS=REPLICA MONITOR
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      sql-primary:
+        condition: service_healthy
+
+  sql-replica02:
+    image: mariadb:10.11
+    container_name: sql-replica02
+    restart: unless-stopped
+    command: --server-id=3 --log-basename=replica
+    volumes:
+      - ./sql-replica02:/var/lib/mysql
+      - ./shared-data:/mnt/data
+    environment:
+      - MARIADB_ROOT_PASSWORD=password
+      - MARIADB_MASTER_HOST=sql-primary
+      - MARIADB_REPLICATION_USER=repl
+      - MARIADB_REPLICATION_PASSWORD=replpw
+      - MARIADB_HEALTHCHECK_GRANTS=REPLICA MONITOR
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      sql-primary:
+        condition: service_healthy
