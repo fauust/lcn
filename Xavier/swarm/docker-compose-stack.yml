@@ -1,0 +1,122 @@
+services:
+
+  mariadb:
+    # The docker deployment instructions
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
+    # The container specifications
+    container_name: mydb
+    image: mariadb:11.4
+    restart: unless-stopped
+#    volumes:
+#      - mariadb-data:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: toto
+      MARIADB_DATABASE: wpdb
+      MARIADB_USER: xav
+      MARIADB_PASSWORD: titi
+    networks:
+      - db-network
+
+  wordpress:
+    # The docker deployment instructions
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
+    # The container specifications
+    container_name: mywp
+    image: wordpress:6.6
+    restart: unless-stopped
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: mariadb:3306
+      WORDPRESS_DB_USER: xav
+      WORDPRESS_DB_PASSWORD: titi
+      WORDPRESS_DB_NAME: wpdb
+#    volumes:
+#      - wordpress:/var/www/html
+    networks:
+      - db-network
+      - front-network
+
+  phpMyAdmin:
+    # The docker deployment instructions
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
+    # The container specifications
+    container_name: mypma
+    image: phpmyadmin:5.2
+    restart: unless-stopped
+    ports:
+      - 8085:80
+    environment:
+      PMA_HOST: mydb
+      MYSQL_ROOT_PASSWORD: toto
+    networks:
+      - db-network
+      - front-network
+
+#  netdata:
+#    # The docker deployment instructions
+#    deploy:
+#      placement:
+#        constraints:
+#          - node.role == worker
+#    # The container specifications
+#    image: netdata/netdata:stable
+#    container_name: netdata
+#    pid: host
+#    restart: unless-stopped
+#    cap_add:
+#      - SYS_PTRACE
+#      - SYS_ADMIN
+#    security_opt:
+#      - apparmor:unconfined
+#    volumes:
+#      - netdataconfig:/etc/netdata
+#      - netdatalib:/var/lib/netdata
+#      - netdatacache:/var/cache/netdata
+#      - /:/host/root:ro,rslave
+#      - /etc/passwd:/host/etc/passwd:ro
+#      - /etc/group:/host/etc/group:ro
+#      - /etc/localtime:/etc/localtime:ro
+#      - /proc:/host/proc:ro
+#      - /sys:/host/sys:ro
+#      - /etc/os-release:/host/etc/os-release:ro
+#      - /var/log:/host/var/log:ro
+#      - /var/run/docker.sock:/var/run/docker.sock:ro
+#    environment:
+#      - NETDATA_CLAIM_TOKEN=zl0RzrOyNiwOZL13m02fuwRDPf41iG0OitfYj8nhWNLzDtD2tzXz_ZLmAoGem7o1Jz1M13AgAcjL1d6H0mb8Fr1ZUfnSIyK4aWRGNdXc27n5kFMC8ZM6efki4949dw2-2APlaL8
+#      - NETDATA_CLAIM_URL=https://app.netdata.cloud
+#      - NETDATA_CLAIM_ROOMS=dc5eb4ee-af28-4a0e-8551-f61ff4dfcaa2
+#    networks:
+#      - front-network
+
+volumes:
+  netdataconfig:
+  netdatalib:
+  netdatacache:
+#  mariadb-data:
+#    driver: local
+#    driver_opts:
+#      type: none
+#      device: /srv/docker/mariadb-data
+#      o: bind
+#  wordpress:
+#    driver: local
+#    driver_opts:
+#      type: none
+#      device: /srv/docker/wordpress
+#      o: bind
+
+
+networks:
+  db-network:
+    internal: true
+  front-network:

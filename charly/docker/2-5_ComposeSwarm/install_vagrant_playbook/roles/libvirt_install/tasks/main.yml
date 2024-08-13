@@ -1,0 +1,9 @@
+---
+- import_tasks: installLibvirt.yml
+- import_tasks: installAnsibleLib.yml
+- import_tasks: installDependances.yml
+- import_tasks: generateSSHKey.yml
+
+- name: message at the end
+  debug:
+    msg: "You can now use vagrant with libvirt, if not : \n you may need to logout and back in or reboot your system"

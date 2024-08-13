@@ -30,15 +30,47 @@
 - -d : démarre le conteneur en arriére plan.
 - nom de l'image utilisée.
 
+## Docker-compose
+
+Utilisation de docker-compose pour deployer plusieurs conteneurs et leurs services.
+Voir [docker-compose](compose.yml).
+
+1. **Builds, (re)créer, démarre, les conteneurs à partir du `compose.yml`**.
+   ```sh
+   docker compose up
+
+2. **Arrête et supprime les conteneurs, les réseaux, les volumes et les images créés par `up`**.
+   ```sh
+   docker compose down
+
+## Ports
+
+Préciser 127.0.0.1, devant le port qu'on veut map, spécifie que le port est lié uniquement à l'interface de bouclage (localhost) de la machine hôte.
+Cela signifie que le port ne sera pas accessible depuis l'extérieur de la machine hôte.
+
+## Réseaux
+
+Deux réseaux sont définis : frontnet et backnet.  
+Isolation du réseau backnet, donc du conteneur sur ce reseau qui contient la BDD, pour qu'il ne soit pas accéssible de l'extérieur.
+
+## Secrets
+
+Mots de passes mis dans un dossier secrets et ajouté au .gitignore.
+
+## Monitoring
+
+Utilisation de Netdata, solution de monitoring simple. Mais pas très opti.
+À changer !
+
 ## Docker VS VM ?
 
 DOCKER:
-Un conteneur utilisent directement les resources du noyau de l'OS hôte.
-Il permet d'empaqueter une application, un service, de manière isolée. Peut s'exécuter partout.
-En général le conteneur est + legé qu'une VM.
+Un conteneur utilisent directement les ressources du noyau de l'OS hôte.
+Il permet d'empaqueter une application avec toutes ses dépendances, un service, de manière isolée. Peut s'exécuter partout sans se soucier des differences entre les environnements.
+Les avantages du conteneur : légèreté, portabilité, facilité de déploiement.
 Le conteneur est "jetables", son état n'est pas conservés.
 
 VM:
 Une Vm est une simulation d'une machine physique. Elle a aussi son propre OS qui peut être different de la machine hôte.
-Elle est limitée par les resources de la machine hôte. Son état est conservée lorsqu'on éteint la VM.
+Elle est limitée par les ressources de la machine hôte. Son état est conservée lorsqu'on éteint la VM.
 Une Vm peu être longue à configurer.
