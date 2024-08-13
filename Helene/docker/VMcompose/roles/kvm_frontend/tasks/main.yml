@@ -1,0 +1,89 @@
+---
+# tasks file for kvm_frontend
+- name: Ensure requirements in place
+  package:
+    name:
+      - guestfs-tools
+      - python3-libvirt
+    state: present
+  become: true
+
+- name: Install pip
+  ansible.builtin.shell: |
+    pip3 install --upgrade pip3
+    pip3 install lxml
+    exit 0
+
+- name: Get VMs list
+  community.libvirt.virt:
+    command: list_vms
+  register: existing_vms
+  changed_when: no
+
+- name: Create VM if not exists
+  block:
+    - name: Download base image
+      get_url:
+        url: "{{ base_image_url }}"
+        dest: "/tmp/{{ base_image_name }}"
+        checksum: "sha512:{{ base_image_sha }}"
+
+    - name: Copy base image to libvirt directory
+      copy:
+        dest: "{{ libvirt_pool_dir }}/{{ vm_name }}.qcow2"
+        src: "/tmp/{{ base_image_name }}"
+        force: no
+        remote_src: yes
+        mode: 0660
+      register: copy_results
+
+    - name: Create qemu-img
+      command: |
+        qemu-img create -f qcow2 empty.qcow2 7G
+      when: copy_results is changed
+
+    - name: Resize the img debian
+      command: |
+        virt-resize --expand /dev/vda1 {{ libvirt_pool_dir }}/{{ vm_name }}.qcow2 empty.qcow2
+      when: copy_results is changed
+
+    - name: Create backup
+      command: |
+        mv {{ libvirt_pool_dir }}/{{ vm_name }}.qcow2 {{ libvirt_pool_dir }}/{{ vm_name }}.qcow2.bak
+      when: copy_results is changed
+
+    - name: Replace disk with new one
+      command: |
+        mv empty.qcow2 {{ libvirt_pool_dir }}/{{ vm_name }}.qcow2
+      when: copy_results is changed
+
+    - name: Configure the image
+      command: |
+        virt-customize -a {{ libvirt_pool_dir }}/{{ vm_name }}.qcow2 \
+        --hostname {{ vm_name }} \
+        --root-password password:{{ vm_root_pass }} \
+        --ssh-inject 'root:file:{{ ssh_key }}' \
+        --uninstall openssh-server \
+        --install openssh-server
+      when: copy_results is changed
+
+    - name: Define vm
+      community.libvirt.virt:
+        command: define
+        xml: "{{ lookup('template', 'vm-template.xml.j2') }}"
+      when: "vm_name not in existing_vms.list_vms"
+
+    - name: Ensure VM is started
+      community.libvirt.virt:
+        name: "{{ vm_name }}"
+        state: running
+      register: vm_start_results
+      until: "vm_start_results is success"
+      retries: 15
+      delay: 2
+
+    - name: Ensure temporary file is deleted
+      file:
+        path: "/tmp/{{ base_image_name }}"
+        state: absent
+      when: cleanup_tmp | bool

@@ -1,0 +1,115 @@
+version: '3.8'
+
+services:
+  wordpress:
+    image: wordpress:6.5
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          memory: 2G
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+    ports:
+      - target: 80
+        published: 8080
+        protocol: tcp
+        mode: ingress
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpressuser
+      WORDPRESS_DB_PASSWORD: wordpresspassword
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wordpress-data:/var/www/html
+    networks:
+      - frontend
+      - backend
+
+  db:
+    image: mysql:5.7
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+      restart_policy:
+        condition: on-failure
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpressuser
+      MYSQL_PASSWORD: wordpresspassword
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - backend
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 128M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - target: 80
+        published: 8081
+        protocol: tcp
+        mode: ingress
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: rootpassword
+    networks:
+      - frontend
+      - backend
+
+  netdata:
+    image: netdata/netdata:stable
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - netdataconfig:/etc/netdata
+      - netdatalib:/var/lib/netdata
+      - netdatacache:/var/cache/netdata
+      - /:/host/root:ro,rslave
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /var/log:/host/var/log:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - NETDATA_CLAIM_TOKEN=etI3r4VLfiDaRoOQ8ultss78sd8kcRvUEpcnbMJrIU4S8iSRb8lvUDOY3Yygm4M-d9nMvTEvELEmdQwHOtaorEpwcdvVLTIASnN9qsoE7cgYHGsMPSizxK950H0F39zKekEcLDw
+      - NETDATA_CLAIM_URL=https://app.netdata.cloud
+      - NETDATA_CLAIM_ROOMS=4a3b53b6-46f5-4d6a-a645-3cb5921dd3dd
+    network_mode: host
+    cap_add:
+      - SYS_PTRACE
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+
+networks:
+  frontend:
+    driver: overlay
+  backend:
+    driver: overlay
+    internal: true
+
+volumes:
+  wordpress-data:
+  db-data:
+  netdataconfig:
+  netdatalib:
+  netdatacache:

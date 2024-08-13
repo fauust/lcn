@@ -27,6 +27,7 @@ repos:
         entry: lycheeverse/lychee
         language: docker_image
         types: [markdown]
+        args: ["--exclude", "xeko.fr"]
       - id: docker-hadolint
         name: Run hadolint with docker
         language: docker_image

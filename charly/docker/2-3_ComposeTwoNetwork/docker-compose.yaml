@@ -1,0 +1,60 @@
+services:
+  wordpress:
+    image: wordpress:6.3
+    depends_on:
+      - mariadb
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    networks:
+      - frontnet
+      - backnet
+    environment:
+      WORDPRESS_DB_HOST: mariadb:3306
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/password
+      WORDPRESS_DB_NAME: wpdb
+    volumes:
+      - /srv/wordpress:/var/www/html
+    secrets:
+      - password
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    depends_on:
+      - mariadb
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8081:80"
+    networks:
+      - frontnet
+      - backnet
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+
+  mariadb:
+    image: mariadb:10.5
+    restart: unless-stopped
+    networks:
+      - backnet
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/password
+      MYSQL_DATABASE: wpdb
+      MYSQL_USER: wpuser
+      MYSQL_PASSWORD_FILE: /run/secrets/password
+    volumes:
+      - /srv/mariadb:/var/lib/mysql
+    secrets:
+      - password
+
+networks:
+  frontnet:
+    driver: bridge
+  backnet:
+    driver: bridge
+    internal: true
+
+secrets:
+  password:
+    file: secrets/password.txt

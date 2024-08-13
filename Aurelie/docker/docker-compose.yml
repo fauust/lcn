@@ -1,0 +1,98 @@
+--- # version avec netdata et swarm
+services:
+  mariadb:
+    image: mariadb:10.6.18
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=aurand
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=root
+    restart: unless-stopped
+    networks:
+      - db
+
+  wordpress:
+    image: wordpress:6.6.1-php8.3-apache
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
+    environment:
+      WORDPRESS_DB_HOST: mariadb:3306
+      WORDPRESS_DB_USER: admin
+      WORDPRESS_DB_PASSWORD: root
+      WORDPRESS_DB_NAME: aurand
+    ports:
+      - 2024:80
+    volumes:
+      - /srv/wordpress:/var/www/html
+    restart: unless-stopped
+    networks:
+      - db
+      - wp
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.1-apache
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
+    environment:
+      - PMA_HOST=mariadb
+      - PMA_PORT=3306
+    ports:
+      - 8081:80
+    restart: unless-stopped
+    networks:
+      - db
+      - wp
+
+  netdata:
+    image: netdata/netdata:stable
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
+    pid: host
+    network_mode: host
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - netdataconfig:/etc/netdata
+      - netdatalib:/var/lib/netdata
+      - netdatacache:/var/cache/netdata
+      - /:/host/root:ro,rslave
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /var/log:/host/var/log:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - NETDATA_CLAIM_TOKEN=Ibz9psDg_h4tN5kWGfffc4ImFiO_mJXrXOG50rju5mnpqaw8hGYZ0DQumm0vSyTAMV8SWN8Gi2ritIyffOpwyDk2ID4hYRDYBmO4TTarN3TXoiW_07cQDjQLLhUSk_Eky47Z13I
+      - NETDATA_CLAIM_URL=https://app.netdata.cloud
+      - NETDATA_CLAIM_ROOMS=feac9959-a689-4cb9-8783-e0a6beea0b49
+volumes:
+  netdataconfig:
+  netdatalib:
+  netdatacache:
+
+
+networks:
+  db:
+    driver: overlay
+  wp:
+    driver: overlay

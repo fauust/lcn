@@ -1,10 +1,21 @@
+---
 services:
   wordpress:
     image: wordpress:6.6.1
+    deploy:
+      resources:
+        limits:
+          cpus: '0.6'
+          memory: 1024M
+        reservations:
+          cpus: '0.2'
+          memory: 256M
     ports:
-      - "8080:80"
+      - "127.0.0.1:8080:80"
     volumes:
-      - apache_data:/var/www/html
+      - wordpress_data:/var/www/html
+      # - ./logs/apache2:/var/log/apache2
+      - ./custom-apache2.conf:/etc/apache2/conf-available/custom-servername.conf
     depends_on:
       - mariadb
     environment:
@@ -12,34 +23,93 @@ services:
       WORDPRESS_DB_NAME: database
       WORDPRESS_DB_USER: root
       WORDPRESS_DB_PASSWORD: h
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
     networks:
-      - my-app
-
+      - external
+      - internal
+    command: >
+      sh -c "echo 'Include conf-available/custom-servername.conf' >> /etc/apache2/apache2.conf && apache2ctl -D FOREGROUND" # Include the custom config file on startup
 
   mariadb:
     image: mariadb:11.4
-    ports:
-      - "8082:3306"
     environment:
       MYSQL_ROOT_PASSWORD: h
       MYSQL_DATABASE: database
     volumes:
       - mariadb_data:/var/lib/mysql
+      # - ./logs/mariadb:/var/log/mysql
+      # - ./my_custom.cnf:/etc/mysql/mariadb.conf.d/my_custom.cnf
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
     networks:
-      - my-app
+      - internal
+
+  netdata:
+    image: netdata/netdata:stable
+    container_name: netdata
+    pid: host
+    network_mode: host
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - netdataconfig:/etc/netdata
+      - netdatalib:/var/lib/netdata
+      - netdatacache:/var/cache/netdata
+      - /:/host/root:ro,rslave
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /var/log:/host/var/log:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - NETDATA_CLAIM_TOKEN=/run/secrets/netdata_claim_token
+      - NETDATA_CLAIM_URL=/run/secrets/netdata_claim_url
+      - NETDATA_CLAIM_ROOMS=/run/secrets/netdata_claim_rooms
+    secrets:
+      - netdata_claim_token
+      - netdata_claim_url
+      - netdata_claim_rooms
 
   adminer:
     image: adminer:4.8.1
     ports:
-      - "8081:8080"
+      - "127.0.0.1:8081:8080"
     depends_on:
       - mariadb
     networks:
-      - my-app
+      - external
+      - internal
 
 volumes:
   mariadb_data:
-  apache_data:
+  wordpress_data:
+  netdataconfig:
+  netdatalib:
+  netdatacache:
 
 networks:
-  my-app:
+  external:
+  internal:
+    internal: true
+
+secrets:
+  netdata_claim_token:
+    file: ./secret_token.txt
+  netdata_claim_url:
+    file: ./secret_url.txt
+  netdata_claim_rooms:
+    file: ./secret_rooms.txt
