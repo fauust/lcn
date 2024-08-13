@@ -1,9 +1,10 @@
 FROM mariadb:11.4
 
-RUN apt-get update && apt-get install -y cron && \
+RUN apt-get update && apt-get install -y cron --no-install-recommends && \
     mkdir -p /var/log/cron && \
     touch /var/log/cron/backup.log  && \
-    chmod 777 -R /var/log
+    chmod 777 -R /var/log && \
+    apt-get clean
 
 COPY backup.sh /usr/local/bin/backup.sh
 RUN chmod +x /usr/local/bin/backup.sh
