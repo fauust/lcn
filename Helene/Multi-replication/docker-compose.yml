@@ -1,0 +1,43 @@
+---
+services:
+  sql-01:
+    image: mariadb:10.11
+    container_name: sql-01
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - ./sql-01-data:/var/lib/mysql
+      - shared-data:/mnt/data
+      - ./init:/docker-entrypoint-initdb.d
+    networks:
+      - mariadb-net
+
+  sql-svg:
+    image: mariadb:10.11
+    container_name: sql-svg
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ./sql-svg-data:/var/lib/mysql
+      - shared-data:/mnt/data
+    networks:
+      - mariadb-net
+  backup:
+    image: alpine
+    container_name: backup
+    volumes:
+      - ./backup.sh:/mnt/data/backup.sh
+      - shared-data:/mnt/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - mariadb-net
+
+networks:
+  mariadb-net:
+    driver: bridge
+
+volumes:
+  shared-data:

@@ -1,0 +1,57 @@
+services:
+  wp:
+    image: wordpress:6-php8.1-apache
+    restart: unless-stopped
+    container_name: wp
+    depends_on:
+      - sql-primary
+    ports:
+      - 127.0.0.1:8000:80
+    volumes:
+      - ./wp:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: sql-primary
+      WORDPRESS_DB_USER: wp-user
+      WORDPRESS_DB_NAME: wpdb
+      WORDPRESS_DB_PASSWORD: test123
+
+  sql-primary:
+    image: mariadb:11.4.2
+    restart: unless-stopped
+    container_name: sql-primary
+    volumes:
+      - ./sql-primary:/var/lib/mysql
+      - ./primary.cnf:/etc/mysql/conf.d/primary.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: test123
+      MYSQL_DATABASE: wpdb
+      MYSQL_USER: wp-user
+      MYSQL_PASSWORD: test123
+      MARIADB_REPLICATION_USER: replication_user
+      MARIADB_REPLICATION_PASSWORD: replication_password
+
+  sql-replica01:
+    image: mariadb:11.4.2
+    restart: unless-stopped
+    container_name: sql-replica01
+    volumes:
+      - ./sql-replica01:/var/lib/mysql
+      - ./replica01.cnf:/etc/mysql/conf.d/replica01.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: test123
+      MARIADB_REPLICATION_USER: replication_user
+      MARIADB_REPLICATION_PASSWORD: replication_password
+      MARIADB_MASTER_HOST: sql-primary
+
+  sql-replica02:
+    image: mariadb:11.4.2
+    restart: unless-stopped
+    container_name: sql-replica02
+    volumes:
+      - ./sql-replica02:/var/lib/mysql
+      - ./replica02.cnf:/etc/mysql/conf.d/replica02.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: test123
+      MARIADB_REPLICATION_USER: replication_user
+      MARIADB_REPLICATION_PASSWORD: replication_password
+      MARIADB_MASTER_HOST: sql-primary
