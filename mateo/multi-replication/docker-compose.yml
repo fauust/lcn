@@ -23,6 +23,8 @@ services:
     command: >
       sh -c "echo 'Include conf-available/custom-servername.conf' >> /etc/apache2/apache2.conf && apache2ctl -D FOREGROUND"
 
+#---------------------------------------------------------------------------------------------------------------
+
   sql-01:
     image: mariadb:11.4
     container_name: sql-01
@@ -62,17 +64,23 @@ services:
     networks:
       - docker
 
+#---------------------------------------------------------------------------------------------------------------
+
   sql-primary:
     image: mariadb:11.4
     container_name: sql-primary
-    command: --server-id=1 --log-bin=mysql-bin --binlog-format=ROW
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: h
-      MYSQL_DATABASE: database
-      MYSQL_USER: replication_user
-      MYSQL_PASSWORD: h
+      - MARIADB_ROOT_PASSWORD=h
+      - MARIADB_USER=wp
+      - MARIADB_PASSWORD=h
+      - MARIADB_DATABASE=database
+      - MARIADB_REPLICATION_USER=replication_user
+      - MARIADB_REPLICATION_PASSWORD=h
+
     volumes:
-      - ./primary:/var/lib/mysql
+      - ./sql-primary:/var/lib/mysql
+      - ./primary.cnf:/etc/mysql/conf.d/custom.cnf
     logging:
       driver: "json-file"
       options:
@@ -84,17 +92,17 @@ services:
   sql-replica01:
     image: mariadb:11.4
     container_name: sql-replica01
+    restart: unless-stopped
     depends_on:
       - sql-primary
-    command: --server-id=2 --log-bin=mysql-bin --binlog-format=ROW
     environment:
-      MYSQL_ROOT_PASSWORD: h
-      MYSQL_DATABASE: database
-      MYSQL_USER: replication_user
-      MYSQL_PASSWORD: h
+      - MARIADB_ROOT_PASSWORD=h
+      - MARIADB_REPLICATION_USER=replication_user
+      - MARIADB_REPLICATION_PASSWORD=h
+      - MARIADB_MASTER_HOST=sql-primary
     volumes:
-      - ./replica:/var/lib/mysql
-      - ./backups:/var/backups
+      - ./sql-replica01:/var/lib/mysql
+      - ./replica01.cnf:/etc/mysql/conf.d/custom.cnf
     logging:
       driver: "json-file"
       options:
@@ -106,17 +114,17 @@ services:
   sql-replica02:
     image: mariadb:11.4
     container_name: sql-replica02
+    restart: unless-stopped
     depends_on:
       - sql-primary
-    command: --server-id=3 --log-bin=mysql-bin --binlog-format=ROW
     environment:
-      MYSQL_ROOT_PASSWORD: h
-      MYSQL_DATABASE: database
-      MYSQL_USER: replication_user
-      MYSQL_PASSWORD: h
+      - MARIADB_ROOT_PASSWORD=h
+      - MARIADB_REPLICATION_USER=replication_user
+      - MARIADB_REPLICATION_PASSWORD=h
+      - MARIADB_MASTER_HOST=sql-primary
     volumes:
-      - ./replica2:/var/lib/mysql
-      - ./backups:/var/backups
+      - ./sql-replica02:/var/lib/mysql
+      - ./replica02.cnf:/etc/mysql/conf.d/custom.cnf
     logging:
       driver: "json-file"
       options:
