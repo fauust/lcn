@@ -1,0 +1,60 @@
+# setting replica and slave using old school method : ./script/replication_Primary_Replica.sh
+# not very elegant : prefer using the new method with docker-compose.yml and the native option of mariadb docker image
+version: "3.8"
+
+services:
+  master:
+    image: mariadb:11.4
+    container_name: sql-primary
+    restart: unless-stopped
+    # env_file:
+    #   - ./env/mariadb-primary.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=password1234
+      - MYSQL_DATABASE=wordpress # Feel free to change this database name
+      - MYSQL_USER=replication_user # This user will handle replication
+      - MYSQL_PASSWORD=password1234replica
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
+      - ./master_data:/var/lib/mysql
+    command: >
+      --server-id=1
+      --log-bin=mysql-bin
+      --binlog-format=row
+    ports:
+      - "3306:3306"
+    networks:
+      - mariadb-network
+
+  replica:
+    image: mariadb:11.4
+    container_name: sql-replica01
+    restart: unless-stopped
+    # env_file:
+    #   - ./env/mariadb-replica01.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=password1234
+      - MYSQL_DATABASE=wordpress # Feel free to change this database name
+      - MYSQL_USER=replication_user # This user will handle replication
+      - MYSQL_PASSWORD=password1234replica
+    depends_on:
+      - master
+    volumes:
+      - ./replica_data:/var/lib/mysql
+    networks:
+      - mariadb-network
+    command: >
+      --server-id=2
+      --log-bin=mysql-bin
+      --relay-log=mysql-relay-bin
+      --read-only=1
+    ports:
+      - "3307:3306"
+
+networks:
+  mariadb-network:
+    driver: bridge
+
+volumes:
+  master_data:
+  replica_data:
