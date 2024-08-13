@@ -1,0 +1,29 @@
+services:
+  mariadb:
+    image: mariadb:11.4.2
+    restart: unless-stopped
+    container_name: sql-01
+    ports:
+      - 3306:3306
+    volumes:
+      - ./sql-01:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./shared-data:/shared-data
+    environment:
+      MYSQL_ROOT_PASSWORD: test123
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: mydb-user
+      MYSQL_PASSWORD: test132
+
+  backup-mariadb:
+    image: mariadb:11.4.2
+    restart: unless-stopped
+    container_name: sql-svg
+    volumes:
+      - ./sql-svg:/var/lib/mysql
+      - ./shared-data:/shared-data
+    environment:
+      MYSQL_ROOT_PASSWORD: test123
+      MYSQL_DATABASE: mydb
+volumes:
+  shared-data:
