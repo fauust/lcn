@@ -6,7 +6,7 @@ GRANT REPLICATION SLAVE ON *.* TO 'myuser'@'%';
 FLUSH PRIVILEGES;
 ```
 
-# 2- Synchronized DB 
+# 2- Synchronized DB
 
 ```
 STOP SLAVE;

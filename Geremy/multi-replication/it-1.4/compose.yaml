@@ -4,7 +4,7 @@ services:
     image: mariadb:lts
     container_name: sql-primary01
     environment:
-      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_pwd 
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_pwd
       MARIADB_DATABASE_FILE: /run/secrets/db_name
       MARIADB_USER_FILE: /run/secrets/db_user_name
       MARIADB_PASSWORD_FILE: /run/secrets/db_user_pwd
@@ -16,12 +16,12 @@ services:
       - db_name
       - db_user_name
       - db_user_pwd
-    
+
   sql-primary02:
     image: mariadb:lts
     container_name: sql-primary02
     environment:
-      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_pwd 
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_pwd
       MARIADB_DATABASE_FILE: /run/secrets/db_name
       MARIADB_USER_FILE: /run/secrets/db_user_name
       MARIADB_PASSWORD_FILE: /run/secrets/db_user_pwd
