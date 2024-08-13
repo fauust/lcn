@@ -1,3 +1,0 @@
----
-- name: Install ansible libraries for Vagrant
-  shell: ansible-galaxy collection install community.general
