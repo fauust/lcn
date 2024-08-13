@@ -1,0 +1,81 @@
+---
+services:
+  sql-primary01:
+    image: mariadb:10.11
+    container_name: sql-primary01
+    restart: unless-stopped
+    volumes:
+      - ./primary01.cnf:/etc/mysql/conf.d/custom.cnf
+      - ./sql-primary01:/var/lib/mysql
+      - ./setup_replication01.sql:/docker-entrypoint-initdb.d/setup_replication.sql
+    environment:
+      - MARIADB_ROOT_PASSWORD=password
+      - MARIADB_USER=testuser
+      - MARIADB_PASSWORD=password
+      - MARIADB_DATABASE=wordpress
+      - MARIADB_REPLICATION_USER=repl
+      - MARIADB_REPLICATION_PASSWORD=replpw
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  sql-primary02:
+    image: mariadb:10.11
+    container_name: sql-primary02
+    restart: unless-stopped
+    volumes:
+      - ./primary02.cnf:/etc/mysql/conf.d/custom.cnf
+      - ./sql-primary02:/var/lib/mysql
+      - ./setup_replication02.sql:/docker-entrypoint-initdb.d/setup_replication.sql
+    environment:
+      - MARIADB_ROOT_PASSWORD=password
+      - MARIADB_USER=testuser
+      - MARIADB_PASSWORD=password
+      - MARIADB_DATABASE=wordpress
+      - MARIADB_REPLICATION_USER=repl
+      - MARIADB_REPLICATION_PASSWORD=replpw
+    depends_on:
+      sql-primary01:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # wordpress dicker
+  wordpress01:
+    image: wordpress:php8.3-apache
+    container_name: wp01
+    volumes:
+      - ./config01/php.conf.ini:/usr/local/etc/php/conf.d/php.ini
+      - ./wordpress:/var/www/html
+    depends_on:
+      - sql-primary01
+    restart: unless-stopped
+    ports:
+      - 8002:80
+    environment:
+      - WORDPRESS_DB_HOST=sql-primary01
+      - WORDPRESS_DB_USER=root
+      - WORDPRESS_DB_PASSWORD=password
+      - WORDPRESS_DB_NAME=wordpress
+
+        #  wordpress02:
+        #    image: wordpress:php8.3-apache
+        #    container_name: wp02
+        #    volumes:
+        #      - ./config02/php.conf.ini:/usr/local/etc/php/conf.d/php.ini
+        #      - ./wordpress:/var/www/html
+        #    depends_on:
+        #      - sql-primary02
+        #    restart: unless-stopped
+        #    ports:
+        #      - 8003:80
+        #    environment:
+        #      - WORDPRESS_DB_HOST=sql-primary02
+        #      - WORDPRESS_DB_USER=root
+        #      - WORDPRESS_DB_PASSWORD=password
+        #      - WORDPRESS_DB_NAME=wordpress
