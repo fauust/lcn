@@ -21,3 +21,15 @@ docker exec sql-primary02 bash -c "mariadb -uroot -ph -e \"START SLAVE;\" mydb2"
 
 docker exec sql-primary01 bash -c "mariadb -uroot -ph -e \"SHOW SLAVE STATUS\\G\" mydb2"
 docker exec sql-primary02 bash -c "mariadb -uroot -ph -e \"SHOW SLAVE STATUS\\G\" mydb2"
+
+docker exec sql-primary01 bash -c "mariadb -uroot -ph -e \"CREATE TABLE IF NOT EXISTS test_table (id INT PRIMARY KEY, value VARCHAR(100)); INSERT INTO test_table (id,value) VALUES (1, 'Test from primary01');\" mydb2"
+
+sleep 5
+
+docker exec sql-primary02 bash -c "mariadb -uroot -ph -e \"SELECT * FROM test_table;\" mydb2"
+docker exec sql-primary02 bash -c "mariadb -uroot -ph -e \"INSERT INTO test_table (id, value) VALUES (2, 'Test from primary02');\" mydb2"
+
+sleep 5
+
+docker exec sql-primary01 bash -c "mariadb -uroot -ph -e \"SELECT * FROM test_table;\" mydb2"
+
