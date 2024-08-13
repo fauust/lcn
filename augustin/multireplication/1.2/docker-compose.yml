@@ -11,7 +11,7 @@ services:
     volumes:
       - ./sql-01:/var/lib/mysql
       - ./sql-01-backups:/backups
-      - ./sql-01-backups/log:/var/log/backup.log
+      - ./sql-01-backups/log:/var/log/
     ports:
       - "3306:3306"
 

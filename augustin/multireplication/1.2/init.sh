@@ -29,33 +29,48 @@ while getopts "bd" opt; do
 done
 
 if [ "$build" == "true" ]; then
-    docker build -t mariadb-replica . && sleep 5
+    docker build -t mariadb-replica . && sleep 10
 fi
 
 if [ "$drop" == "true" ]; then
-    docker compose down && sleep 5
-    sudo rm -rf sql-01
-    sudo rm -rf sql-svg
-    sudo rm -rf shared-data
-    sudo rm -rf sql-01-backups
+    sudo rm -rf sql-01 && \
+    sudo rm -rf sql-svg && \
+    sudo rm -rf shared-data && \
+    sudo rm -rf sql-01-backups && \
+    sleep 1
 fi
-docker compose up -d && sleep 10
 
-master_info=$(docker exec -i sql-01 mariadb -u root -p1234 -e " ALTER USER 'replica'@'%' IDENTIFIED VIA mysql_native_password USING PASSWORD ('123456789');  GRANT REPLICATION SLAVE ON *.* TO 'replica'@'%';  FLUSH PRIVILEGES;  SHOW MASTER STATUS\G")
+docker compose down && \
+docker compose up -d && \
+sleep 10
+
+master_info=$(docker exec -i sql-01 mariadb -u root -p1234 -e "ALTER USER 'replica'@'%' IDENTIFIED VIA mysql_native_password USING PASSWORD ('123456789'); GRANT REPLICATION SLAVE ON *.* TO 'replica'@'%'; FLUSH PRIVILEGES; SHOW MASTER STATUS\G")
+if [ $? -ne 0 ]; then
+    echo "Failed to get master status."
+    exit 1
+fi
 
 echo "$master_info"
-
 master_file=$(echo "$master_info" | grep "File:" | awk '{print $2}')
 master_pos=$(echo "$master_info" | grep "Position:" | awk '{print $2}')
 
-docker exec -i sql-svg mariadb -u root -p1234 -e " CHANGE MASTER TO  MASTER_HOST='sql-01',  MASTER_USER='replica',  MASTER_PASSWORD='123456789',  MASTER_LOG_FILE='$master_file',  MASTER_LOG_POS=$master_pos; START SLAVE;"
+docker exec -i sql-svg mariadb -u root -p1234 -e "CHANGE MASTER TO MASTER_HOST='sql-01', MASTER_USER='replica', MASTER_PASSWORD='123456789', MASTER_LOG_FILE='$master_file', MASTER_LOG_POS=$master_pos; START SLAVE;"
+if [ $? -ne 0 ]; then
+    echo "Failed to set up slave."
+    exit 1
+fi
 
 slave_status=$(docker exec -i sql-svg mariadb -u root -p1234 -e "SHOW SLAVE STATUS\G")
-# echo "$slave_status"
+if [ $? -ne 0 ]; then
+    echo "Failed to get slave status."
+    exit 1
+fi
 
 docker exec -i sql-01 mariadb -u root -p1234 -e "USE mydb; CREATE TABLE IF NOT EXISTS user (id INT); INSERT INTO user (id) VALUES ($value);"
-
-sleep 10
+if [ $? -ne 0 ]; then
+    echo "Failed to insert value into master."
+    exit 1
+fi
 
 master_data=$(docker exec -i sql-01 mariadb -u root -p1234 -e "USE mydb; SELECT * FROM user;")
 echo "Master Data:"
@@ -67,3 +82,29 @@ echo "$slave_data"
 
 final_slave_status=$(docker exec -i sql-svg mariadb -u root -p1234 -e "SHOW SLAVE STATUS\G")
 # echo "$final_slave_status"
+
+docker exec -i sql-01 backup.sh
+
+function break_down {
+    docker exec -it sql-01 mariadb -u root -p1234 -e "DROP DATABASE mydb;"
+    echo "The node sql-01 no longer has the DB! Damned!"
+}
+latest_dump=$(ls -t ./sql-01-backups/mydb* | head -1)
+break_down
+
+# Recreate the database before restoring from backup
+docker exec -i sql-01 mariadb -u root -p1234 -e "CREATE DATABASE mydb;"
+if [ $? -ne 0 ]; then
+    echo "Failed to create database mydb."
+    exit 1
+fi
+
+docker exec -i sql-01 mariadb -u root -p1234 mydb < "$latest_dump"
+if [ $? -ne 0 ]; then
+    echo "Failed to restore database from backup."
+    exit 1
+fi
+
+master_data=$(docker exec -i sql-01 mariadb -u root -p1234 -e "USE mydb; SELECT * FROM user;")
+echo "Master Data:"
+echo "$master_data"
