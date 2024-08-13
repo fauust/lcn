@@ -1,0 +1,32 @@
+services:
+  sql-01:
+    container_name: sql-01
+    image: mariadb-replica
+    command: --server-id=1 --log-bin=mysql-bin --binlog-format=row
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: replica
+      MYSQL_PASSWORD: 4321
+    volumes:
+      - ./sql-01:/var/lib/mysql
+      - ./sql-01-backups:/backups
+      - ./sql-01-backups/log:/var/log/
+    ports:
+      - "3306:3306"
+
+  sql-svg:
+    container_name: sql-svg
+    image: mariadb:11.4
+    depends_on:
+      - sql-01
+    command: --server-id=2 --relay-log=relay-bin --log-bin=mysql-bin --binlog-format=row
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: replica
+      MYSQL_PASSWORD: 4321
+    volumes:
+      - ./sql-svg:/var/lib/mysql
+    ports:
+      - "3307:3306"
