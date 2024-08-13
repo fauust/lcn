@@ -1,3 +1,21 @@
+volumes:
+  db_data:
+  wordpress:
+  nginx:
+
+networks:
+  frontend:
+  db_network:
+    internal: true
+  backend:
+    internal: true
+
+secrets:
+  db_password:
+    file: db_password.txt
+  db_root_password:
+    file: db_root_password.txt
+
 services:
   db:
     image: mariadb:11.4
@@ -17,7 +35,7 @@ services:
       MYSQL_USER: "wordpress"
       MYSQL_PASSWORD_FILE: /run/secrets/db_password #123
     networks:
-      - backend
+      - db_network
     secrets:
       - db_root_password
       - db_password
@@ -34,13 +52,13 @@ services:
       PMA_USER: root
       PMA_PASSWORD_FILE: /run/secrets/db_root_password #123
     networks:
-      - wpsite
+      - db_network
       - backend
     secrets:
       - db_root_password
 
   wordpress:
-    image: wordpress:php8.1
+    image: wordpress:6.6.1
     container_name: wordpress
     depends_on:
       db:
@@ -59,9 +77,8 @@ services:
       WORDPRESS_DB_USER: root
       WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_root_password #123
       WORDPRESS_DB_NAME: wordpress
-      VIRTUAL_HOST: foobar.local
     networks:
-      - wpsite
+      - db_network
       - backend
     secrets:
       - db_root_password
@@ -77,7 +94,8 @@ services:
     # tty: true # enable terminal = option -t
     # stdin_open: true # enable terminal = option -i
     networks:
-      - wpsite
+      - db_network
+      - frontend
       - backend
     volumes:
       - ./data:/data
@@ -85,32 +103,35 @@ services:
       context: debug
       dockerfile: debug.Dockerfile
 
-  nginx-base:
-    image: nginx:latest
-    container_name: nginx-base
+  #replace by nginx-proxy-manager
+  # nginx-base:
+  #   image: nginx:latest
+  #   container_name: nginx-base
+  #   networks:
+  #     - backend
+  #     - frontend
+  #   volumes:
+  #     - ./mynginx.conf:/etc/nginx/conf.d/mynginx.conf
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     wordpress:
+  #       condition: service_healthy
+  #   restart: on-failure:3
+
+  nginx-proxy-manager:
+    image: "jc21/nginx-proxy-manager:latest"
     networks:
-      - wpsite
+      - backend
       - frontend
-    volumes:
-      - ./mynginx.conf:/etc/nginx/conf.d/mynginx.conf
     ports:
-      - "8080:80"
-
-volumes:
-  db_data:
-  wordpress:
-  nginx:
-
-networks:
-  frontend:
-    external: true
-  wpsite:
-    internal: true
-  backend:
-    internal: true
-
-secrets:
-  db_password:
-    file: db_password.txt
-  db_root_password:
-    file: db_root_password.txt
+      - "80:80"
+      - "81:81"
+      - "443:443"
+    volumes:
+      - ./datanpm:/data
+      - ./letsencrypt:/etc/letsencrypt
+    restart: unless-stopped
+    depends_on:
+      wordpress:
+        condition: service_healthy

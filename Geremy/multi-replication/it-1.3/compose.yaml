@@ -1,0 +1,71 @@
+---
+services:
+  mariadb-primary:
+    image: mariadb:lts
+    container_name: mariadb-primary
+    command: --server-id=1 --log-bin=mysql-bin --binlog-format=row
+    environment:
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_pwd
+      MARIADB_DATABASE_FILE: /run/secrets/db_name # Feel free to change this database name
+      MARIADB_USER_FILE: /run/secrets/user_name # This user will handle replication
+      MARIADB_PASSWORD_FILE: /run/secrets/user_pwd
+    # Map the container port (3306) to your host machine's port (also 3306)
+    # This lets you access the master server from your machine
+    ports:
+      - "3306:3306"
+    secrets:
+      - db_root_pwd
+      - db_name
+      - user_name
+      - user_pwd
+
+  # The replica server, the master's trusty sidekick
+  mariadb-replica:
+    image: mariadb:lts
+    container_name: mariadb-replica
+    depends_on:
+      - mariadb-primary
+    command: --server-id=2 --log-bin=mysql-bin --binlog-format=row
+    environment:
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_pwd # Same password for both
+      MARIADB_DATABASE_FILE: /run/secrets/db_name
+      MARIADB_USER_FILE: /run/secrets/user_name
+      MARIADB_PASSWORD_FILE: /run/secrets/user_pwd
+    # Map the container port (3306) to a different host machine port (3307 in this case)
+    ports:
+      - "3307:3306"
+    secrets:
+      - db_root_pwd
+      - db_name
+      - user_name
+      - user_pwd
+
+  mariadb-replica02:
+    image: mariadb:lts
+    container_name: mariadb-replica02
+    depends_on:
+      - mariadb-primary
+    command: --server-id=3 --log-bin=mysql-bin --binlog-format=row
+    environment:
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_pwd # Same password for both
+      MARIADB_DATABASE_FILE: /run/secrets/db_name
+      MARIADB_USER_FILE: /run/secrets/user_name
+      MARIADB_PASSWORD_FILE: /run/secrets/user_pwd
+    # Map the container port (3306) to a different host machine port (3307 in this case)
+    ports:
+      - "3308:3306"
+    secrets:
+      - db_root_pwd
+      - db_name
+      - user_name
+      - user_pwd
+
+secrets:
+  db_root_pwd:
+    file: ./secrets/db_root_pwd.txt
+  db_name:
+    file: ./secrets/db_name.txt
+  user_name:
+    file: ./secrets/user_name.txt
+  user_pwd:
+    file: ./secrets/user_pwd.txt
