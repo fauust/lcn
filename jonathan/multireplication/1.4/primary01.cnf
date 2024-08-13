@@ -1,0 +1,8 @@
+[mariadb]
+bind-address=sql-primary01
+server_id=1
+log-bin=/var/log/mysql/mysql-bin.log
+expire_logs_days=10
+max_binlog_size=100M
+binlog_do_db=wordpress
+#binlog_ignore_db=exclude_database_name
