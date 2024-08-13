@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 timestamp=$(date +%F_%T)
 
 # Check if sql-01 container is running
@@ -10,6 +12,7 @@ if docker ps --format '{{.Names}}' | grep -q 'sql-01'; then
   logger "Backup completed for sql-01 at $timestamp."
 else
   logger "Container sql-01 is not running. Skipping backup."
+  exit 1
 fi
 
 # Check if sql-svg container is running

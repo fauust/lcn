@@ -1,5 +1,5 @@
 services:
-  mariadb:
+  sql-01:
     image: mariadb:11.4.2
     restart: unless-stopped
     container_name: sql-01
@@ -15,7 +15,7 @@ services:
       MYSQL_USER: mydb-user
       MYSQL_PASSWORD: test132
 
-  backup-mariadb:
+  sql-svg:
     image: mariadb:11.4.2
     restart: unless-stopped
     container_name: sql-svg
