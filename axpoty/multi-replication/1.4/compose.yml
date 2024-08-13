@@ -18,6 +18,6 @@ services:
       MARIADB_ROOT_PASSWORD: password1234
       MARIADB_REPLICATION_USER: replication_user
       MARIADB_REPLICATION_PASSWORD: replicapass
-      MARIADB_DATABASE: mydb2 
+      MARIADB_DATABASE: mydb2
     volumes:
       - ./primary02.conf:/etc/mysql/conf.d/custom.cnf
