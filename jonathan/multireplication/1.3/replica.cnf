@@ -1,5 +1,0 @@
-[mariadb]
-log-bin
-server_id=2
-log-basename=replica
-binlog-format=mixed
