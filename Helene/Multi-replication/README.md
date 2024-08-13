@@ -3,7 +3,7 @@
 
 Création d'un ficher docker-compose.yml pour creer deux containers : MariaDB sql-01 avec sa BDD mydb et sql-svg.
 
-Créer un fichier ```init-db.sql``` dans pour initer la base de donnée (créer db + tables) dans ```./init``` dans le répertoire de travail :
+Créer un fichier [init-db.sql](init-db.sql) dans pour initer la base de donnée (créer db + tables) :
 
 ```
 CREATE DATABASE IF NOT EXISTS mydb;
@@ -33,7 +33,17 @@ docker logs <nom-du-container>
 Vérification BDD :
 docker exec -it sql-01 mariadb -uroot -p${MYSQL_ROOT_PASSWORD} -e "SHOW DATABASES;"
 
-Création d'un script de sauvegarde
+Création d'un script de sauvegarde [backup.sh](backup.sh)
+
+Configurer une tâche cron pour exécuter la sauvegarde
+Édite la crontab pour ajouter la tâche :
+```
+crontab -e
+```
+Ajouter la ligne suivante :
+```
+*/2 * * * * /root/docker-multirep/backup.sh
+```
 
 Utilisation de la commande cron depuis le container backup
 

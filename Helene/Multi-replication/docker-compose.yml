@@ -1,7 +1,7 @@
 ---
 services:
   sql-01:
-    image: mariadb
+    image: mariadb:10.11
     container_name: sql-01
     restart: unless-stopped
     environment:
@@ -15,7 +15,7 @@ services:
       - mariadb-net
 
   sql-svg:
-    image: mariadb
+    image: mariadb:10.11
     container_name: sql-svg
     restart: unless-stopped
     environment:
@@ -32,7 +32,6 @@ services:
       - ./backup.sh:/mnt/data/backup.sh
       - shared-data:/mnt/data
       - /var/run/docker.sock:/var/run/docker.sock
-    entrypoint: /bin/sh -c "apk add --no-cache bash && echo '*/2 * * * * /mnt/data/backup.sh' > /etc/cro>
     networks:
       - mariadb-net
 
