@@ -1,0 +1,31 @@
+services:
+  sql-01:
+    image: mariadb:10.6.18
+    container_name: sql-01
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: a
+    volumes:
+      - sql01_data:/var/lib/mysql
+      - ./create_table.sql:/docker-entrypoint-initdb.d/create_table.sql
+    networks:
+      - docker_sql
+
+  sql-svg:
+    image: mariadb:10.6.18
+    container_name: sql-svg
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - sqlsvg_data:/var/lib/mysql
+    networks:
+      - docker_sql
+
+volumes:
+  sql01_data:
+  sqlsvg_data:
+
+networks:
+  docker_sql:
