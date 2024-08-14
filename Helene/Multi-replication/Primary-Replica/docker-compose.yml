@@ -1,0 +1,71 @@
+---
+services:
+  sql-primary:
+    container_name: sql-primary
+    image: mariadb:10.11
+    restart: unless-stopped
+    volumes:
+      - /srv/docker/sql-primary:/var/lib/mysql
+      - ./primary.cnf:/etc/mysql/conf.d/primary.cnf
+    environment:
+      - MARIADB_ROOT_PASSWORD=12321
+      - MARIADB_DATABASE=wordpress
+      - MARIADB_USER=wp
+      - MARIADB_PASSWORD=wppass
+      - MARIADB_REPLICATION_USER=replication_user
+      - MARIADB_REPLICATION_PASSWORD=replicapass
+    networks:
+      - mariadb-net
+
+  sql-replica01:
+    container_name: sql-replica1
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      - MARIADB_ROOT_PASSWORD=12321
+      - MARIADB_REPLICATION_USER=replication_user
+      - MARIADB_REPLICATION_PASSWORD=replicapass
+      - MARIADB_MASTER_HOST=sql-primary
+    volumes:
+      - /srv/docker/sql-replica:/var/lib/mysql
+      - ./replica01.cnf:/etc/mysql/conf.d/replica.cnf
+    networks:
+      - mariadb-net
+
+  sql-replica02:
+    container_name: sql-replica2
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      - MARIADB_ROOT_PASSWORD=12321
+      - MARIADB_REPLICATION_USER=replication_user
+      - MARIADB_REPLICATION_PASSWORD=replicapass
+      - MARIADB_MASTER_HOST=sql-primary
+    volumes:
+      - /srv/docker/sql-replica:/var/lib/mysql
+      - ./replica02.cnf:/etc/mysql/conf.d/replica.cnf
+    networks:
+      - mariadb-net
+
+  wordpress:
+    container_name: wp
+    image: wordpress:php8.3-apache
+    restart: unless-stopped
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: sql-primary
+      WORDPRESS_DB_USER: wp
+      WORDPRESS_DB_PASSWORD: wppass
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - /srv/docker/wordpress:/var/www/html
+    networks:
+      - mariadb-net
+
+volumes:
+  shared-data:
+
+networks:
+  mariadb-net:
+    driver: bridge
