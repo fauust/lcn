@@ -1,0 +1,102 @@
+version: "3.8"
+
+services:
+  galera_node1:
+    image: bitnami/mariadb-galera:11.4
+    environment:
+      MARIADB_GALERA_CLUSTER_NAME: my_galera
+      MARIADB_GALERA_MARIABACKUP_USER: my_mariabackup_user
+      MARIADB_GALERA_MARIABACKUP_PASSWORD: my_mariabackup_password
+      MARIADB_ROOT_PASSWORD: my_root_password
+      MARIADB_GALERA_CLUSTER_BOOTSTRAP: yes
+      MARIADB_USER: my_user
+      MARIADB_PASSWORD: my_password
+      MARIADB_DATABASE: my_database
+      MARIADB_REPLICATION_USER: my_replication_user
+      MARIADB_REPLICATION_PASSWORD: my_replication_password
+      MARIADB_GALERA_FORCE_SAFETOBOOTSTRAP: yes
+    healthcheck:
+      test: ["CMD", "/opt/bitnami/scripts/mariadb-galera/healthcheck.sh"]
+      interval: 15s
+      timeout: 5s
+      retries: 6
+    networks:
+      - galera-network
+    ports:
+      - "3306:3306"
+      - "4444:4444"
+      - "4567:4567"
+      - "4568:4568"
+    volumes:
+      - "mariadb_galera_data:/bitnami/mariadb"
+
+  galera_node2:
+    image: bitnami/mariadb-galera:11.4
+    environment:
+      MARIADB_GALERA_CLUSTER_NAME: my_galera
+      MARIADB_GALERA_CLUSTER_ADDRESS: gcomm://galera_node1:4567,0.0.0.0:4567
+      MARIADB_GALERA_MARIABACKUP_USER: my_mariabackup_user
+      MARIADB_GALERA_MARIABACKUP_PASSWORD: my_mariabackup_password
+      MARIADB_ROOT_PASSWORD: my_root_password
+      MARIADB_REPLICATION_USER: my_replication_user
+      MARIADB_REPLICATION_PASSWORD: my_replication_password
+    networks:
+      - galera-network
+    depends_on:
+      galera_node1:
+        condition: service_healthy
+    volumes:
+      - "mariadb_galera_data2:/bitnami/mariadb"
+
+  galera_node3:
+    image: bitnami/mariadb-galera:latest
+    environment:
+      MARIADB_GALERA_CLUSTER_NAME: my_galera
+      MARIADB_GALERA_CLUSTER_ADDRESS: gcomm://galera_node1:4567,0.0.0.0:4567
+      MARIADB_GALERA_MARIABACKUP_USER: my_mariabackup_user
+      MARIADB_GALERA_MARIABACKUP_PASSWORD: my_mariabackup_password
+      MARIADB_ROOT_PASSWORD: my_root_password
+      MARIADB_REPLICATION_USER: my_replication_user
+      MARIADB_REPLICATION_PASSWORD: my_replication_password
+    networks:
+      - galera-network
+    depends_on:
+      galera_node1:
+        condition: service_healthy
+    volumes:
+      - "mariadb_galera_data3:/bitnami/mariadb"
+
+  wordpress:
+    image: wordpress:6.6.1
+    container_name: wordpress
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: on-failure:3
+    volumes:
+      - ./wordpress:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: my_galera
+      WORDPRESS_DB_USER: my_user
+      WORDPRESS_DB_PASSWORD: my_password
+      WORDPRESS_DB_NAME: my_database
+    networks:
+      - galera-network
+      - frontend
+    ports:
+      - "8080:80"
+
+networks:
+  galera-network:
+    driver: bridge
+  frontend:
+volumes:
+  mariadb_galera_data:
+    driver: local
+  mariadb_galera_data2:
+    driver: local
+  mariadb_galera_data3:
+    driver: local
