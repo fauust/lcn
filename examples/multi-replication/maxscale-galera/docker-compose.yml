@@ -1,0 +1,81 @@
+services:
+  node1:
+    image: bitnami/mariadb-galera:11.4
+    container_name: node1
+    restart: unless-stopped
+    environment:
+      MARIADB_GALERA_CLUSTER_NAME: galera
+      MARIADB_GALERA_CLUSTER_ADDRESS: gcomm://node1,node2,node3
+      MARIADB_GALERA_MARIABACKUP_USER: mariabackup_user
+      MARIADB_GALERA_MARIABACKUP_PASSWORD: mariabackup_pwd
+      MARIADB_ROOT_PASSWORD: root_pwd
+      MARIADB_GALERA_CLUSTER_BOOTSTRAP: yes
+      MARIADB_USER: user
+      MARIADB_PASSWORD: pwd
+      MARIADB_DATABASE: wordpress
+      MARIADB_REPLICATION_USER: rpl_user
+      MARIADB_REPLICATION_PASSWORD: rpl_pwd
+      MARIADB_GALERA_FORCE_SAFETOBOOTSTRAP: yes
+    volumes:
+      - ./node_data1:/bitnami/mariadb
+      - ./setup_maxscale_user.sql:/docker-entrypoint-initdb.d/setup_maxscale_user.sql
+
+  node2:
+    image: bitnami/mariadb-galera:11.4
+    container_name: node2
+    restart: unless-stopped
+    environment:
+      MARIADB_GALERA_CLUSTER_NAME: galera
+      MARIADB_GALERA_CLUSTER_ADDRESS: gcomm://node1,node2,node3
+      MARIADB_GALERA_MARIABACKUP_USER: mariabackup_user
+      MARIADB_GALERA_MARIABACKUP_PASSWORD: mariabackup_pwd
+      MARIADB_ROOT_PASSWORD: root_pwd
+      MARIADB_REPLICATION_USER: rpl_user
+      MARIADB_REPLICATION_PASSWORD: rpl_pwd
+    volumes:
+      - ./node_data2:/bitnami/mariadb
+
+  node3:
+    image: bitnami/mariadb-galera:11.4
+    container_name: node3
+    restart: unless-stopped
+    environment:
+      MARIADB_GALERA_CLUSTER_NAME: galera
+      MARIADB_GALERA_CLUSTER_ADDRESS: gcomm://node1,node2,node3
+      MARIADB_GALERA_MARIABACKUP_USER: mariabackup_user
+      MARIADB_GALERA_MARIABACKUP_PASSWORD: mariabackup_pwd
+      MARIADB_ROOT_PASSWORD: root_pwd
+      MARIADB_REPLICATION_USER: rpl_user
+      MARIADB_REPLICATION_PASSWORD: rpl_pwd
+    volumes:
+      - ./node_data3:/bitnami/mariadb
+
+  maxscale:
+    image: mariadb/maxscale:latest
+    container_name: maxscale
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3306:3306"
+      - "127.0.0.1:8989:8989"
+    volumes:
+      - ./maxscale.cnf:/etc/maxscale.cnf
+
+  wp:
+    image: wordpress:6.6.1
+    container_name: wp
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    volumes:
+      - ./wordpress:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: maxscale
+      WORDPRESS_DB_USER: user
+      WORDPRESS_DB_PASSWORD: pwd
+      WORDPRESS_DB_NAME: wordpress
+    ports:
+      - "127.0.0.1:8080:80"
