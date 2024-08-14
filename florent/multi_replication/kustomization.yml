@@ -1,6 +1,6 @@
 ---
 resources:
-  - containers/pma.yml
+  # - containers/pma.yml
   - containers/sql-01.yml
   - containers/sql-svg.yml
   - crons/cron.yml

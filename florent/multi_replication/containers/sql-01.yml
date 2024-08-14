@@ -1,35 +1,17 @@
 ---
-#########################
-### MARIADB [PRIMARY] ###
-#########################
+############################
+### KUBERNETES [PRIMARY] ###
+############################
 ---
-kind: Pod
+kind: Service
 metadata:
   name: sql-01
-  labels:
-    app: sql-01-app
 spec:
-  containers:
-    - name: sql-01
-      image: mariadb:10.6.18
-      env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: "root"
-        - name: MYSQL_DATABASE
-          value: "mydb"
-        - name: MYSQL_USER
-          value: "admin"
-        - name: MYSQL_PASSWORD
-          value: "root"
-      ports:
-        - containerPort: 3306
-      volumeMounts:
-        - name: data
-          mountPath: /docker-entrypoint-initdb.d
-  volumes:
-    - name: data
-      configMap:
-        name: database
+  selector:
+    app: sql-01
+  ports:
+    - port: 3306
+      protocol: TCP
 apiVersion: v1
 ---
 kind: ConfigMap
@@ -53,14 +35,43 @@ data:
       (3, 'Charlie', 28);
 apiVersion: v1
 ---
-kind: Service
+kind: StatefulSet
 metadata:
-  name: sql-01-service
+  name: sql-01
 spec:
+  serviceName: "sql-01"
+  replicas: 1
   selector:
-    app: sql-01-app
-  ports:
-    - port: 3306
-      targetPort: 3306
-  type: ClusterIP
-apiVersion: v1
+    matchLabels:
+      app: sql-01
+  template:
+    metadata:
+      labels:
+        app: sql-01
+    spec:
+      containers:
+        - name: sql-01
+          image: mariadb:10.6.18
+          env:
+            - name: MARIADB_USER
+              value: "admin"
+            - name: MARIADB_PASSWORD
+              value: "root"
+            - name: MARIADB_ROOT_PASSWORD
+              value: "root"
+            - name: MARIADB_DATABASE
+              value: "mydb"
+            - name: MARIADB_REPLICATION_USER
+              value: "radmin"
+            - name: MARIADB_REPLICATION_PASSWORD
+              value: "rroot"
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: sql-01
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: sql-01
+          configMap:
+            name: database
+apiVersion: apps/v1
