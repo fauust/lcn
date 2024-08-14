@@ -17,8 +17,10 @@ sure why. This needs some more work.
 
 ### MaxScale GUI access
 
-Access should be available at http://127.0.0.1:8989
-A user needs to be created in the maxscale container:
+Access should be available at http://127.0.0.1:898 (default credentials,
+admin/any-pwd).
+
+If a user needs to be created in the maxscale container:
 
 ```console
 $ docker exec -u root -it maxscale bash
