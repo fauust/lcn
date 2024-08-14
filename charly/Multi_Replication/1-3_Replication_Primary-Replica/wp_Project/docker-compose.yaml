@@ -1,0 +1,47 @@
+---
+services:
+  wordpress:
+    container_name: wp
+    image: wordpress
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: sql-replica01
+      WORDPRESS_DB_USER: test-user
+      WORDPRESS_DB_PASSWORD: test-password
+      WORDPRESS_DB_NAME: test-db
+    volumes:
+      - wordpress:/var/www/html
+
+  db:
+    container_name: sql-primary
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: test-db
+      MYSQL_USER: test-user
+      MYSQL_PASSWORD: test-password
+      MYSQL_ROOT_PASSWORD: test-password
+    volumes:
+      - db_primary:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/my.cnf
+    command: --server-id=1 --log-bin=mysql-bin --binlog-format=ROW
+
+  sql-replica01:
+    container_name: sql-replica01
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: test-db
+      MYSQL_USER: test-user
+      MYSQL_PASSWORD: test-password
+      MYSQL_ROOT_PASSWORD: test-password
+    volumes:
+      - db_replica:/var/lib/mysql
+    command: --server-id=2 --log-bin=mysql-bin --binlog-format=ROW
+
+volumes:
+  wordpress:
+  db_primary:
+  db_replica:
