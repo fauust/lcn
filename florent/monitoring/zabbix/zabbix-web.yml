@@ -32,8 +32,14 @@ spec:
               value: root
             - name: MYSQL_ROOT_PASSWORD
               value: root
-            - name: DB_SERVER_DBNAME
+            - name: MYSQL_DATABASE
               value: zabbix
+            - name: ZBX_SERVER_HOST
+              value: zabbix-server
+            - name: ZBX_SERVER_PORT
+              value: "10051"
+            - name: PHP_TZ
+              value: Europe/Paris
 ---
 apiVersion: v1
 kind: Service
