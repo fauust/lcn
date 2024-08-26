@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zabbix-agent
+  labels:
+    app: zabbix
+    component: agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zabbix
+      component: agent
+  template:
+    metadata:
+      labels:
+        app: zabbix
+        component: agent
+    spec:
+      containers:
+        - name: zabbix-agent
+          image: zabbix/zabbix-agent2:latest
+          env:
+            - name: ZBX_HOSTNAME
+              value: hostname
+            - name: ZBX_SERVER_HOST
+              value: zabbix-server
+          volumeMounts:
+            - name: docker-sock
+              mountPath: /var/run/docker.sock
+      volumes:
+        - name: docker-sock
+          hostPath:
+            path: /var/run/docker.sock
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zabbix-agent
+spec:
+  type: NodePort
+  ports:
+    - port: 10050
+      targetPort: 10050
+  selector:
+    app: zabbix
+    component: agent
