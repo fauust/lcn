@@ -23,9 +23,9 @@ spec:
           image: zabbix/zabbix-agent2:latest
           env:
             - name: ZBX_HOSTNAME
-              value: hostname
-            - name: ZBX_SERVER_HOST
-              value: zabbix-server
+              value: "Zabbix server"
+            - name: ZBX_PASSIVE_ALLOW
+              value: "false"
           volumeMounts:
             - name: docker-sock
               mountPath: /var/run/docker.sock
@@ -39,7 +39,6 @@ kind: Service
 metadata:
   name: zabbix-agent
 spec:
-  type: NodePort
   ports:
     - port: 10050
       targetPort: 10050
