@@ -1,0 +1,74 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zabbix-mysql
+  labels:
+    app: zabbix
+    component: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zabbix
+      component: mysql
+  template:
+    metadata:
+      labels:
+        app: zabbix
+        component: mysql
+    spec:
+      containers:
+        - name: zabbix-mysql
+          image: mariadb:10.11.8
+          env:
+            - name: MARIADB_USER
+              value: zabbix
+            - name: MARIADB_PASSWORD
+              value: root
+            - name: MARIADB_ROOT_PASSWORD
+              value: root
+            - name: MARIADB_DATABASE
+              value: zabbix
+          ports:
+            - containerPort: 3306
+      volumes:
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /mnt/data/mysql
+  storageClassName: standard
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zabbix-mysql
+spec:
+  ports:
+    - port: 3306
+      targetPort: 3306
+  selector:
+    app: zabbix
+    component: mysql

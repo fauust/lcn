@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zabbix-web
+  labels:
+    app: zabbix
+    component: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zabbix
+      component: web
+  template:
+    metadata:
+      labels:
+        app: zabbix
+        component: web
+    spec:
+      containers:
+        - name: zabbix-web
+          image: zabbix/zabbix-web-apache-mysql:latest
+          env:
+            - name: DB_SERVER_HOST
+              value: zabbix-mysql
+            - name: DB_SERVER_PORT
+              value: "3306"
+            - name: MYSQL_USER
+              value: zabbix
+            - name: MYSQL_PASSWORD
+              value: root
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_DATABASE
+              value: zabbix
+            - name: ZBX_SERVER_HOST
+              value: zabbix-server
+            - name: ZBX_SERVER_PORT
+              value: "10051"
+            - name: PHP_TZ
+              value: Europe/Paris
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zabbix-web
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 8080
+      nodePort: 30080
+  selector:
+    app: zabbix
+    component: web
