@@ -1,0 +1,8 @@
+# Ignore directories
+sql-01/
+wordpress/
+sql-svg/
+initdb.back/
+master_data/
+replica_data/
+full-option-3 tiers/

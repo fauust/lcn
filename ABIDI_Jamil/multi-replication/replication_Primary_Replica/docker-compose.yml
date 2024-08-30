@@ -44,7 +44,8 @@ services:
       - MARIADB_REPLICATION_PASSWORD=password1234replica
       - MARIADB_MASTER_HOST=sql-primary
     depends_on:
-      - sql-primary
+      sql-primary:
+        condition: service_healthy
     volumes:
       - ./replica_data:/var/lib/mysql
       - ./mariadb.conf.d/replica01.cnf:/etc/mysql/conf.d/replica01.cnf
@@ -78,6 +79,47 @@ services:
       - frontend
     ports:
       - "8080:80"
+
+  mysqld-exporter:
+    image: prom/mysqld-exporter
+    container_name: mysqld-exporter
+    restart: unless-stopped
+    environment:
+      DATA_SOURCE_NAME: root:password1234@(sql-primary:3306)/
+    volumes:
+      - ./mysql-exporter/my.cnf:/.my.cnf
+    ports:
+      - "9104:9104"
+    networks:
+      - mariadb-network
+      - frontend
+    depends_on:
+      sql-primary:
+        condition: service_healthy
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - frontend
+    depends_on:
+      - mysqld-exporter
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana-data:/var/lib/grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    networks:
+      - frontend
 
 networks:
   mariadb-network:

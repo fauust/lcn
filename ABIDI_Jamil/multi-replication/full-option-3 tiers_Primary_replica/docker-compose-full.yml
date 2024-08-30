@@ -2,6 +2,7 @@ volumes:
   db_data:
   wordpress:
   nginx:
+  replica_data:
 
 networks:
   frontend:
@@ -19,9 +20,10 @@ secrets:
 services:
   db:
     image: mariadb:11.4
-    container_name: db
+    container_name: mariadb_master
     volumes:
       - "./db_data:/var/lib/mysql"
+      - "./mariadb.conf.d/master.cnf:/etc/mysql/conf.d/master.cnf"
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       start_period: 10s
@@ -34,6 +36,28 @@ services:
       MYSQL_DATABASE: wordpress
       MYSQL_USER: "wordpress"
       MYSQL_PASSWORD_FILE: /run/secrets/db_password #123
+      MARIADB_REPLICATION_USER: "replication_user"
+      MARIADB_REPLICATION_PASSWORD_FILE: /run/secrets/db_password #123
+    networks:
+      - db_network
+    secrets:
+      - db_root_password
+      - db_password
+
+  db-replica:
+    image: mariadb:11.4
+    container_name: mariadb_replica
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password #123
+      MARIADB_MASTER_HOST: db
+      MARIADB_MASTER_PORT: 3306
+      MARIADB_REPLICATION_USER: "replication_user"
+      MARIADB_REPLICATION_PASSWORD_FILE: /run/secrets/db_password #123
+    depends_on:
+      - db
+    volumes:
+      - replica_data:/var/lib/mysql
+      - "./mariadb.conf.d/master.cnf:/etc/mysql/conf.d/replica01.cnf"
     networks:
       - db_network
     secrets:
@@ -80,7 +104,6 @@ services:
     networks:
       - db_network
       - backend
-      - frontend
     secrets:
       - db_root_password
 
