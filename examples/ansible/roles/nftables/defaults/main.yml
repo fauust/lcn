@@ -1,0 +1,5 @@
+---
+nftables_boot_enabled: true
+nftables_restart_allowed: true
+nftables_input_ssh: true
+nftables_input_log: false

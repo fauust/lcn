@@ -1,0 +1,2 @@
+---
+nftables_config: "/etc/nftables.nft"

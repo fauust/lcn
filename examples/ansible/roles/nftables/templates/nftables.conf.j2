@@ -1,0 +1,71 @@
+#!/usr/sbin/nft -f
+# vim: set ts=4 sw=4:
+
+# {{ ansible_managed }}
+
+flush ruleset
+
+{% if nftables_raw is defined %}
+# manual nftables (raw)
+{{ nftables_raw }}
+{% else %}
+table inet filter {
+  chain input {
+    type filter hook input priority 0; policy drop;
+
+    # accept any localhost traffic
+    iif lo accept
+
+    # icmp
+    icmp type echo-request accept
+    ip6 nexthdr icmpv6 icmpv6 type { echo-request, nd-neighbor-solicit,  nd-router-advert, nd-neighbor-advert } accept
+
+    # accept traffic originated from us
+    ct state invalid drop
+    ct state established,related accept
+
+    {% if nftables_input_ssh is defined and nftables_input_ssh | bool-%}
+    # ssh
+    tcp dport ssh accept
+    {% endif %}
+
+    {% if nftables_input_raw is defined -%}
+    {{ nftables_input_raw | indent }}
+    {% endif %}
+
+    {% if nftables_input is defined -%}
+    {% for var in nftables_input -%}
+    {{ var.proto|default('tcp') }} dport { {{ var.port }} } accept
+    {% endfor %}
+    {% endif %}
+
+    {% if nftables_input_ipv4 is defined -%}
+    {% for var in nftables_input_ipv4 -%}
+    ip saddr { {{ var.saddr|default('0.0.0.0/0') }} } {{ var.proto|default('tcp') }} dport { {{ var.port }} } accept
+    {% endfor %}
+    {% endif %}
+
+    {% if nftables_input_ipv6 is defined -%}
+    {% for var in nftables_input_ipv6 -%}
+    ip6 saddr { {{ var.saddr|default('::/0') }} } {{ var.proto|default('tcp') }} dport { {{ var.port }} } accept
+    {% endfor %}
+    {% endif %}
+
+    # count, trace and drop any other traffic
+{% if nftables_input_log is defined and nftables_input_log | bool %}
+    counter meta nftrace set 1 log prefix "nft: " drop
+{% else %}
+    counter meta nftrace set 1 drop
+{% endif %}
+  }
+  chain forward {
+    type filter hook forward priority 0; policy drop;
+  }
+  chain output {
+    type filter hook output priority 0; policy accept;
+{% if nftables_output_raw is defined %}
+    {{ nftables_output_raw }}
+{%- endif %}
+  }
+}
+{% endif %}
