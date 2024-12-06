@@ -1,7 +1,9 @@
 ---
 collections:
+  - ansible.posix
+  - community.general
   - community.mysql
-  - azure.azcollection
+  - containers.podman
 
 roles:
   - name: fauust.mariadb
