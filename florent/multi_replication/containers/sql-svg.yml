@@ -1,0 +1,52 @@
+---
+############################
+### KUBERNETES [REPLICA] ###
+############################
+---
+kind: Service
+metadata:
+  name: sql-svg
+spec:
+  selector:
+    app: sql-svg
+  ports:
+    - port: 3306
+      protocol: TCP
+apiVersion: v1
+---
+kind: StatefulSet
+metadata:
+  name: sql-svg
+spec:
+  serviceName: "sql-svg"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sql-svg
+  template:
+    metadata:
+      labels:
+        app: sql-svg
+    spec:
+      containers:
+        - name: sql-svg
+          image: mariadb:10.6.18
+          env:
+            - name: MARIADB_ROOT_PASSWORD
+              value: "root"
+            - name: MARIADB_REPLICATION_USER
+              value: "radmin"
+            - name: MARIADB_REPLICATION_PASSWORD
+              value: "rroot"
+            - name: MARIADB_MASTER_HOST
+              value: "sql-01"
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: sql-svg
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: sql-svg
+          configMap:
+            name: database
+apiVersion: apps/v1
