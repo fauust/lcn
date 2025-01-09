@@ -1,0 +1,6 @@
+[mariadb]
+log-bin
+server_id=5
+log-basename=primary02
+binlog_do_db=mydb2
+binlog-format=mixed

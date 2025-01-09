@@ -1,0 +1,7 @@
+users_only_root: true
+users:
+  - name: faust
+    full_name: faust
+    ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJQjh/mB8sjry3FB5YHs30Unybuf7tY+D+vH8aUz3EIP"
+    state: present
+    path: "/root/.ssh/instance_keys"

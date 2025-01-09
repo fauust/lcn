@@ -1,0 +1,39 @@
+---
+- name: Load OS-specific vars
+  ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "{{ ansible_distribution }}.yml"
+        - "{{ ansible_os_family }}.yml"
+      paths:
+        - "vars"
+
+- name: Install nftables
+  ansible.builtin.package:
+    state: present
+    name: nftables
+
+- name: Ensure /etc/security dir exist
+  ansible.builtin.file:
+    path: /etc/security
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Nftables configuration
+  ansible.builtin.template:
+    src: nftables.conf.j2
+    dest: "{{ nftables_config }}"
+    owner: root
+    group: root
+    mode: 0600
+    validate: "nft -c -f %s"
+  notify: Restart nftables
+
+- name: Start/enable nftables
+  ansible.builtin.service:
+    name: nftables
+    state: started
+    enabled: "{{ nftables_boot_enabled }}"

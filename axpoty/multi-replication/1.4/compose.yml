@@ -1,0 +1,25 @@
+---
+services:
+  sql-primary01:
+    container_name: sql-primary01
+    image: mariadb:11.4
+    environment:
+      MARIADB_ROOT_PASSWORD: password1234
+      MARIADB_REPLICATION_USER: replication_user
+      MARIADB_REPLICATION_PASSWORD: replicapass
+      MARIADB_DATABASE: mydb2
+    volumes:
+      - ./primary01.conf:/etc/mysql/conf.d/custom.cnf
+      - ./setup_primary01.sql:/docker-entrypoint-initdb.d/setup.sql
+
+  sql-primary02:
+    container_name: sql-primary02
+    image: mariadb:11.4
+    environment:
+      MARIADB_ROOT_PASSWORD: password1234
+      MARIADB_REPLICATION_USER: replication_user
+      MARIADB_REPLICATION_PASSWORD: replicapass
+      MARIADB_DATABASE: mydb2
+    volumes:
+      - ./primary02.conf:/etc/mysql/conf.d/custom.cnf
+      - ./setup_primary02.sql:/docker-entrypoint-initdb.d/setup.sql

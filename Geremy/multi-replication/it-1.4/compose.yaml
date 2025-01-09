@@ -1,0 +1,46 @@
+---
+services:
+  sql-primary01:
+    image: mariadb:lts
+    container_name: sql-primary01
+    environment:
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_pwd
+      MARIADB_DATABASE_FILE: /run/secrets/db_name
+      MARIADB_USER_FILE: /run/secrets/db_user_name
+      MARIADB_PASSWORD_FILE: /run/secrets/db_user_pwd
+    volumes:
+      - /srv/it-1.4/sql-primary01/:/var/lib/mysql
+      - ./conf/primary01.cnf:/etc/mysql/conf.d/my.cnf
+    secrets:
+      - db_root_pwd
+      - db_name
+      - db_user_name
+      - db_user_pwd
+
+  sql-primary02:
+    image: mariadb:lts
+    container_name: sql-primary02
+    environment:
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_pwd
+      MARIADB_DATABASE_FILE: /run/secrets/db_name
+      MARIADB_USER_FILE: /run/secrets/db_user_name
+      MARIADB_PASSWORD_FILE: /run/secrets/db_user_pwd
+    volumes:
+      - /srv/it-1.4/sql-primary02/:/var/lib/mysql
+      - ./conf/primary02.cnf:/etc/mysql/conf.d/my.cnf
+
+    secrets:
+      - db_root_pwd
+      - db_name
+      - db_user_name
+      - db_user_pwd
+
+secrets:
+  db_root_pwd:
+    file: ./secrets/db_root_pwd.txt
+  db_name:
+    file: ./secrets/db_name.txt
+  db_user_name:
+    file: ./secrets/db_user_name.txt
+  db_user_pwd:
+    file: ./secrets/db_user_pwd.txt

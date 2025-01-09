@@ -1,6 +1,5 @@
 VENV_DIR := .venv
 VENDOR_DIR := .vendor
-SHELL := /usr/bin/env bash
 .DEFAULT_GOAL := help
 .SHELLFLAGS := -eu -o pipefail -c
 PATH := $(VENV_DIR)/bin:$(PATH)
@@ -14,26 +13,45 @@ install: ## Install all necessary tools
 	$(MAKE)	venv
 	$(MAKE) install-pip-packages
 	$(MAKE) install-galaxy
-	$(MAKE) install-azure
+	@echo -e "\n--> You should now activate the python3 venv with:"
+	@echo -e "source $(VENV_DIR)/bin/activate"
+
+install-molecule: ## Install all necessary tools for molecule testing
+	$(MAKE)	venv
+	$(MAKE) install-pip-packages-molecule
+	@echo -e "\n--> You should now activate the python3 venv with:"
+	@echo -e "source $(VENV_DIR)/bin/activate"
+
+install-mitogen: ## Install all necessary tools for fast deployment (mitogen)
+	$(MAKE)	venv
+	$(MAKE) install-pip-packages-mitogen
+	$(MAKE) install-galaxy
 	@echo -e "\n--> You should now activate the python3 venv with:"
 	@echo -e "source $(VENV_DIR)/bin/activate"
 
 venv: ## Create python3 venv if it does not exists
 	$(info --> Create python virtual env ($(VENV_DIR)))
-	[[ -d $(VENV_DIR) ]] || $(shell command -v virtualenv) $(VENV_DIR)
+	[[ -d $(VENV_DIR) ]] || $(shell command -v uv) venv $(VENV_DIR)
 
 install-pip-packages: ## Install python3 requirements
-	$(info --> Install requirements via `pip`)
-	pip install -r requirements.txt
+	$(info --> Install requirements via `uv pip`)
+	uv pip install -r requirements.txt
+
+install-pip-packages-molecule: ## Install python3 requirements for molecule testing
+	$(info --> Install requirements via `uv pip`)
+	uv pip install -r requirements_molecule.txt
+
+install-pip-packages-mitogen: ## Install python3 requirements for fast deployment (mitogen)
+	$(info --> Install requirements via `uv pip`)
+	uv pip install -r requirements_mitogen.txt
 
 install-galaxy: ## Install galaxy requirements
 	$(info --> Install galaxy roles)
 	ansible-galaxy collection install -r requirements.yml --force -p $(VENDOR_DIR)/collections
 	ansible-galaxy role install -r requirements.yml --force -p $(VENDOR_DIR)/roles
 
-install-azure: ## Install azure deps
-	$(info --> Install azure deps)
-	pip install -r .vendor/collections/ansible_collections/azure/azcollection/requirements.txt
+molecule-test: ## Run molecule tests on all roles
+	bash ci/role_test -a
 
 clean: ## Clean venv
 	[[ ! -d $(VENV_DIR) ]] || rm -rf $(VENV_DIR)

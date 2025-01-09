@@ -1,0 +1,5 @@
+ansible
+ansible-core==2.18.*
+mitogen
+wheel
+yamllint
