@@ -1,7 +1,7 @@
 users_only_root: true
 users:
-  - name: faust
-    full_name: faust
-    ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJQjh/mB8sjry3FB5YHs30Unybuf7tY+D+vH8aUz3EIP"
+  - name: augustin
+    full_name: augustin
+    ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC3cufTULGXnSJY/rp7//L/LRIdXp4ka+tGtN3rdNRguCNf5WtvRcs1Ch3YcHlH0vahgysmqTnqQtyV4hubxpicQoiCRkLt2H7lG9jZLP7QZO/BRgw4QOGwiPyUnwn+Mx+X4jGaNh5vPP1kgXwG8aV0VfMYzAP6yLEFPocgxEZPrfMfmGJAAt/NpmZ+HQNnQTPccC5IwYdNwdFUaeb/U1I+Br4xhFuZ6woSCQTdfwfIGN9Gg/vn1NssWaTzeRfsPLPw8RmCy9dgmgghfwgN/Lhetz/tI6pcSTm201XiXOY59ZGsR7NFD17D4QIGxdzY4OSS06DqmACD/rgD2JxLU5kCL7LgSatGMIjyytvoRXafEUhzJii9goT/tRa8E2C3l9mjJkUGhhTvev9OJJYTBRoISAmlmDPHbYaj8CIdCIU12ppcev3ZBKxVzeXC/rHaMJhz/r/yOavCInSpUBRRMzW11mBox4zFf7ICziJktOchgn7C+/ep/6TXb+Rwbw94Wmc= augustin@augustin-desktop"
     state: present
     path: "/root/.ssh/instance_keys"
