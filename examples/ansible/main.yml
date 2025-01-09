@@ -2,7 +2,7 @@
 - name: Apply common configuration
   hosts: all
   roles:
-    - { role: sshd, tags: ["sshd"] }
+    - { role: users, tags: ["users"] }
 
 - name: Setup databases
   hosts: db

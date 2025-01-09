@@ -1,0 +1,8 @@
+---
+- name: Configure root
+  ansible.builtin.include_tasks: root.yml
+  when: users_only_root
+
+- name: Deploy users
+  ansible.builtin.include_tasks: users.yml
+  when: not users_only_root
