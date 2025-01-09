@@ -1,7 +1,14 @@
+---
 users_only_root: true
 users:
-  - name: faust
-    full_name: faust
-    ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJQjh/mB8sjry3FB5YHs30Unybuf7tY+D+vH8aUz3EIP"
+  - name: mateo
+    full_name: mateo
+    ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPZjYhnFv5qCL1tb8FsO0PFVRBclU3kujG1jak+hguJj mateo.nicoud@le-campus-numerique.fr"
+    state: present
+    path: "/root/.ssh/instance_keys"
+
+  - name: eddy
+    full_name: eddy
+    ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEOWJI5O8+5djvin0SB1021JQv+AfMqnSGyk8qMlhlh9"
     state: present
     path: "/root/.ssh/instance_keys"
