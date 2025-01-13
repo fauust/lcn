@@ -12,3 +12,9 @@ users:
     ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEOWJI5O8+5djvin0SB1021JQv+AfMqnSGyk8qMlhlh9"
     state: present
     path: "/root/.ssh/instance_keys"
+
+  - name: phil
+    full_name: phil
+    ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILuheb2yASQoeqPvRcspiK5fPzflzN/NPXKwbZ1NP8it philemon.maly@le-campus-numérique.fr"
+    state: present
+    path: "/root/.ssh/instance_keys"
