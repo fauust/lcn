@@ -11,3 +11,9 @@ users:
     ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIQNoc/qgVg4reg7juqJGOS806pU8m2EB+5sglng592o helene.finot@le-campus-numerique.fr"
     state: present
     path: "/root/.ssh/instance_keys"
+  
+  - name: jon
+    full_name: jon
+    ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMqFqPoo4JwwMk96dXgzf9cPdLbJhc+B/bveC5OXNp5b jon@demian"
+    state: present
+    path: "/root/.ssh/instance_keys"
