@@ -1,0 +1,49 @@
+zabbix_export:
+  version: '7.0'
+  template_groups:
+    - uuid: 827fad0df906498cb3e08dc738adab2b
+      name: Templates/perso
+  templates:
+    - uuid: 89675d24cfe7478bbc1e1ad3577fc75c
+      template: 'TLS certificate expiration'
+      name: 'TLS certificate expiration'
+      groups:
+        - name: Templates/perso
+      items:
+        - uuid: 6daacd6561564ce98daf39083c8d2995
+          name: 'TLS certificate validity'
+          type: EXTERNAL
+          key: 'zext_ssl_expiry.sh["{HOST.CONN}","{$SSL_PORT}"]'
+          delay: 3h
+          history: 1w
+          value_type: FLOAT
+          units: days
+          tags:
+            - tag: Application
+              value: 'SSL certificate'
+          triggers:
+            - uuid: 0d59894aea7343fc9d0bd3235c18c2a7
+              expression: 'last(/TLS certificate expiration/zext_ssl_expiry.sh["{HOST.CONN}","{$SSL_PORT}"])<0'
+              name: 'TLS certificate on {HOSTNAME} expired'
+              priority: DISASTER
+            - uuid: c02224a974ed4a44bfe3dcdd01aaac4f
+              expression: 'last(/TLS certificate expiration/zext_ssl_expiry.sh["{HOST.CONN}","{$SSL_PORT}"])<{$SSL_EXPIRY_AVG}'
+              name: 'TLS certificate on {HOSTNAME} expires in {ITEM.LASTVALUE}'
+              priority: AVERAGE
+              dependencies:
+                - name: 'TLS certificate on {HOSTNAME} expired'
+                  expression: 'last(/TLS certificate expiration/zext_ssl_expiry.sh["{HOST.CONN}","{$SSL_PORT}"])<0'
+            - uuid: 3b248ab55e9c4956b73556655d284b1e
+              expression: 'last(/TLS certificate expiration/zext_ssl_expiry.sh["{HOST.CONN}","{$SSL_PORT}"])<{$SSL_EXPIRY_WARN}'
+              name: 'TLS certificate on {HOSTNAME} expires in {ITEM.LASTVALUE}'
+              priority: INFO
+              dependencies:
+                - name: 'TLS certificate on {HOSTNAME} expires in {ITEM.LASTVALUE}'
+                  expression: 'last(/TLS certificate expiration/zext_ssl_expiry.sh["{HOST.CONN}","{$SSL_PORT}"])<{$SSL_EXPIRY_AVG}'
+      macros:
+        - macro: '{$SSL_EXPIRY_AVG}'
+          value: '3'
+        - macro: '{$SSL_EXPIRY_WARN}'
+          value: '25'
+        - macro: '{$SSL_PORT}'
+          value: '443'

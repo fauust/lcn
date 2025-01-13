@@ -1,0 +1,44 @@
+---
+- name: Set users common
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    comment: "{{ item.full_name }}"
+    shell: "{{ item.shell | default('/bin/bash')}}"
+    state: "{{ item.state }}"
+    remove: "yes"
+  with_items:
+    - "{{ users }}"
+  when: item.name is defined
+
+- name: Set users group
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    groups: "{{ item.groups }}"
+    append: "yes"
+    remove: "yes"
+  with_items:
+    - "{{ users }}"
+  when: item.groups is defined
+
+- name: Set users pwd
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    remove: "yes"
+  with_items:
+    - "{{ users }}"
+  when: item.password is defined
+
+- name: Deploy users ssh keys
+  ansible.posix.authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.ssh_key }}"
+    state: "{{ item.state }}"
+    manage_dir: true
+    exclusive: true
+  with_items:
+    - "{{ users }}"
+  when:
+    - item.name is defined
+    - item.state == 'present'
+    - not ansible_check_mode

@@ -1,0 +1,1 @@
+[zabbix install](https://www.zabbix.com/download)

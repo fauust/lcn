@@ -1,0 +1,52 @@
+---
+services:
+  sql-primary:
+    image: mariadb:10.11
+    container_name: sql-primary
+    environment:
+      MARIADB_ROOT_PASSWORD: dbpassword
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wpuser
+      MARIADB_PASSWORD: wppassword
+      MARIADB_REPLICATION_USER: replication_user
+      MARIADB_REPLICATION_PASSWORD: replicapass
+    volumes:
+      - ./sql-primary:/var/lib/mysql
+      - ./primary.cnf:/etc/mysql/conf.d/primary.cnf
+
+  sql-replica01:
+    image: mariadb:10.11
+    container_name: sql-replica01
+    environment:
+      MARIADB_ROOT_PASSWORD: dbpassword
+      MARIADB_REPLICATION_USER: replication_user
+      MARIADB_REPLICATION_PASSWORD: replicapass
+      MARIADB_MASTER_HOST: sql-primary
+    volumes:
+      - ./sql-replica01:/var/lib/mysql
+      - ./replica01.cnf:/etc/mysql/conf.d/replica01.cnf
+
+  sql-replica02:
+    image: mariadb:10.11
+    container_name: sql-replica02
+    environment:
+      MARIADB_ROOT_PASSWORD: dbpassword
+      MARIADB_REPLICATION_USER: replication_user
+      MARIADB_REPLICATION_PASSWORD: replicapass
+      MARIADB_MASTER_HOST: sql-primary
+    volumes:
+      - ./sql-replica02:/var/lib/mysql
+      - ./replica02.cnf:/etc/mysql/conf.d/replica02.cnf
+
+  wp:
+    image: wordpress:latest
+    container_name: wp
+    environment:
+      WORDPRESS_DB_HOST: sql-primary
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: wppassword
+    volumes:
+      - ./wp:/var/www/html
+    ports:
+      - 8080:80

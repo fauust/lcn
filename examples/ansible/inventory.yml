@@ -18,3 +18,27 @@ db:
 docker:
   hosts:
     vm2:
+
+jah:
+  hosts:
+    jah01:
+      ansible_user: root
+      ansible_host: 51.15.237.19
+    jah02:
+      ansible_user: root
+      ansible_host: 51.15.253.30
+    jah03:
+      ansible_user: root
+      ansible_host: 51.15.114.185
+
+teamd:
+  hosts:
+    teamd01:
+      ansible_user: root
+      ansible_host: 51.15.222.171
+    teamd02:
+      ansible_user: root
+      ansible_host: 51.15.238.125
+    teamd03:
+      ansible_user: root
+      ansible_host: 51.15.87.242

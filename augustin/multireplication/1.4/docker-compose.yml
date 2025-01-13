@@ -1,0 +1,22 @@
+services:
+  sql-primary01:
+    image: master-master
+    cap_add:
+      - SYS_TIME
+    container_name: sql-primary01
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydb2
+    ports:
+      - "3306:3306"
+
+  sql-primary02:
+    image: master-master
+    cap_add:
+      - SYS_TIME
+    container_name: sql-primary02
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydb2
+    ports:
+      - "3307:3306"

@@ -1,0 +1,9 @@
+[mariadb]
+bind-address=sql-primary01
+log-bin=/var/log/mysql/mysql-bin.log
+server_id=1
+log-basename=primary01
+binlog-format=mixed
+binlog_do_db=mydb2
+expire_logs_days=10
+max_binlog_size=100M

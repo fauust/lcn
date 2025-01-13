@@ -1,0 +1,6 @@
+[mariadb]
+log-bin
+server_id=2
+log-basename=primary2
+binlog-format=mixed
+binlog_do_db = wpd

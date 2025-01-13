@@ -1,0 +1,55 @@
+---
+services:
+  sql-primary01:
+    image: mariadb:11.4
+    container_name: sql-primary01
+    restart: unless-stopped
+    environment:
+      - MARIADB_ROOT_PASSWORD=h
+      - MARIADB_USER=wp
+      - MARIADB_PASSWORD=h
+      - MARIADB_DATABASE=mydb2
+      - MARIADB_REPLICATION_USER=replication_user
+      - MARIADB_REPLICATION_PASSWORD=h
+    volumes:
+      - ./sql-primary01:/var/lib/mysql
+      - ./primary01.cnf:/etc/mysql/conf.d/custom.cnf
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  sql-primary02:
+    image: mariadb:11.4
+    container_name: sql-primary02
+    restart: unless-stopped
+    environment:
+      - MARIADB_ROOT_PASSWORD=h
+      - MARIADB_USER=wp
+      - MARIADB_PASSWORD=h
+      - MARIADB_DATABASE=mydb2
+      - MARIADB_REPLICATION_USER=replication_user
+      - MARIADB_REPLICATION_PASSWORD=h
+    volumes:
+      - ./sql-primary02:/var/lib/mysql
+      - ./primary02.cnf:/etc/mysql/conf.d/custom.cnf
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  wp:
+    container_name: wp
+    restart: unless-stopped
+    image: wordpress:6-php8.1-apache
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: sql-primary01
+      WORDPRESS_DB_USER: wp
+      WORDPRESS_DB_PASSWORD: h
+      WORDPRESS_DB_NAME: mydb2
+    volumes:
+      - ./wordpress:/var/www/html

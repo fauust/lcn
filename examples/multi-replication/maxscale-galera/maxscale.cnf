@@ -1,0 +1,59 @@
+[maxscale]
+admin_secure_gui=false
+admin_auth=false
+admin_host=0.0.0.0
+threads=auto
+
+# Servers
+[node1]
+type=server
+address=node1
+port=3306
+protocol=MariaDBBackend
+
+[node2]
+type=server
+address=node2
+port=3306
+protocol=MariaDBBackend
+
+[node3]
+type=server
+address=node3
+port=3306
+protocol=MariaDBBackend
+
+# Monitoring for the servers
+[GaleraMonitor]
+type=monitor
+module=galeramon
+servers=node1,node2,node3
+user=max_user
+password=max_pwd
+
+# Galera router service
+[GaleraService]
+type=service
+router=readwritesplit
+servers=node1,node2,node3
+user=max_user
+password=max_pwd
+
+## MaxAdmin Service
+#[MaxAdminService]
+#type=service
+#router=cli
+
+# Galera cluster listener
+[GaleraListener]
+type=listener
+service=GaleraService
+protocol=mariadbprotocol
+port=3306
+
+## MaxAdmin listener
+#[MaxAdminListener]
+#type=listener
+#service=MaxAdminService
+#protocol=maxscaled
+#socket=default

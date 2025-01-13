@@ -1,0 +1,12 @@
+---
+- name: Restart nftables
+  ansible.builtin.service:
+    name: nftables
+    state: restarted
+  notify: Update monitoring file
+  when: nftables_restart_allowed
+
+- name: Update monitoring file
+  ansible.builtin.shell: |
+    /usr/sbin/nft -s list ruleset >/etc/security/.md.conf
+  changed_when: false
