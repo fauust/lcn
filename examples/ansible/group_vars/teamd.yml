@@ -18,3 +18,9 @@ users:
     ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILuheb2yASQoeqPvRcspiK5fPzflzN/NPXKwbZ1NP8it philemon.maly@le-campus-numérique.fr"
     state: present
     path: "/root/.ssh/instance_keys"
+
+  - name: ansible
+    full_name: ansible
+    ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBHImYdDCffu1Qe2PK/6I9hO5YGMuuwq5ZlQ23bHHayF"
+    state: present
+    path: "/root/.ssh/instance_keys"
