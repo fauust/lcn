@@ -2,7 +2,6 @@
 - name: Deploy root ssh keys
   ansible.posix.authorized_key:
     user: root
-    path: "{{ item.path }}"
     key: "{{ item.ssh_key }}"
     state: "{{ item.state }}"
     exclusive: false
@@ -11,4 +10,3 @@
   when:
     - item.name is defined
     - item.state == 'present'
-  notify: Regenerate authorized_keys

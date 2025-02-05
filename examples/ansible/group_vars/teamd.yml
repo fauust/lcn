@@ -5,22 +5,18 @@ users:
     full_name: mateo
     ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPZjYhnFv5qCL1tb8FsO0PFVRBclU3kujG1jak+hguJj mateo.nicoud@le-campus-numerique.fr"
     state: present
-    path: "/root/.ssh/instance_keys"
 
   - name: eddy
     full_name: eddy
     ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEOWJI5O8+5djvin0SB1021JQv+AfMqnSGyk8qMlhlh9"
     state: present
-    path: "/root/.ssh/instance_keys"
 
   - name: phil
     full_name: phil
     ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILuheb2yASQoeqPvRcspiK5fPzflzN/NPXKwbZ1NP8it philemon.maly@le-campus-numérique.fr"
     state: present
-    path: "/root/.ssh/instance_keys"
 
   - name: ansible
     full_name: ansible
     ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBHImYdDCffu1Qe2PK/6I9hO5YGMuuwq5ZlQ23bHHayF"
     state: present
-    path: "/root/.ssh/instance_keys"

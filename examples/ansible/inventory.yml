@@ -23,10 +23,10 @@ jah:
   hosts:
     jah01:
       ansible_user: root
-      ansible_host: 51.15.237.19
+      ansible_host: 116.203.141.142
     jah02:
       ansible_user: root
-      ansible_host: 51.15.253.30
+      ansible_host: 49.12.229.158
     jah03:
       ansible_user: root
       ansible_host: 51.15.114.185
@@ -35,10 +35,10 @@ teamd:
   hosts:
     teamd01:
       ansible_user: root
-      ansible_host: 51.15.222.171
+      ansible_host: 188.245.248.174
     teamd02:
       ansible_user: root
-      ansible_host: 51.15.238.125
+      ansible_host: 168.119.161.50
     teamd03:
       ansible_user: root
-      ansible_host: 51.15.87.242
+      ansible_host: 188.245.222.26

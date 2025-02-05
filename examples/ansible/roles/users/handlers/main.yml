@@ -1,3 +1,0 @@
----
-- name: Regenerate authorized_keys
-  ansible.builtin.shell: "scw-fetch-ssh-keys --upgrade"
