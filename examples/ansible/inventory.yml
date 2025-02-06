@@ -29,7 +29,7 @@ jah:
       ansible_host: 49.12.229.158
     jah03:
       ansible_user: root
-      ansible_host: 51.15.114.185
+      ansible_host: 188.245.32.217
 
 teamd:
   hosts:
