@@ -1,0 +1,49 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: true
+
+  tasks:
+    - name: Verify pkg status
+      ansible.builtin.package:
+        name: "openssh-server"
+        state: present
+      check_mode: true
+      register: pkg_status
+
+    - name: Check that openssh-server already installed
+      ansible.builtin.assert:
+        that: not pkg_status.changed
+        fail_msg: "openssh-server is not installed"
+
+    - name: Register /etc/ssh/sshd_config
+      ansible.builtin.stat:
+        path: "/etc/ssh/sshd_config"
+      register: conf
+
+    - name: Check /etc/ssh/sshd_config
+      ansible.builtin.assert:
+        that:
+          - conf.stat.exists is true
+          - conf.stat.pw_name == 'root'
+          - conf.stat.gr_name == 'root'
+
+    - name: Make sure that sshd service is started
+      ansible.builtin.service:
+        name: sshd
+        state: started
+      register: status
+      failed_when: status.changed
+
+    - name: Make sure that service is enabled
+      ansible.builtin.service:
+        name: sshd
+        state: enabled
+      register: status
+      failed_when: status.changed
+
+    - name: Check that 0.0.0.0:22 is listening
+      ansible.builtin.wait_for:
+        host: 0.0.0.0
+        port: 22
+        timeout: 2
