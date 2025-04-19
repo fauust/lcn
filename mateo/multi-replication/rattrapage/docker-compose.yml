@@ -1,0 +1,152 @@
+---
+services:
+  sql-primary01:
+    user: "999"
+    container_name: sql-primary01
+    restart: unless-stopped
+    image: mariadb:11.7.2
+    environment:
+      - MARIADB_ROOT_PASSWORD=password1234
+      - MARIADB_ROOT_HOST=%
+      - MARIADB_USER=wp
+      - MARIADB_PASSWORD=wppass
+      - MARIADB_DATABASE=wordpress
+      - MARIADB_REPLICATION_USER=replication_user
+      - MARIADB_REPLICATION_PASSWORD=replicapass
+    volumes:
+      - sql-primary01:/var/lib/mysql
+      - ./primary01.cnf:/etc/mysql/conf.d/custom.cnf
+      - ./setup_replication01.sql:/docker-entrypoint-initdb.d/setup_replication.sql
+      - ./fix_permissions.sql:/docker-entrypoint-initdb.d/fix_permissions.sql
+    # healthcheck:
+    #   test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "-ppassword1234"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+
+  sql-primary02:
+    container_name: sql-primary02
+    restart: unless-stopped
+    image: mariadb:11.7.2
+    user: "999"
+    environment:
+      - MARIADB_ROOT_PASSWORD=password1234
+      - MARIADB_ROOT_HOST=%
+      - MARIADB_USER=wp
+      - MARIADB_PASSWORD=wppass
+      - MARIADB_DATABASE=wordpress
+      - MARIADB_REPLICATION_USER=replication_user
+      - MARIADB_REPLICATION_PASSWORD=replicapass
+    volumes:
+      - sql-primary02:/var/lib/mysql
+      - ./primary02.cnf:/etc/mysql/conf.d/custom.cnf
+      - ./setup_replication02.sql:/docker-entrypoint-initdb.d/setup_replication.sql
+      - ./fix_permissions.sql:/docker-entrypoint-initdb.d/fix_permissions.sql
+    # healthcheck:
+    #   test: ["CMD", "mariadb", "ping", "-h", "127.0.0.1", "-u", "root", "-ppassword1234"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+
+  wp:
+    container_name: wp
+    restart: unless-stopped
+    image: wordpress:6-php8.1-apache
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: sql-primary01
+      WORDPRESS_DB_USER: wp
+      WORDPRESS_DB_PASSWORD: wppass
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wordpress:/var/www/html
+    depends_on:
+      - sql-primary01
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    user: "65534"
+    ports:
+      - 9090:9090
+    volumes:
+      - prometheus_data:/prometheus
+      - ./prometheus/:/etc/prometheus:ro
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --web.console.libraries=/usr/share/prometheus/console_libraries
+      - --web.console.templates=/usr/share/prometheus/consoles
+
+    depends_on:
+      - mysqld-exporter1
+      - mysqld-exporter2
+
+  mysqld-exporter1:
+    container_name: mysqld-exporter1
+    image: prom/mysqld-exporter:latest
+    user: "65534"
+    restart: unless-stopped
+    ports:
+      - 9104:9104
+    # volumes:
+    #   - ./exporter1.my.cnf:/home/nobody/.my.cnf:ro
+    command:
+      # - '--config.my-cnf=/home/nobody/.my.cnf'
+      - '--collect.info_schema.tables'
+      - '--collect.global_status'
+      - '--collect.global_variables'
+      - '--collect.slave_status'
+      - '--collect.info_schema.processlist'
+      - "--mysqld.address=sql-primary01:3306"
+      - "--mysqld.username=monitoring_user:monitorpass"
+    # depends_on:
+    #   sql-primary01:
+        # condition: service_healthy
+    links:
+      - sql-primary01
+
+
+  mysqld-exporter2:
+    container_name: mysqld-exporter2
+    image: quay.io/prometheus/mysqld-exporter
+    user: "65534"
+    restart: unless-stopped
+    ports:
+      - 9105:9104
+    # volumes:
+    #   - ./exporter2.my.cnf:/home/nobody/.my.cnf:ro
+    command:
+      # - '--config.my-cnf=/home/nobody/.my.cnf'
+      - '--collect.info_schema.tables'
+      - '--collect.global_status'
+      - '--collect.global_variables'
+      - '--collect.slave_status'
+      - '--collect.info_schema.processlist'
+      - "--mysqld.address=sql-primary02:3306"
+      - "--mysqld.username=monitoring_user:monitorpass"
+    # depends_on:
+      # sql-primary02:
+        # condition: service_healthy
+    links:
+      - sql-primary02
+
+  grafana:
+    user: "472"
+    container_name: grafana
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ./grafana-provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+
+volumes:
+  prometheus_data:
+  sql-primary01:
+  sql-primary02:
+  wordpress:

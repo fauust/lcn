@@ -1,0 +1,19 @@
+[mariadb]
+log-bin
+server_id=1
+log-basename=primary01
+binlog-format=mixed
+binlog_do_db=wordpress
+
+# Paramètres de sécurité
+max_connections=500
+max_connect_errors=1000
+skip-name-resolve
+
+# Paramètres de performance
+innodb_buffer_pool_size=256M
+innodb_log_file_size=64M
+innodb_flush_log_at_trx_commit=2
+query_cache_size=32M
+query_cache_limit=2M
+table_open_cache=1000
