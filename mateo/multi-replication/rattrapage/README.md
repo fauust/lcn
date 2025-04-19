@@ -27,9 +27,9 @@ bash main.sh
 ```
 
 3. Accès aux services:
-   - WordPress: http://localhost:8080
-   - Prometheus: http://localhost:9090
-   - Grafana: http://localhost:3000 (identifiants: admin/admin)
+   - WordPress: localhost:8080
+   - Prometheus: localhost:9090
+   - Grafana: localhost:3000 (identifiants: admin/admin)
 
 ## Preuves de travail
 
@@ -145,17 +145,17 @@ Cette séparation des privilèges suit le principe de sécurité du "moindre pri
 Notre solution utilise la stack Prometheus/Grafana pour surveiller les métriques clés.
 
 **Preuves:**
-- Dashboard Grafana pré-configuré accessible sur http://localhost:3000:
+- Dashboard Grafana pré-configuré accessible sur localhost:3000:
   - Métriques de réplication (délai, statut)
   - Métriques de performance (requêtes/sec, temps de réponse)
   - Utilisation des ressources (connexions, mémoire)
 
 - Exportateurs MySQL collectant des métriques détaillées:
-  - http://localhost:9104/metrics (primary01)
-  - http://localhost:9105/metrics (primary02)
+  - localhost:9104/metrics (primary01)
+  - localhost:9105/metrics (primary02)
 
 - Prometheus stockant les métriques temporelles:
-  - Interface permettant de requêter ces métriques: http://localhost:9090
+  - Interface permettant de requêter ces métriques: localhost:9090
 
 **Indicateurs clés à surveiller:**
 - État de la réplication: `mysql_slave_status_slave_io_running`, `mysql_slave_status_slave_sql_running`

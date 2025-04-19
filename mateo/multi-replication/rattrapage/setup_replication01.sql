@@ -3,9 +3,9 @@ CREATE USER IF NOT EXISTS 'replication_user'@'%' IDENTIFIED BY 'replicapass';
 GRANT REPLICATION SLAVE ON *.* TO 'replication_user'@'%';
 
 -- Configuration du slave pour pointer vers le master
-CHANGE MASTER TO 
-  MASTER_HOST='sql-primary02', 
-  MASTER_USER='replication_user', 
+CHANGE MASTER TO
+  MASTER_HOST='sql-primary02',
+  MASTER_USER='replication_user',
   MASTER_PASSWORD='replicapass',
   MASTER_PORT=3306,
   MASTER_CONNECT_RETRY=10;
