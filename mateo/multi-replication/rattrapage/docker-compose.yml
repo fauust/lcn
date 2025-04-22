@@ -18,11 +18,6 @@ services:
       - ./primary01.cnf:/etc/mysql/conf.d/custom.cnf
       - ./setup_replication01.sql:/docker-entrypoint-initdb.d/setup_replication.sql
       - ./fix_permissions.sql:/docker-entrypoint-initdb.d/fix_permissions.sql
-    # healthcheck:
-    #   test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "-ppassword1234"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 3
 
   sql-primary02:
     container_name: sql-primary02
@@ -42,11 +37,6 @@ services:
       - ./primary02.cnf:/etc/mysql/conf.d/custom.cnf
       - ./setup_replication02.sql:/docker-entrypoint-initdb.d/setup_replication.sql
       - ./fix_permissions.sql:/docker-entrypoint-initdb.d/fix_permissions.sql
-    # healthcheck:
-    #   test: ["CMD", "mariadb", "ping", "-h", "127.0.0.1", "-u", "root", "-ppassword1234"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 3
 
   wp:
     container_name: wp
@@ -89,10 +79,7 @@ services:
     restart: unless-stopped
     ports:
       - 9104:9104
-    # volumes:
-    #   - ./exporter1.my.cnf:/home/nobody/.my.cnf:ro
     command:
-      # - '--config.my-cnf=/home/nobody/.my.cnf'
       - '--collect.info_schema.tables'
       - '--collect.global_status'
       - '--collect.global_variables'
@@ -100,9 +87,6 @@ services:
       - '--collect.info_schema.processlist'
       - "--mysqld.address=sql-primary01:3306"
       - "--mysqld.username=monitoring_user:monitorpass"
-    # depends_on:
-    #   sql-primary01:
-        # condition: service_healthy
     links:
       - sql-primary01
 
@@ -114,10 +98,7 @@ services:
     restart: unless-stopped
     ports:
       - 9105:9104
-    # volumes:
-    #   - ./exporter2.my.cnf:/home/nobody/.my.cnf:ro
     command:
-      # - '--config.my-cnf=/home/nobody/.my.cnf'
       - '--collect.info_schema.tables'
       - '--collect.global_status'
       - '--collect.global_variables'
@@ -125,9 +106,6 @@ services:
       - '--collect.info_schema.processlist'
       - "--mysqld.address=sql-primary02:3306"
       - "--mysqld.username=monitoring_user:monitorpass"
-    # depends_on:
-      # sql-primary02:
-        # condition: service_healthy
     links:
       - sql-primary02
 
