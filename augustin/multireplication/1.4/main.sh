@@ -5,8 +5,8 @@ set -euo pipefail
 docker compose down --volumes
 docker compose up --build --force-recreate -d
 
-while ! docker exec -it sql-primary01 mariadb -uroot -proot -e "SELECT 1" &> /dev/null && \
-    ! docker exec -it sql-primary02 mariadb -uroot -proot -e "SELECT 1" &> /dev/null; do
+while ! docker exec -it sql-primary01 mariadb -uroot -proot -e "SELECT * FROM test_repl.hello;" &> /dev/null && \
+    ! docker exec -it sql-primary02 mariadb -uroot -proot -e "SELECT * FROM test_repl.hello;" &> /dev/null; do
     echo "Waiting for sql-primary01 and sql-primary02 to be ready..."
     sleep 2
 done
@@ -43,3 +43,5 @@ docker exec -it sql-primary02 mariadb -uroot -proot -e "INSERT INTO test_repl.he
 
 docker exec -it sql-primary01 mariadb -uroot -proot -e "SELECT * FROM test_repl.hello;"
 docker exec -it sql-primary02 mariadb -uroot -proot -e "SELECT * FROM test_repl.hello;"
+
+docker compose down --volumes
