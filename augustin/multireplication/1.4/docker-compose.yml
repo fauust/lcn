@@ -1,22 +1,26 @@
 services:
   sql-primary01:
-    image: master-master
-    cap_add:
-      - SYS_TIME
+    build: .
     container_name: sql-primary01
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: mydb2
-    ports:
-      - "3306:3306"
+    volumes:
+      - ./mariadb.conf.d1:/etc/mysql/conf.d
+      - ./replication-setup1.sql:/docker-entrypoint-initdb.d/replication-setup.sql
+    networks:
+      - mariadbnet
 
   sql-primary02:
-    image: master-master
-    cap_add:
-      - SYS_TIME
+    build: .
     container_name: sql-primary02
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: mydb2
-    ports:
-      - "3307:3306"
+    volumes:
+      - ./mariadb.conf.d2:/etc/mysql/conf.d
+      - ./replication-setup2.sql:/docker-entrypoint-initdb.d/replication-setup.sql
+    networks:
+      - mariadbnet
+
+networks:
+  mariadbnet:
+    driver: bridge

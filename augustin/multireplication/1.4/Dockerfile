@@ -1,9 +1,15 @@
 FROM mariadb:11.4
 
-RUN apt-get update -y && apt-get install -y chrony --no-install-recommends &&\
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-# RUN timedatectl set-timezone Africa/Nairobi --adjust-system-clock
-# RUN timedatectl set-ntp yes
+RUN apt-get update && apt-get install -y netcat-openbsd
 
-CMD ["service chrony start"]
+# Install chrony without trying to start it
+#RUN apt-get update && \
+#    DEBIAN_FRONTEND=noninteractive apt-get install -y chrony --no-install-recommends && \
+#    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Copy custom entrypoint
+#COPY entrypoint.sh /entrypoint.sh
+#RUN chmod +x /entrypoint.sh
+
+#ENTRYPOINT ["/entrypoint.sh"]
+#CMD ["mysqld"]
