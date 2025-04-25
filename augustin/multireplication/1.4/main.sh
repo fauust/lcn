@@ -2,7 +2,11 @@
 docker compose down --volumes
 docker compose up --build --force-recreate -d
 
-sleep 20
+while ! docker exec -it sql-primary01 mariadb -uroot -proot -e "SELECT 1" &> /dev/null && \
+    ! docker exec -it sql-primary02 mariadb -uroot -proot -e "SELECT 1" &> /dev/null; do
+    echo "Waiting for sql-primary01 and sql-primary02 to be ready..."
+    sleep 2
+done
 
 docker exec -it sql-primary01 mariadb -uroot -proot -e "STOP SLAVE;"
 docker exec -it sql-primary02 mariadb -uroot -proot -e "STOP SLAVE;"
