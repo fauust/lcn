@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -euo pipefail
+
 docker compose down --volumes
 docker compose up --build --force-recreate -d
 

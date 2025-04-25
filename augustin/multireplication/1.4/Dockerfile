@@ -1,6 +1,7 @@
 FROM mariadb:11.4
 
-RUN apt-get update && apt-get install -y netcat-openbsd
+RUN apt-get update && apt-get install -y netcat-openbsd --no-install-recommends && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install chrony without trying to start it
 #RUN apt-get update && \
