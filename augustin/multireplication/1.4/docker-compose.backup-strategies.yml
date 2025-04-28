@@ -1,0 +1,32 @@
+services:
+  sql-primary01:
+    build: .
+    container_name: sql-primary01
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./mariadb.conf.d1:/etc/mysql/conf.d
+      - ./replication-setup1.sql:/sql-scripts/replication-setup.sql
+      - ./backup:/var/mariadb/backup
+      - ./mariadb01:/var/lib/mysql
+    networks:
+      - mariadbnet
+
+  sql-primary02:
+    build: .
+    container_name: sql-primary02
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    depends_on:
+      - sql-primary01
+    volumes:
+      - ./mariadb.conf.d2:/etc/mysql/conf.d
+      - ./replication-setup2.sql:/sql-scripts/replication-setup.sql
+      - ./backup:/var/mariadb/backup
+      - ./mariadb02:/var/lib/mysql
+    networks:
+      - mariadbnet
+
+networks:
+  mariadbnet:
+    driver: bridge

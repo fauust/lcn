@@ -1,7 +1,11 @@
 -- Drop existing replication user and test database if they exist
 DROP USER IF EXISTS 'repl'@'%';
+DROP USER IF EXISTS 'mariadb_backup'@'%';
 DROP DATABASE IF EXISTS test_repl;
 -- Create replication user
+CREATE USER IF NOT EXISTS 'mariadb_backup'@'%' IDENTIFIED BY 'mypassword';
+GRANT RELOAD, PROCESS, LOCK TABLES, REPLICATION CLIENT ON *.* TO 'mariadb_backup'@'%';
+
 CREATE USER IF NOT EXISTS 'repl'@'%' IDENTIFIED BY 'repl_pass';
 GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
 FLUSH PRIVILEGES;
@@ -14,8 +18,3 @@ CREATE TABLE IF NOT EXISTS hello (
   msg VARCHAR(100)
 );
 INSERT INTO hello (msg) VALUES ('Hello from 01!');
-
--- STOP SLAVE;
--- RESET SLAVE ALL;
-
--- CHANGE MASTER TO MASTER_HOST='sql-primary02', MASTER_USER='repl', MASTER_PASSWORD='repl_pass', MASTER_PORT=3306, MASTER_USE_GTID=slave_pos;
