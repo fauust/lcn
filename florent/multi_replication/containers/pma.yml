@@ -1,0 +1,46 @@
+---
+########################
+### PMA (PHPMyAdmin) ###
+########################
+---
+kind: Deployment
+metadata:
+  name: pma
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pma-app
+  template:
+    metadata:
+      labels:
+        app: pma-app
+    spec:
+      containers:
+        - name: pma
+          image: phpmyadmin:5.2.1-apache
+          env:
+            - name: PMA_HOST
+              value: "mariadb-service"
+            - name: PMA_PORT
+              value: "3306"
+            - name: PMA_USER
+              value: "admin"
+            - name: PMA_PASSWORD
+              value: "root"
+          ports:
+            - containerPort: 80
+apiVersion: apps/v1
+---
+kind: Service
+metadata:
+  name: pma-service
+spec:
+  selector:
+    app: pma-app
+  ports:
+    - port: 8081
+      targetPort: 80
+      nodePort: 30081
+  type: NodePort
+apiVersion: v1

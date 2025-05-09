@@ -1,0 +1,77 @@
+---
+############################
+### KUBERNETES [PRIMARY] ###
+############################
+---
+kind: Service
+metadata:
+  name: sql-01
+spec:
+  selector:
+    app: sql-01
+  ports:
+    - port: 3306
+      protocol: TCP
+apiVersion: v1
+---
+kind: ConfigMap
+metadata:
+  name: database
+data:
+  init.sql:
+    CREATE DATABASE IF NOT EXISTS mydb;
+
+    USE mydb;
+
+    CREATE TABLE IF NOT EXISTS persons (
+      id INT PRIMARY KEY,
+      name VARCHAR(50),
+      age INT
+    );
+
+    INSERT INTO persons (id, name, age) VALUES
+      (1, 'Alice', 30),
+      (2, 'Bob', 25),
+      (3, 'Charlie', 28);
+apiVersion: v1
+---
+kind: StatefulSet
+metadata:
+  name: sql-01
+spec:
+  serviceName: "sql-01"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sql-01
+  template:
+    metadata:
+      labels:
+        app: sql-01
+    spec:
+      containers:
+        - name: sql-01
+          image: mariadb:10.6.18
+          env:
+            - name: MARIADB_USER
+              value: "admin"
+            - name: MARIADB_PASSWORD
+              value: "root"
+            - name: MARIADB_ROOT_PASSWORD
+              value: "root"
+            - name: MARIADB_DATABASE
+              value: "mydb"
+            - name: MARIADB_REPLICATION_USER
+              value: "radmin"
+            - name: MARIADB_REPLICATION_PASSWORD
+              value: "rroot"
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: sql-01
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: sql-01
+          configMap:
+            name: database
+apiVersion: apps/v1
