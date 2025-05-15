@@ -1,0 +1,14 @@
+# fiiles to Ignore
+.docker.test.swp
+cert1.pem
+certs/
+chain1.pem
+data/
+datanpm/
+db_data/
+default.conf
+fullchain1.pem
+letsencrypt/
+privkey1.pem
+wordpress/
+zabbix/
