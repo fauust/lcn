@@ -15,8 +15,7 @@ pushing" your code.
 
 List of necessary packages (`sudo apt install pkg`):
 
+- uv
 - shellcheck
-- rubygems
-- ruby-dev
 
 Working docker installation (user member of docker group).
